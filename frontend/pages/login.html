@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In — ShopVerse</title>
-  <meta name="description" content="Sign in to your ShopVerse account. Access your orders, wishlist, and exclusive deals.">
+  <meta name="description"
+    content="Sign in to your ShopVerse account. Access your orders, wishlist, and exclusive deals.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +18,9 @@
   <style>
     /* ── Auth page extra styles not covered by pages.css ─── */
 
-    body { overflow-x: hidden; }
+    body {
+      overflow-x: hidden;
+    }
 
     /* Floating blobs on the auth-left panel */
     .auth-blob {
@@ -26,20 +30,29 @@
       opacity: 0.25;
       pointer-events: none;
     }
+
     .auth-blob-1 {
-      width: 350px; height: 350px;
+      width: 350px;
+      height: 350px;
       background: var(--color-primary-light);
-      top: -80px; right: -80px;
+      top: -80px;
+      right: -80px;
     }
+
     .auth-blob-2 {
-      width: 260px; height: 260px;
+      width: 260px;
+      height: 260px;
       background: var(--color-secondary);
-      bottom: 40px; left: -60px;
+      bottom: 40px;
+      left: -60px;
     }
+
     .auth-blob-3 {
-      width: 200px; height: 200px;
+      width: 200px;
+      height: 200px;
       background: var(--color-accent);
-      top: 40%; left: 30%;
+      top: 40%;
+      left: 30%;
     }
 
     /* Floating stat cards on the left panel */
@@ -49,16 +62,21 @@
       gap: var(--space-3);
       margin-top: var(--space-10);
     }
+
     .auth-stat-card {
-      background: rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: var(--border-radius-lg);
       padding: var(--space-4);
       text-align: center;
       transition: transform var(--transition-base);
     }
-    .auth-stat-card:hover { transform: translateY(-3px); }
+
+    .auth-stat-card:hover {
+      transform: translateY(-3px);
+    }
+
     .auth-stat-val {
       font-size: var(--font-size-2xl);
       font-weight: 900;
@@ -66,16 +84,29 @@
       line-height: 1;
       margin-bottom: 4px;
     }
-    .auth-stat-lbl { font-size: var(--font-size-xs); color: rgba(255,255,255,0.7); }
+
+    .auth-stat-lbl {
+      font-size: var(--font-size-xs);
+      color: rgba(255, 255, 255, 0.7);
+    }
 
     /* Form group */
-    .form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
     .form-label {
       font-size: var(--font-size-sm);
       font-weight: 700;
       color: var(--text-primary);
     }
-    .form-label .required { color: var(--color-danger); margin-left: 2px; }
+
+    .form-label .required {
+      color: var(--color-danger);
+      margin-left: 2px;
+    }
 
     /* Input wrapper with icon */
     .input-icon-wrap {
@@ -83,6 +114,7 @@
       display: flex;
       align-items: center;
     }
+
     .input-icon-prefix {
       position: absolute;
       left: 14px;
@@ -91,9 +123,11 @@
       pointer-events: none;
       z-index: 1;
     }
+
     .input-with-icon {
       padding-left: 42px !important;
     }
+
     .input-icon-suffix {
       position: absolute;
       right: 14px;
@@ -108,7 +142,10 @@
       z-index: 1;
       line-height: 1;
     }
-    .input-icon-suffix:hover { color: var(--color-primary); }
+
+    .input-icon-suffix:hover {
+      color: var(--color-primary);
+    }
 
     /* Error text */
     .input-error-text {
@@ -118,13 +155,18 @@
       display: none;
       margin-top: 2px;
     }
-    .input-error-text.visible { display: block; animation: fadeInScale 0.2s ease; }
+
+    .input-error-text.visible {
+      display: block;
+      animation: fadeInScale 0.2s ease;
+    }
 
     /* Input invalid state */
     .form-control.invalid {
       border-color: var(--color-danger) !important;
-      background: rgba(239,68,68,0.04);
+      background: rgba(239, 68, 68, 0.04);
     }
+
     .form-control.valid {
       border-color: var(--color-success) !important;
     }
@@ -137,6 +179,7 @@
       flex-wrap: wrap;
       gap: var(--space-2);
     }
+
     .remember-label {
       display: flex;
       align-items: center;
@@ -146,7 +189,13 @@
       color: var(--text-secondary);
       user-select: none;
     }
-    .remember-label input[type="checkbox"] { accent-color: var(--color-primary); width: 16px; height: 16px; }
+
+    .remember-label input[type="checkbox"] {
+      accent-color: var(--color-primary);
+      width: 16px;
+      height: 16px;
+    }
+
     .forgot-link {
       font-size: var(--font-size-sm);
       font-weight: 700;
@@ -154,7 +203,11 @@
       text-decoration: none;
       transition: opacity var(--transition-fast);
     }
-    .forgot-link:hover { opacity: 0.8; text-decoration: underline; }
+
+    .forgot-link:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
 
     /* Submit button */
     .auth-submit-btn {
@@ -172,40 +225,65 @@
       overflow: hidden;
       letter-spacing: 0.3px;
     }
+
     .auth-submit-btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(108,99,255,0.4);
+      box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
     }
-    .auth-submit-btn:active { transform: translateY(0); }
+
+    .auth-submit-btn:active {
+      transform: translateY(0);
+    }
+
     .auth-submit-btn:disabled {
       opacity: 0.7;
       cursor: not-allowed;
       transform: none;
     }
+
     .auth-submit-btn.loading::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 3px;
-      background: rgba(255,255,255,0.5);
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.5);
       animation: loading-bar 1.2s ease infinite;
     }
+
     @keyframes loading-bar {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
     }
 
     /* Social buttons */
     .auth-social-icon {
-      width: 22px; height: 22px;
+      width: 22px;
+      height: 22px;
       border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 14px;
       font-weight: 900;
       flex-shrink: 0;
     }
-    .social-google { background: linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4); color: white; }
-    .social-facebook { background: #1877F2; color: white; }
+
+    .social-google {
+      background: linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4);
+      color: white;
+    }
+
+    .social-facebook {
+      background: #1877F2;
+      color: white;
+    }
 
     /* Form error alert */
     .auth-alert {
@@ -216,15 +294,22 @@
       display: none;
       animation: fadeInScale 0.25s ease;
     }
-    .auth-alert.visible { display: flex; align-items: center; gap: var(--space-3); }
+
+    .auth-alert.visible {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
     .auth-alert.error {
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.2);
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
       color: var(--color-danger);
     }
+
     .auth-alert.success {
-      background: rgba(16,185,129,0.1);
-      border: 1px solid rgba(16,185,129,0.2);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
       color: var(--color-success);
     }
 
@@ -238,6 +323,7 @@
       padding-top: var(--space-5);
       border-top: 1px solid var(--border-color);
     }
+
     .auth-trust-item {
       display: flex;
       align-items: center;
@@ -248,11 +334,19 @@
     }
 
     @media (max-width: 480px) {
-      .auth-stat-cards { grid-template-columns: 1fr 1fr; }
-      .auth-trust-row { flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+      .auth-stat-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .auth-trust-row {
+        flex-wrap: wrap;
+        gap: var(--space-3);
+        justify-content: center;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Page Loader -->
@@ -289,7 +383,8 @@
             <span style="font-weight:400;font-size:0.75em;opacity:0.9">Great to see you again</span>
           </h1>
           <p class="auth-left-subtitle">
-            Sign in to access your orders, wishlist, exclusive deals, and a personalised shopping experience tailored just for you.
+            Sign in to access your orders, wishlist, exclusive deals, and a personalised shopping experience tailored
+            just for you.
           </p>
 
           <div class="auth-left-features">
@@ -352,7 +447,9 @@
           <!-- Header -->
           <div style="margin-bottom: var(--space-8);">
             <!-- Mobile logo (hidden on desktop via CSS) -->
-            <a href="../index.html" style="display:none;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:900;font-size:1.25rem;margin-bottom:var(--space-6)" id="mobile-logo">
+            <a href="../index.html"
+              style="display:none;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:900;font-size:1.25rem;margin-bottom:var(--space-6)"
+              id="mobile-logo">
               🛍️ ShopVerse
             </a>
             <h2 class="auth-right-title">Sign in to your account</h2>
@@ -365,20 +462,7 @@
             <span id="login-alert-msg"></span>
           </div>
 
-          <!-- Social Login -->
-          <div class="auth-social-btns" style="margin-bottom: var(--space-6);">
-            <button class="auth-social-btn" id="google-login-btn" type="button" aria-label="Continue with Google">
-              <div class="auth-social-icon social-google" aria-hidden="true">G</div>
-              <span>Continue with Google</span>
-            </button>
-            <button class="auth-social-btn" id="facebook-login-btn" type="button" aria-label="Continue with Facebook">
-              <div class="auth-social-icon social-facebook" aria-hidden="true">f</div>
-              <span>Continue with Facebook</span>
-            </button>
-          </div>
 
-          <!-- Divider -->
-          <div class="auth-divider">or sign in with email</div>
 
           <!-- Login Form -->
           <form class="auth-form" id="login-form" novalidate autocomplete="on">
@@ -390,18 +474,9 @@
               </label>
               <div class="input-icon-wrap">
                 <span class="input-icon-prefix" aria-hidden="true">✉️</span>
-                <input
-                  type="email"
-                  id="login-email"
-                  name="email"
-                  class="form-control input-with-icon"
-                  placeholder="you@example.com"
-                  autocomplete="email"
-                  inputmode="email"
-                  required
-                  aria-required="true"
-                  aria-describedby="email-error"
-                >
+                <input type="email" id="login-email" name="email" class="form-control input-with-icon"
+                  placeholder="you@example.com" autocomplete="email" inputmode="email" required aria-required="true"
+                  aria-describedby="email-error">
               </div>
               <span class="input-error-text" id="email-error" role="alert"></span>
             </div>
@@ -413,25 +488,11 @@
               </label>
               <div class="input-icon-wrap">
                 <span class="input-icon-prefix" aria-hidden="true">🔒</span>
-                <input
-                  type="password"
-                  id="login-password"
-                  name="password"
-                  class="form-control input-with-icon"
-                  placeholder="Enter your password"
-                  autocomplete="current-password"
-                  required
-                  aria-required="true"
-                  aria-describedby="password-error"
-                  style="padding-right: 48px;"
-                >
-                <button
-                  type="button"
-                  class="input-icon-suffix"
-                  id="toggle-password"
-                  aria-label="Show password"
-                  title="Show/Hide password"
-                >👁</button>
+                <input type="password" id="login-password" name="password" class="form-control input-with-icon"
+                  placeholder="Enter your password" autocomplete="current-password" required aria-required="true"
+                  aria-describedby="password-error" style="padding-right: 48px;">
+                <button type="button" class="input-icon-suffix" id="toggle-password" aria-label="Show password"
+                  title="Show/Hide password">👁</button>
               </div>
               <span class="input-error-text" id="password-error" role="alert"></span>
             </div>
@@ -474,10 +535,13 @@
   <!-- Show mobile logo on small screens -->
   <style>
     @media (max-width: 1024px) {
-      #mobile-logo { display: flex !important; }
+      #mobile-logo {
+        display: flex !important;
+      }
     }
   </style>
 
   <script type="module" src="../assets/js/pages/login.js"></script>
 </body>
+
 </html>

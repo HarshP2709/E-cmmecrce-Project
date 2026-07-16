@@ -45,12 +45,12 @@ function initForm() {
   const form = document.getElementById('register-form');
   if (!form) return;
 
-  const nameInput     = document.getElementById('reg-name');
-  const emailInput    = document.getElementById('reg-email');
-  const phoneInput    = document.getElementById('reg-phone');
+  const nameInput = document.getElementById('reg-name');
+  const emailInput = document.getElementById('reg-email');
+  const phoneInput = document.getElementById('reg-phone');
   const passwordInput = document.getElementById('reg-password');
-  const confirmInput  = document.getElementById('reg-confirm');
-  const termsInput    = document.getElementById('reg-terms');
+  const confirmInput = document.getElementById('reg-confirm');
+  const termsInput = document.getElementById('reg-terms');
 
   // Live validation on blur
   nameInput?.addEventListener('blur', () => validateName(nameInput));
@@ -80,21 +80,21 @@ function initForm() {
 async function handleSubmit(e) {
   e.preventDefault();
 
-  const nameInput     = document.getElementById('reg-name');
-  const emailInput    = document.getElementById('reg-email');
-  const phoneInput    = document.getElementById('reg-phone');
+  const nameInput = document.getElementById('reg-name');
+  const emailInput = document.getElementById('reg-email');
+  const phoneInput = document.getElementById('reg-phone');
   const passwordInput = document.getElementById('reg-password');
-  const confirmInput  = document.getElementById('reg-confirm');
-  const termsInput    = document.getElementById('reg-terms');
-  const submitBtn     = document.getElementById('register-btn');
+  const confirmInput = document.getElementById('reg-confirm');
+  const termsInput = document.getElementById('reg-terms');
+  const submitBtn = document.getElementById('register-btn');
 
   // Validate everything
-  const nameOk    = validateName(nameInput);
-  const emailOk   = validateEmail(emailInput);
-  const phoneOk   = validatePhone(phoneInput);
-  const passOk    = validatePassword(passwordInput);
+  const nameOk = validateName(nameInput);
+  const emailOk = validateEmail(emailInput);
+  const phoneOk = validatePhone(phoneInput);
+  const passOk = validatePassword(passwordInput);
   const confirmOk = validateConfirm(passwordInput, confirmInput);
-  const termsOk   = validateTerms(termsInput);
+  const termsOk = validateTerms(termsInput);
 
   if (!nameOk || !emailOk || !phoneOk || !passOk || !confirmOk || !termsOk) {
     // Focus the first invalid field
@@ -104,7 +104,7 @@ async function handleSubmit(e) {
   }
 
   const fullName = nameInput.value.trim();
-  const email    = emailInput.value.trim().toLowerCase();
+  const email = emailInput.value.trim().toLowerCase();
   const password = passwordInput.value;
 
   // Loading state
@@ -201,9 +201,13 @@ function validatePassword(input) {
     setFieldError(input, 'password-error', 'Password must be at least 8 characters');
     return false;
   }
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(val)) {
+    setFieldError(input, 'password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+    return false;
+  }
   const score = getPasswordScore(val);
   if (score < 2) {
-    setFieldError(input, 'password-error', 'Password is too weak. Add uppercase, numbers, or symbols.');
+    setFieldError(input, 'password-error', 'Password is too weak. Add symbols for better security.');
     return false;
   }
   clearFieldError(input, 'password-error');
@@ -211,7 +215,7 @@ function validatePassword(input) {
 }
 
 function validateConfirm(passwordInput, confirmInput) {
-  const pass    = passwordInput?.value || '';
+  const pass = passwordInput?.value || '';
   const confirm = confirmInput?.value || '';
   if (!confirm) {
     setFieldError(confirmInput, 'confirm-error', 'Please confirm your password');
@@ -294,7 +298,7 @@ function setLoadingState(loading, btn) {
 // ── Password score calculator ─────────────────────────────────
 function getPasswordScore(password) {
   let score = 0;
-  if (password.length >= 8)  score++;
+  if (password.length >= 8) score++;
   if (password.length >= 12) score++;
   if (/[A-Z]/.test(password)) score++;
   if (/[0-9]/.test(password)) score++;
@@ -305,8 +309,8 @@ function getPasswordScore(password) {
 // ── Password Strength Meter ───────────────────────────────────
 function initPasswordStrength() {
   const input = document.getElementById('reg-password');
-  const wrap  = document.getElementById('pw-strength-wrap');
-  const bars  = [
+  const wrap = document.getElementById('pw-strength-wrap');
+  const bars = [
     document.getElementById('sb-1'),
     document.getElementById('sb-2'),
     document.getElementById('sb-3'),
@@ -315,20 +319,20 @@ function initPasswordStrength() {
   const label = document.getElementById('password-strength-label');
 
   const reqs = {
-    len:     { el: document.getElementById('req-len'),     test: (v) => v.length >= 8 },
-    upper:   { el: document.getElementById('req-upper'),   test: (v) => /[A-Z]/.test(v) },
-    num:     { el: document.getElementById('req-num'),     test: (v) => /[0-9]/.test(v) },
+    len: { el: document.getElementById('req-len'), test: (v) => v.length >= 8 },
+    upperlower: { el: document.getElementById('req-upperlower'), test: (v) => /[A-Z]/.test(v) && /[a-z]/.test(v) },
+    num: { el: document.getElementById('req-num'), test: (v) => /[0-9]/.test(v) },
     special: { el: document.getElementById('req-special'), test: (v) => /[^A-Za-z0-9]/.test(v) },
   };
 
   if (!input || !wrap) return;
 
   const levels = [
-    { label: 'Very Weak', cls: 'weak',   fill: 1, color: 'var(--color-danger)' },
-    { label: 'Weak',      cls: 'weak',   fill: 1, color: 'var(--color-danger)' },
-    { label: 'Fair',      cls: 'fair',   fill: 2, color: 'var(--color-warning)' },
-    { label: 'Good',      cls: 'good',   fill: 3, color: 'var(--color-info)' },
-    { label: 'Strong',    cls: 'strong', fill: 4, color: 'var(--color-success)' },
+    { label: 'Very Weak', cls: 'weak', fill: 1, color: 'var(--color-danger)' },
+    { label: 'Weak', cls: 'weak', fill: 1, color: 'var(--color-danger)' },
+    { label: 'Fair', cls: 'fair', fill: 2, color: 'var(--color-warning)' },
+    { label: 'Good', cls: 'good', fill: 3, color: 'var(--color-info)' },
+    { label: 'Strong', cls: 'strong', fill: 4, color: 'var(--color-success)' },
     { label: 'Very Strong', cls: 'strong', fill: 4, color: 'var(--color-success)' },
   ];
 
@@ -367,11 +371,11 @@ function initPasswordStrength() {
 function initPasswordToggles() {
   const pairs = [
     { toggleId: 'toggle-password', inputId: 'reg-password' },
-    { toggleId: 'toggle-confirm',  inputId: 'reg-confirm' },
+    { toggleId: 'toggle-confirm', inputId: 'reg-confirm' },
   ];
 
   pairs.forEach(({ toggleId, inputId }) => {
-    const btn   = document.getElementById(toggleId);
+    const btn = document.getElementById(toggleId);
     const input = document.getElementById(inputId);
     if (!btn || !input) return;
 

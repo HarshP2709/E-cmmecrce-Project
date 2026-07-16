@@ -1,0 +1,6 @@
+[2026-07-16 17:56:41] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-16 17:56:41] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-16 17:56:41] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-16 17:56:41] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-16 17:57:08] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?category=fashion&sort=newest&page=1&limit=20 - ::1
+[2026-07-16 17:57:15] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?category=fashion&sort=newest&page=1&limit=20 - ::1
