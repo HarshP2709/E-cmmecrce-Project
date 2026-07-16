@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Product — ShopVerse</title>
+  <meta name="description" id="page-description" content="View product details, specifications and reviews on ShopVerse.">
+  <meta property="og:title" id="og-title" content="Product — ShopVerse">
+  <meta property="og:description" id="og-description" content="Shop premium products on ShopVerse.">
+  <meta property="og:type" content="product">
+  <meta property="og:image" id="og-image" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/navbar.css">
+  <link rel="stylesheet" href="../assets/css/products.css">
+  <link rel="stylesheet" href="../assets/css/pages.css">
+  <link rel="stylesheet" href="../assets/css/footer.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+
+  <style>
+    /* ── Tab System ──────────────────────────────────────── */
+    .product-tabs {
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .product-tabs::-webkit-scrollbar { display: none; }
+    .product-tab-btn {
+      padding: var(--space-4) var(--space-6);
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+      background: transparent;
+      cursor: pointer;
+    }
+    .product-tab-btn:hover { color: var(--color-primary); }
+    .product-tab-btn.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+    .product-tab-panel { display: none; padding: var(--space-8) 0; }
+    .product-tab-panel.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── Specs Table ─────────────────────────────────────── */
+    .specs-table { width: 100%; border-collapse: collapse; }
+    .specs-table tr { border-bottom: 1px solid var(--border-color); }
+    .specs-table tr:last-child { border-bottom: none; }
+    .specs-table td {
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-sm);
+    }
+    .specs-table td:first-child {
+      color: var(--text-muted);
+      font-weight: 600;
+      width: 40%;
+      background: var(--bg-secondary);
+    }
+    .specs-table td:last-child { color: var(--text-primary); }
+
+    /* ── Rating Breakdown ────────────────────────────────── */
+    .rating-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      min-width: 200px;
+    }
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--font-size-xs);
+    }
+    .rating-bar-label { width: 40px; color: var(--text-muted); text-align: right; flex-shrink: 0; }
+    .rating-bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: var(--border-radius-pill);
+      overflow: hidden;
+    }
+    .rating-bar-fill {
+      height: 100%;
+      background: var(--color-warning);
+      border-radius: var(--border-radius-pill);
+      transition: width 0.8s ease;
+    }
+    .rating-bar-count { width: 28px; color: var(--text-muted); flex-shrink: 0; }
+
+    /* ── Review Cards ────────────────────────────────────── */
+    .review-list { display: flex; flex-direction: column; gap: var(--space-5); }
+    .review-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-5);
+      transition: box-shadow var(--transition-base);
+    }
+    .review-item:hover { box-shadow: var(--shadow-sm); }
+    .review-item-header { display: flex; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-3); }
+    .review-avatar-sm {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: var(--font-size-base);
+      flex-shrink: 0;
+    }
+    .review-meta { flex: 1; }
+    .review-author { font-weight: 700; font-size: var(--font-size-sm); color: var(--text-primary); }
+    .review-date   { font-size: var(--font-size-xs); color: var(--text-muted); margin-top: 2px; }
+    .review-stars  { display: flex; gap: 2px; margin: var(--space-1) 0; }
+    .review-title  { font-weight: 700; font-size: var(--font-size-sm); color: var(--text-primary); margin-bottom: var(--space-2); }
+    .review-body   { font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7; }
+    .review-verified { font-size: var(--font-size-xs); color: var(--color-success); font-weight: 600; }
+
+    /* ── Write Review Form ───────────────────────────────── */
+    .write-review-btn {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-3) var(--space-5);
+      border: 1.5px solid var(--color-primary);
+      border-radius: var(--border-radius-pill);
+      color: var(--color-primary);
+      font-weight: 600;
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      background: transparent;
+    }
+    .write-review-btn:hover {
+      background: rgba(108,99,255,0.07);
+      transform: translateY(-1px);
+    }
+
+    /* ── Large Rating Display ────────────────────────────── */
+    .rating-big {
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+    .rating-big-stars { font-size: 1.2rem; color: var(--color-warning); letter-spacing: 2px; }
+
+    /* ── Skeleton state ──────────────────────────────────── */
+    #product-detail-content { display: none; }
+    #product-skeleton.hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-logo">🛍️ ShopVerse</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- Zoom Overlay -->
+  <div class="zoom-overlay" id="zoom-overlay" role="dialog" aria-modal="true" aria-label="Image zoom">
+    <img src="" alt="" class="zoom-img" id="zoom-img">
+    <button class="zoom-close" id="zoom-close" aria-label="Close zoom">✕</button>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="top-bar" role="banner">
+    <div class="container top-bar-inner">
+      <div class="top-bar-text">
+        🚚 <strong>Free Delivery</strong> on orders above <strong>₹499</strong> &nbsp;|&nbsp;
+        🎉 Use code <strong>WELCOME20</strong> for 20% off on first order
+      </div>
+      <div class="top-bar-links">
+        <a href="#">Sell on ShopVerse</a>
+        <a href="#">Download App</a>
+        <a href="/pages/login.html">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="/index.html" class="nav-logo" aria-label="ShopVerse Home">
+        <div class="nav-logo-icon" aria-hidden="true">🛍️</div>
+        <span class="nav-logo-text">ShopVerse</span>
+      </a>
+      <div class="nav-search" role="search">
+        <div class="search-input-wrapper">
+          <input type="search" class="search-input" id="nav-search-input"
+            placeholder="Search for products, brands & more..."
+            autocomplete="off" aria-label="Search products"
+            aria-controls="search-dropdown" aria-autocomplete="list">
+          <button class="search-btn" aria-label="Search" id="nav-search-btn">🔍</button>
+          <div class="search-dropdown" id="search-dropdown" role="listbox" aria-label="Search suggestions"></div>
+        </div>
+      </div>
+      <ul class="nav-links" role="list">
+        <li><a href="/index.html" class="nav-link">Home</a></li>
+        <li><a href="/pages/products.html" class="nav-link">Products</a></li>
+        <li>
+          <button class="nav-link" id="mega-menu-trigger" aria-expanded="false">Categories ▾</button>
+        </li>
+        <li><a href="/pages/offers.html" class="nav-link">🔥 Deals</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">🌙</button>
+        <a href="/pages/wishlist.html" class="nav-action-btn" aria-label="Wishlist">
+          🤍
+          <span class="nav-badge" id="wishlist-count" aria-label="0 items in wishlist" style="display:none">0</span>
+        </a>
+        <a href="/pages/cart.html" class="nav-action-btn" aria-label="Shopping cart">
+          🛒
+          <span class="nav-badge" id="cart-count" aria-label="0 items in cart" style="display:none">0</span>
+        </a>
+        <div class="nav-user" id="nav-user-area">
+          <button class="nav-user-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">
+            <div class="nav-user-avatar" id="nav-avatar">👤</div>
+            <span id="nav-username">Account</span>
+            <span>▾</span>
+          </button>
+          <div class="nav-dropdown" id="user-dropdown" role="menu"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mega-menu" id="mega-menu" aria-label="Category menu" role="navigation">
+      <div class="container">
+        <div class="mega-menu-grid" id="mega-menu-grid"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu-drawer">
+      <div class="mobile-menu-header">
+        <a href="/index.html" class="nav-logo-text">🛍️ ShopVerse</a>
+        <button class="modal-close" id="mobile-close-btn" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <div class="mobile-nav-section-title">Navigation</div>
+        <a href="/index.html" class="mobile-nav-link"><span class="icon">🏠</span> Home</a>
+        <a href="/pages/products.html" class="mobile-nav-link"><span class="icon">📦</span> Products</a>
+        <a href="/pages/categories.html" class="mobile-nav-link"><span class="icon">📁</span> Categories</a>
+        <a href="/pages/offers.html" class="mobile-nav-link"><span class="icon">🔥</span> Deals & Offers</a>
+        <div class="mobile-nav-section-title">Account</div>
+        <a href="/pages/login.html" class="mobile-nav-link" id="mobile-login-link"><span class="icon">🔐</span> Sign In</a>
+        <a href="/pages/profile.html" class="mobile-nav-link" id="mobile-profile-link" style="display:none"><span class="icon">👤</span> My Profile</a>
+        <a href="/pages/orders.html" class="mobile-nav-link"><span class="icon">📋</span> My Orders</a>
+        <a href="/pages/wishlist.html" class="mobile-nav-link"><span class="icon">🤍</span> Wishlist</a>
+        <a href="/pages/cart.html" class="mobile-nav-link"><span class="icon">🛒</span> Cart</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" style="padding-top: var(--navbar-height)">
+
+    <!-- Breadcrumb -->
+    <div style="background:var(--bg-secondary);border-bottom:1px solid var(--border-color);padding:var(--space-3) 0">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol id="breadcrumb-list" style="display:flex;align-items:center;gap:var(--space-2);list-style:none;padding:0;margin:0;font-size:var(--font-size-xs);color:var(--text-muted)">
+            <li><a href="/index.html" style="color:var(--color-primary)">Home</a></li>
+            <li style="opacity:0.5">›</li>
+            <li><a href="/pages/products.html" style="color:var(--color-primary)">Products</a></li>
+            <li style="opacity:0.5">›</li>
+            <li id="breadcrumb-product" aria-current="page" style="color:var(--text-secondary);max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Loading…</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Skeleton State -->
+    <div id="product-skeleton" class="container" style="padding:var(--space-10) var(--space-4)">
+      <div class="product-detail-layout">
+        <div>
+          <div class="skeleton" style="width:100%;aspect-ratio:1;border-radius:var(--border-radius-lg)"></div>
+          <div style="display:flex;gap:var(--space-3);margin-top:var(--space-4)">
+            <div class="skeleton" style="width:72px;height:72px;border-radius:var(--border-radius)"></div>
+            <div class="skeleton" style="width:72px;height:72px;border-radius:var(--border-radius)"></div>
+            <div class="skeleton" style="width:72px;height:72px;border-radius:var(--border-radius)"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+          <div class="skeleton skeleton-text" style="width:60%;height:14px"></div>
+          <div class="skeleton skeleton-text" style="width:90%;height:28px"></div>
+          <div class="skeleton skeleton-text" style="width:40%;height:14px"></div>
+          <div class="skeleton skeleton-text" style="width:50%;height:40px"></div>
+          <div class="skeleton" style="width:100%;height:50px;border-radius:var(--border-radius-pill)"></div>
+          <div class="skeleton" style="width:100%;height:50px;border-radius:var(--border-radius-pill)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Detail Content (hidden until loaded) -->
+    <div id="product-detail-content">
+      <div class="container" style="padding: var(--space-10) var(--space-4)">
+        <div class="product-detail-layout">
+
+          <!-- ── Left: Images ─────────────────────────────── -->
+          <div class="product-images-section" aria-label="Product images">
+
+            <!-- Main Image -->
+            <div class="product-main-img-wrap" id="main-image-wrap" style="cursor:zoom-in" aria-label="Product main image, click to zoom" role="button" tabindex="0">
+              <img
+                id="main-image"
+                src="../assets/images/placeholder.webp"
+                alt="Product"
+                class="product-main-img"
+                loading="eager"
+                onerror="this.src='../assets/images/placeholder.webp'"
+              >
+              <!-- Zoom hint -->
+              <div style="position:absolute;bottom:var(--space-3);right:var(--space-3);background:rgba(0,0,0,0.4);color:white;font-size:0.65rem;padding:4px 8px;border-radius:6px;backdrop-filter:blur(4px)">
+                🔍 Click to zoom
+              </div>
+            </div>
+
+            <!-- Thumbnails -->
+            <div class="product-thumbnails" id="thumbnails" role="list" aria-label="Product image thumbnails">
+              <!-- Populated by JS -->
+            </div>
+
+          </div>
+          <!-- /images -->
+
+          <!-- ── Right: Product Info ───────────────────────── -->
+          <div class="product-info-section" id="product-info">
+
+            <!-- Header -->
+            <div class="product-info-header">
+              <div id="product-brand" class="product-card-brand" style="font-size:var(--font-size-xs);letter-spacing:1px;margin-bottom:var(--space-2)"></div>
+              <h1 class="product-title" id="product-name">Loading…</h1>
+              <div class="product-meta">
+                <!-- Star rating -->
+                <div style="display:flex;align-items:center;gap:var(--space-2)">
+                  <div class="stars" id="product-stars" aria-label="Product rating"></div>
+                  <a href="#reviews-tab" id="product-rating-link" style="color:var(--color-primary);font-size:var(--font-size-xs);font-weight:600;text-decoration:none"></a>
+                </div>
+                <!-- Stock badge -->
+                <div class="product-stock-badge in-stock" id="product-stock-badge" role="status">In Stock</div>
+                <!-- SKU -->
+                <span id="product-sku" style="font-size:var(--font-size-xs);color:var(--text-muted)"></span>
+              </div>
+            </div>
+
+            <!-- Price Section -->
+            <div class="product-price-section">
+              <div style="display:flex;align-items:baseline;gap:var(--space-4);flex-wrap:wrap">
+                <span class="product-price-main" id="product-price">₹0</span>
+                <span id="product-compare-price" style="font-size:var(--font-size-xl);color:var(--text-muted);text-decoration:line-through;display:none"></span>
+                <span id="product-discount-badge" class="card-badge card-badge-sale" style="display:none"></span>
+              </div>
+              <p style="font-size:var(--font-size-xs);color:var(--text-muted);margin-top:var(--space-2)">
+                Inclusive of all taxes &nbsp;|&nbsp; Free delivery above ₹499
+              </p>
+              <!-- EMI teaser -->
+              <p id="product-emi-text" style="font-size:var(--font-size-xs);color:var(--color-primary);font-weight:600;margin-top:var(--space-2);display:none">
+                💳 EMI from <span id="product-emi-amount"></span>/month
+              </p>
+            </div>
+
+            <!-- Variants Section -->
+            <div class="product-variants-section" id="product-variants-section" style="display:none">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Quantity Selector -->
+            <div style="display:flex;align-items:center;gap:var(--space-4)">
+              <div style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-secondary)">Qty:</div>
+              <div class="qty-selector" style="display:flex;align-items:center;gap:var(--space-3);background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--border-radius-pill);padding:4px 8px">
+                <button class="qty-btn" id="qty-decrease" aria-label="Decrease quantity" style="font-size:1.2rem;width:32px;height:32px">−</button>
+                <span id="qty-display" style="font-size:var(--font-size-base);font-weight:800;min-width:24px;text-align:center" aria-live="polite" aria-label="Quantity">1</span>
+                <button class="qty-btn" id="qty-increase" aria-label="Increase quantity" style="font-size:1.2rem;width:32px;height:32px">+</button>
+              </div>
+              <span id="stock-count-text" style="font-size:var(--font-size-xs);color:var(--color-warning);font-weight:600"></span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="product-actions-section">
+              <button class="btn btn-cart" id="add-to-cart-btn" aria-label="Add to cart">
+                🛒 Add to Cart
+              </button>
+              <button class="btn btn-buy-now" id="buy-now-btn" aria-label="Buy now">
+                ⚡ Buy Now
+              </button>
+              <button class="btn-wishlist" id="wishlist-btn" aria-label="Add to wishlist" title="Add to Wishlist">
+                🤍
+              </button>
+            </div>
+
+            <!-- Delivery Info -->
+            <div class="product-delivery-info" role="complementary" aria-label="Delivery information">
+              <div class="delivery-item">
+                <span class="delivery-icon">🚚</span>
+                <div class="delivery-text">
+                  <strong>Free Delivery</strong> on orders above ₹499
+                </div>
+              </div>
+              <div class="delivery-item">
+                <span class="delivery-icon">🔄</span>
+                <div class="delivery-text">
+                  <strong>Easy Returns</strong> 30-day hassle-free returns
+                </div>
+              </div>
+              <div class="delivery-item">
+                <span class="delivery-icon">✅</span>
+                <div class="delivery-text">
+                  <strong>Genuine Product</strong> 100% authentic, quality checked
+                </div>
+              </div>
+              <div class="delivery-item">
+                <span class="delivery-icon">🔒</span>
+                <div class="delivery-text">
+                  <strong>Secure Payment</strong> Encrypted &amp; safe checkout
+                </div>
+              </div>
+            </div>
+
+            <!-- Share -->
+            <div style="display:flex;align-items:center;gap:var(--space-3);padding-top:var(--space-4);border-top:1px solid var(--border-color)">
+              <span style="font-size:var(--font-size-xs);font-weight:600;color:var(--text-muted)">SHARE:</span>
+              <button onclick="navigator.share?.({ title: document.title, url: location.href }) || navigator.clipboard.writeText(location.href).then(() => window.showToastGlobal?.('Link copied!', 'success'))"
+                style="font-size:var(--font-size-xs);color:var(--color-primary);font-weight:600;cursor:pointer;background:transparent;border:none;padding:4px 10px;border:1px solid var(--color-primary);border-radius:20px;transition:all 0.2s" aria-label="Share product">
+                🔗 Share
+              </button>
+            </div>
+
+          </div>
+          <!-- /product-info -->
+
+        </div>
+      </div>
+
+      <!-- ── Tabs: Description / Specs / Reviews ────────────── -->
+      <div class="container" style="padding: 0 var(--space-4) var(--space-10)">
+
+        <!-- Tab Nav -->
+        <div class="product-tabs" role="tablist" aria-label="Product information tabs">
+          <button class="product-tab-btn active" role="tab" aria-selected="true" aria-controls="tab-description" id="tab-btn-description" data-tab="description">
+            📋 Description
+          </button>
+          <button class="product-tab-btn" role="tab" aria-selected="false" aria-controls="tab-specifications" id="tab-btn-specifications" data-tab="specifications">
+            📊 Specifications
+          </button>
+          <button class="product-tab-btn" role="tab" aria-selected="false" aria-controls="tab-reviews" id="tab-btn-reviews" data-tab="reviews">
+            ⭐ Reviews <span id="reviews-tab-count" style="background:var(--bg-secondary);padding:2px 8px;border-radius:20px;font-size:var(--font-size-xs);margin-left:4px">0</span>
+          </button>
+        </div>
+
+        <!-- Tab Panels -->
+        <!-- Description -->
+        <div class="product-tab-panel active" id="tab-description" role="tabpanel" aria-labelledby="tab-btn-description">
+          <div id="product-description" style="color:var(--text-secondary);line-height:1.9;font-size:var(--font-size-base);max-width:840px">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Specifications -->
+        <div class="product-tab-panel" id="tab-specifications" role="tabpanel" aria-labelledby="tab-btn-specifications">
+          <div style="overflow-x:auto;border-radius:var(--border-radius-lg);border:1px solid var(--border-color)">
+            <table class="specs-table" id="product-specs-table" aria-label="Product specifications">
+              <tbody id="product-specs-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="product-tab-panel" id="tab-reviews" role="tabpanel" aria-labelledby="tab-btn-reviews">
+
+          <!-- Rating summary -->
+          <div style="display:flex;gap:var(--space-8);align-items:flex-start;flex-wrap:wrap;margin-bottom:var(--space-8);padding:var(--space-6);background:var(--bg-secondary);border-radius:var(--border-radius-lg)">
+            <!-- Big number -->
+            <div style="text-align:center;min-width:100px">
+              <div class="rating-big" id="reviews-avg-rating">0</div>
+              <div class="rating-big-stars" id="reviews-avg-stars">☆☆☆☆☆</div>
+              <div style="font-size:var(--font-size-xs);color:var(--text-muted);margin-top:var(--space-2)" id="reviews-total-count">0 reviews</div>
+            </div>
+            <!-- Bars -->
+            <div class="rating-breakdown" id="rating-breakdown-bars" aria-label="Rating distribution">
+              <!-- Populated by JS -->
+            </div>
+            <!-- Write review -->
+            <div style="margin-left:auto">
+              <button class="write-review-btn" id="write-review-btn" aria-label="Write a review">
+                ✏️ Write a Review
+              </button>
+            </div>
+          </div>
+
+          <!-- Write Review Form (collapsed) -->
+          <div id="write-review-form" style="display:none;background:var(--bg-secondary);border-radius:var(--border-radius-lg);padding:var(--space-6);margin-bottom:var(--space-8);animation:fadeIn 0.25s ease">
+            <h3 style="font-size:var(--font-size-base);font-weight:800;margin-bottom:var(--space-5)">Write Your Review</h3>
+            <form id="review-form-el" novalidate>
+              <!-- Star Picker -->
+              <div class="form-group">
+                <label class="form-label required">Rating</label>
+                <div id="star-picker" style="display:flex;gap:var(--space-2);font-size:1.8rem;cursor:pointer" role="radiogroup" aria-label="Rating">
+                  <span data-val="1" title="1 star" style="opacity:0.35;transition:opacity 0.15s">★</span>
+                  <span data-val="2" title="2 stars" style="opacity:0.35;transition:opacity 0.15s">★</span>
+                  <span data-val="3" title="3 stars" style="opacity:0.35;transition:opacity 0.15s">★</span>
+                  <span data-val="4" title="4 stars" style="opacity:0.35;transition:opacity 0.15s">★</span>
+                  <span data-val="5" title="5 stars" style="opacity:0.35;transition:opacity 0.15s">★</span>
+                </div>
+                <input type="hidden" id="review-rating-input" value="0" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label required" for="review-title-input">Review Title</label>
+                <input type="text" id="review-title-input" class="form-control" placeholder="Summarise your experience" required maxlength="120">
+              </div>
+              <div class="form-group">
+                <label class="form-label required" for="review-body-input">Your Review</label>
+                <textarea id="review-body-input" class="form-control form-textarea" placeholder="Tell others what you think…" required minlength="20" maxlength="1200"></textarea>
+              </div>
+              <div style="display:flex;gap:var(--space-3)">
+                <button type="submit" class="btn btn-primary" id="submit-review-btn">Submit Review</button>
+                <button type="button" class="btn btn-secondary" id="cancel-review-btn">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Reviews List -->
+          <div id="reviews-list" class="review-list" aria-label="Customer reviews" aria-live="polite">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Load More -->
+          <div id="reviews-load-more-wrap" style="text-align:center;margin-top:var(--space-8);display:none">
+            <button class="btn btn-secondary" id="load-more-reviews-btn">Load More Reviews</button>
+          </div>
+
+        </div>
+        <!-- /reviews panel -->
+
+      </div>
+      <!-- /tabs container -->
+
+      <!-- ── Related Products ──────────────────────────────── -->
+      <section class="home-section" aria-labelledby="related-title" style="background:var(--bg-secondary)">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title" id="related-title">You May Also <span>Like</span></h2>
+              <p class="section-subtitle">Based on this product</p>
+            </div>
+            <a href="/pages/products.html" class="view-all-link">View All →</a>
+          </div>
+          <div class="products-grid stagger-children" id="related-products" aria-label="Related products">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <!-- /product-detail-content -->
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+            <div class="nav-logo-icon">🛍️</div>
+            <span class="nav-logo-text">ShopVerse</span>
+          </a>
+          <p class="footer-brand-desc">India's premium e-commerce destination. Millions of products, trusted by 5M+ customers.</p>
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+            <a href="#" class="footer-social-link" aria-label="Twitter">X</a>
+            <a href="#" class="footer-social-link" aria-label="YouTube">▶</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Company</h3>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">About Us</a></li>
+            <li><a href="#" class="footer-link">Careers</a></li>
+            <li><a href="#" class="footer-link">Blog</a></li>
+            <li><a href="#" class="footer-link">Sitemap</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Help</h3>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Customer Support</a></li>
+            <li><a href="#" class="footer-link">Track Order</a></li>
+            <li><a href="#" class="footer-link">Returns & Refunds</a></li>
+            <li><a href="#" class="footer-link">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Categories</h3>
+          <ul class="footer-links">
+            <li><a href="/pages/products.html?category=electronics" class="footer-link">Electronics</a></li>
+            <li><a href="/pages/products.html?category=fashion" class="footer-link">Fashion</a></li>
+            <li><a href="/pages/products.html?category=home-living" class="footer-link">Home & Living</a></li>
+            <li><a href="/pages/products.html?category=sports-fitness" class="footer-link">Sports & Fitness</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Contact</h3>
+          <div class="footer-links">
+            <div class="footer-contact-item"><span class="footer-contact-icon">📍</span><div class="footer-contact-text"><div class="footer-contact-label">Address</div>123 Tech Park, Bengaluru, Karnataka 560001</div></div>
+            <div class="footer-contact-item"><span class="footer-contact-icon">📞</span><div class="footer-contact-text"><div class="footer-contact-label">Phone</div>1800-123-4567 (Toll Free)</div></div>
+            <div class="footer-contact-item"><span class="footer-contact-icon">✉️</span><div class="footer-contact-text"><div class="footer-contact-label">Email</div>support@shopverse.in</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2024 ShopVerse Pvt. Ltd. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#" class="footer-bottom-link">Privacy Policy</a>
+          <a href="#" class="footer-bottom-link">Terms of Service</a>
+          <a href="#" class="footer-bottom-link">Cookie Policy</a>
+        </div>
+        <div class="footer-payment-icons" aria-label="Accepted payment methods">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.75rem">We Accept:</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">VISA</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">MC</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">UPI</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">EMI</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">COD</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../assets/js/pages/product-detail.js"></script>
+</body>
+</html>

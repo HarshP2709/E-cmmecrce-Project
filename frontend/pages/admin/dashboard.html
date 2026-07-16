@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — ShopVerse Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-logo">🛍️ ShopVerse</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Admin Layout -->
+  <div class="admin-layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="admin-sidebar" id="admin-sidebar" role="navigation" aria-label="Admin navigation">
+      <!-- Logo -->
+      <div class="admin-sidebar-logo">
+        <span class="admin-sidebar-logo-icon" aria-hidden="true">🛍️</span>
+        <div>
+          <div class="admin-sidebar-logo-text">ShopVerse</div>
+          <span class="admin-sidebar-logo-tag">Admin Panel</span>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <nav class="admin-nav">
+        <div class="admin-nav-section">Overview</div>
+        <a href="dashboard.html" class="admin-nav-link active" aria-current="page">
+          <span class="admin-nav-icon" aria-hidden="true">📊</span> Dashboard
+        </a>
+
+        <div class="admin-nav-section">Catalogue</div>
+        <a href="products.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">📦</span> Products
+        </a>
+        <a href="add-product.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">➕</span> Add Product
+        </a>
+        <a href="categories.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">📁</span> Categories
+        </a>
+
+        <div class="admin-nav-section">Commerce</div>
+        <a href="orders.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">🛒</span> All Orders
+          <span class="admin-nav-badge" id="pending-badge"></span>
+        </a>
+        <a href="customers.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">👥</span> Customers
+        </a>
+
+        <div class="admin-nav-section">Insights</div>
+        <a href="analytics.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">📈</span> Revenue
+        </a>
+
+        <div class="admin-nav-section">System</div>
+        <a href="settings.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">⚙️</span> Settings
+        </a>
+        <a href="../../index.html" class="admin-nav-link">
+          <span class="admin-nav-icon" aria-hidden="true">🏠</span> Storefront
+        </a>
+      </nav>
+
+      <!-- Sidebar User Info -->
+      <div class="admin-sidebar-user" id="sidebar-user">
+        <div class="admin-sidebar-avatar" id="sidebar-avatar" aria-hidden="true">A</div>
+        <div class="admin-sidebar-user-info">
+          <div class="admin-sidebar-user-name" id="sidebar-name">Admin</div>
+          <div class="admin-sidebar-user-role">Administrator</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="admin-main" id="admin-main">
+
+      <!-- Top Bar -->
+      <header class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="admin-hamburger" id="admin-hamburger" aria-label="Toggle sidebar" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1 class="admin-page-title">Dashboard</h1>
+        </div>
+        <div class="admin-topbar-actions">
+          <button class="admin-topbar-btn" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+          <button class="admin-topbar-btn" id="notif-btn" aria-label="Notifications" aria-haspopup="true">
+            🔔<span class="admin-notif-dot" id="notif-dot" hidden></span>
+          </button>
+          <div class="admin-topbar-user" id="topbar-user">
+            <div class="admin-topbar-avatar" id="topbar-avatar" aria-hidden="true">A</div>
+            <span id="topbar-name">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="admin-content page-enter">
+
+        <!-- Stats Grid -->
+        <section class="stats-grid" aria-label="Key metrics">
+          <article class="stat-card reveal-scale">
+            <div class="stat-icon stat-icon-purple" aria-hidden="true">💰</div>
+            <div class="stat-info">
+              <div class="stat-label">Total Revenue</div>
+              <div class="stat-value" id="stat-revenue">—</div>
+              <div class="stat-change up" id="stat-revenue-change">Loading…</div>
+            </div>
+          </article>
+          <article class="stat-card reveal-scale">
+            <div class="stat-icon stat-icon-pink" aria-hidden="true">🛒</div>
+            <div class="stat-info">
+              <div class="stat-label">Total Orders</div>
+              <div class="stat-value" id="stat-orders">—</div>
+              <div class="stat-change up" id="stat-orders-change">Loading…</div>
+            </div>
+          </article>
+          <article class="stat-card reveal-scale">
+            <div class="stat-icon stat-icon-green" aria-hidden="true">👥</div>
+            <div class="stat-info">
+              <div class="stat-label">Customers</div>
+              <div class="stat-value" id="stat-customers">—</div>
+              <div class="stat-change up" id="stat-customers-change">Loading…</div>
+            </div>
+          </article>
+          <article class="stat-card reveal-scale">
+            <div class="stat-icon stat-icon-blue" aria-hidden="true">📦</div>
+            <div class="stat-info">
+              <div class="stat-label">Total Products</div>
+              <div class="stat-value" id="stat-products">—</div>
+              <div class="stat-change up" id="stat-products-change">Loading…</div>
+            </div>
+          </article>
+        </section>
+
+        <!-- Charts + Recent Orders -->
+        <div class="admin-dashboard-grid">
+
+          <!-- Revenue Chart -->
+          <div class="chart-container reveal">
+            <div class="chart-header">
+              <h2 class="chart-title">Revenue Overview</h2>
+              <div class="chart-period-btns">
+                <button class="chart-period-btn active" data-days="7">7d</button>
+                <button class="chart-period-btn" data-days="30">30d</button>
+                <button class="chart-period-btn" data-days="90">90d</button>
+              </div>
+            </div>
+            <canvas id="revenue-chart" height="280" aria-label="Revenue line chart" role="img"></canvas>
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="admin-table-wrap reveal">
+            <div class="admin-table-header">
+              <h2 class="admin-table-title">Recent Orders</h2>
+              <a href="orders.html" class="btn btn-sm btn-outline">View All</a>
+            </div>
+            <div id="recent-orders-wrap">
+              <table class="admin-table" aria-label="Recent orders">
+                <thead>
+                  <tr>
+                    <th scope="col">Order #</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-orders-body">
+                  <tr><td colspan="5" class="admin-table-loading">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="admin-table-wrap reveal">
+          <div class="admin-table-header">
+            <h2 class="admin-table-title">⚠️ Low Stock Alerts</h2>
+            <a href="products.html?filter=low_stock" class="btn btn-sm btn-outline">Manage Stock</a>
+          </div>
+          <table class="admin-table" aria-label="Low stock products">
+            <thead>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">SKU</th>
+                <th scope="col">Stock Left</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="low-stock-body">
+              <tr><td colspan="5" class="admin-table-loading">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /.admin-content -->
+    </main>
+  </div>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="admin-sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+  <script type="module" src="../../assets/js/pages/admin/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products — ShopVerse</title>
+  <meta name="description" content="Browse millions of products across electronics, fashion, home decor & more. Best prices, genuine products, free shipping on orders above ₹499.">
+  <meta name="keywords" content="buy online, products, electronics, fashion, ShopVerse">
+  <meta property="og:title" content="All Products — ShopVerse">
+  <meta property="og:description" content="Browse millions of products at India's best prices.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://shopverse.in/pages/products.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/navbar.css">
+  <link rel="stylesheet" href="../assets/css/products.css">
+  <link rel="stylesheet" href="../assets/css/pages.css">
+  <link rel="stylesheet" href="../assets/css/footer.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <style>
+    /* ── Products Page Layout ────────────────────────────────── */
+    .products-page-hero {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #a855f7 100%);
+      padding: var(--space-10) 0 var(--space-8);
+      margin-top: calc(var(--navbar-height) + 36px);
+      text-align: center;
+    }
+    .products-page-hero h1 {
+      font-size: var(--font-size-3xl);
+      font-weight: 900;
+      color: white;
+      margin-bottom: var(--space-2);
+    }
+    .products-page-hero p { color: rgba(255,255,255,0.8); font-size: var(--font-size-sm); }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4) 0;
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: var(--text-muted); }
+
+    /* Page layout */
+    .products-layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      gap: var(--space-6);
+      align-items: start;
+      padding: var(--space-6) 0 var(--space-16);
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────── */
+    .filter-sidebar {
+      position: sticky;
+      top: calc(var(--navbar-height) + var(--space-4));
+      max-height: calc(100vh - var(--navbar-height) - var(--space-8));
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) transparent;
+    }
+    .filter-sidebar::-webkit-scrollbar { width: 4px; }
+    .filter-sidebar::-webkit-scrollbar-track { background: transparent; }
+    .filter-sidebar::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+    .filter-card {
+      background: var(--bg-card);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-xs);
+      overflow: hidden;
+    }
+    .filter-card-header {
+      padding: var(--space-4) var(--space-5);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-card-header h3 {
+      font-size: var(--font-size-base);
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    #clear-filters {
+      font-size: var(--font-size-xs);
+      color: var(--color-primary);
+      font-weight: 700;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      border-radius: var(--border-radius-sm);
+      transition: background var(--transition-fast);
+    }
+    #clear-filters:hover { background: rgba(108,99,255,0.1); }
+
+    .filter-section {
+      padding: var(--space-4) var(--space-5);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .filter-section:last-child { border-bottom: none; }
+    .filter-section-title {
+      font-size: var(--font-size-xs);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .filter-section-title .toggle-icon {
+      font-size: 10px;
+      transition: transform var(--transition-fast);
+    }
+    .filter-section-title.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .filter-section-body { display: flex; flex-direction: column; gap: var(--space-2); }
+    .filter-section-body.collapsed { display: none; }
+
+    /* Checkbox groups */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      cursor: pointer;
+      padding: var(--space-1) 0;
+    }
+    .checkbox-group:hover .checkbox-label { color: var(--color-primary); }
+    .custom-checkbox {
+      width: 18px; height: 18px;
+      border-radius: 5px;
+      border: 2px solid var(--border-color);
+      flex-shrink: 0;
+      position: relative;
+      transition: all var(--transition-fast);
+      background: var(--bg-primary);
+    }
+    .custom-checkbox.checked {
+      background: var(--gradient-primary);
+      border-color: var(--color-primary);
+    }
+    .custom-checkbox.checked::after {
+      content: '✓';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .checkbox-label {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+      line-height: 1.4;
+    }
+
+    /* Price Range */
+    .price-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+    .price-input-group { display: flex; flex-direction: column; gap: 4px; }
+    .price-input-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: var(--border-radius-sm);
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      transition: border-color var(--transition-fast);
+    }
+    .price-input:focus { outline: none; border-color: var(--color-primary); }
+    .price-apply-btn {
+      width: 100%;
+      padding: 9px;
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity var(--transition-fast);
+    }
+    .price-apply-btn:hover { opacity: 0.9; }
+
+    /* Rating filter */
+    .rating-radio {
+      display: none;
+    }
+    .rating-label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      cursor: pointer;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--border-radius-sm);
+      border: 1.5px solid var(--border-color);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      background: var(--bg-secondary);
+    }
+    .rating-label:hover { border-color: var(--color-primary-light); color: var(--color-primary); }
+    .rating-radio:checked + .rating-label {
+      border-color: var(--color-primary);
+      background: rgba(108,99,255,0.08);
+      color: var(--color-primary);
+    }
+    .rating-stars { color: #fbbf24; font-size: 12px; letter-spacing: 1px; }
+
+    /* ── Main Area ───────────────────────────────────────────── */
+    .products-main { min-width: 0; }
+
+    /* Search title */
+    #search-title {
+      display: none;
+      font-size: var(--font-size-xl);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+    }
+    #search-title span { color: var(--color-primary); }
+
+    /* Toolbar */
+    .products-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-5);
+      padding: var(--space-4) var(--space-5);
+      background: var(--bg-card);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-xs);
+    }
+    .toolbar-left { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+    .product-count-text {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .product-count-text strong { color: var(--text-primary); font-weight: 800; }
+    .toolbar-right { display: flex; align-items: center; gap: var(--space-3); }
+
+    /* Sort select */
+    .sort-select {
+      padding: 8px 32px 8px 12px;
+      border-radius: var(--border-radius);
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236c63ff' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      transition: border-color var(--transition-fast);
+    }
+    .sort-select:focus { outline: none; border-color: var(--color-primary); }
+
+    /* View toggle */
+    .view-toggle { display: flex; gap: var(--space-1); }
+    .view-btn {
+      width: 36px; height: 36px;
+      border-radius: var(--border-radius-sm);
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+    .view-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .view-btn.active { background: var(--gradient-primary); border-color: transparent; color: white; }
+
+    /* Active filter chips */
+    .filter-chips {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-4);
+      min-height: 0;
+    }
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 5px 12px;
+      border-radius: var(--border-radius-pill);
+      background: rgba(108,99,255,0.1);
+      border: 1px solid rgba(108,99,255,0.2);
+      color: var(--color-primary);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      animation: fadeInScale 0.2s ease;
+    }
+    .filter-chip-remove {
+      cursor: pointer;
+      font-size: 14px;
+      opacity: 0.7;
+      transition: opacity var(--transition-fast);
+      background: none;
+      border: none;
+      color: inherit;
+      line-height: 1;
+      padding: 0;
+    }
+    .filter-chip-remove:hover { opacity: 1; }
+
+    /* List view override */
+    .product-list-view {
+      grid-template-columns: 1fr !important;
+    }
+    .product-list-view .product-card {
+      flex-direction: row;
+    }
+    .product-list-view .product-card-img-wrap {
+      width: 200px;
+      min-width: 200px;
+      aspect-ratio: unset;
+      height: 200px;
+    }
+    .product-list-view .product-card-body { padding: var(--space-5); }
+    .product-list-view .product-card-footer { padding: var(--space-5); padding-top: 0; min-width: 160px; display: flex; flex-direction: column; justify-content: flex-end; }
+
+    /* Sidebar mobile toggle */
+    .filter-toggle-btn {
+      display: none;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 10px 16px;
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 700;
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+      margin-bottom: var(--space-4);
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-10);
+      padding: var(--space-6) 0;
+    }
+    .page-btn {
+      min-width: 40px;
+      height: 40px;
+      padding: 0 var(--space-3);
+      border-radius: var(--border-radius);
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .page-btn:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); background: rgba(108,99,255,0.06); }
+    .page-btn.active { background: var(--gradient-primary); border-color: transparent; color: white; box-shadow: 0 4px 12px rgba(108,99,255,0.35); }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* Empty & error states */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-20) var(--space-10);
+    }
+    .empty-state-icon { font-size: 4rem; margin-bottom: var(--space-4); }
+    .empty-state h3 { font-size: var(--font-size-xl); font-weight: 800; margin-bottom: var(--space-2); }
+    .empty-state p { color: var(--text-muted); margin-bottom: var(--space-6); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .products-layout { grid-template-columns: 1fr; }
+      .filter-sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 300px;
+        z-index: var(--z-modal);
+        background: var(--bg-card);
+        transform: translateX(-110%);
+        transition: transform var(--transition-slow);
+        max-height: 100vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-xl);
+        border-radius: 0;
+      }
+      .filter-sidebar.open { transform: translateX(0); }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--bg-overlay);
+        z-index: calc(var(--z-modal) - 1);
+      }
+      .sidebar-overlay.active { display: block; }
+      .filter-toggle-btn { display: inline-flex; }
+      .filter-sidebar-close {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-5);
+        border-bottom: 1px solid var(--border-color);
+        font-weight: 800;
+        font-size: var(--font-size-base);
+      }
+      .product-list-view .product-card { flex-direction: column; }
+      .product-list-view .product-card-img-wrap { width: 100%; height: auto; aspect-ratio: 4/3; min-width: unset; }
+    }
+    @media (max-width: 768px) {
+      .products-page-hero { padding: var(--space-8) 0 var(--space-6); }
+      .products-page-hero h1 { font-size: var(--font-size-2xl); }
+      .products-toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar-left, .toolbar-right { justify-content: space-between; }
+    }
+    @media (max-width: 480px) {
+      .products-page-hero { margin-top: calc(var(--navbar-height) + 32px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-logo">🛍️ ShopVerse</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Top Bar -->
+  <div class="top-bar" role="banner">
+    <div class="container top-bar-inner">
+      <div class="top-bar-text">
+        🚚 <strong>Free Delivery</strong> on orders above <strong>₹499</strong> &nbsp;|&nbsp;
+        🎉 Use code <strong>WELCOME20</strong> for 20% off on first order
+      </div>
+      <div class="top-bar-links">
+        <a href="#">Sell on ShopVerse</a>
+        <a href="#">Download App</a>
+        <a href="login.html">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="../index.html" class="nav-logo" aria-label="ShopVerse Home">
+        <div class="nav-logo-icon" aria-hidden="true">🛍️</div>
+        <span class="nav-logo-text">ShopVerse</span>
+      </a>
+      <div class="nav-search" role="search">
+        <div class="search-input-wrapper">
+          <input
+            type="search"
+            class="search-input"
+            id="nav-search-input"
+            placeholder="Search for products, brands & more..."
+            autocomplete="off"
+            aria-label="Search products"
+            aria-controls="search-dropdown"
+            aria-autocomplete="list"
+          >
+          <button class="search-btn" aria-label="Search" id="nav-search-btn">🔍</button>
+          <div class="search-dropdown" id="search-dropdown" role="listbox" aria-label="Search suggestions"></div>
+        </div>
+      </div>
+      <ul class="nav-links" role="list">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="products.html" class="nav-link active">Products</a></li>
+        <li>
+          <button class="nav-link" id="mega-menu-trigger" aria-expanded="false">Categories ▾</button>
+        </li>
+        <li><a href="offers.html" class="nav-link">🔥 Deals</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">☀️</button>
+        <a href="wishlist.html" class="nav-action-btn" aria-label="Wishlist">
+          🤍
+          <span class="nav-badge" id="wishlist-count" aria-label="0 items in wishlist" style="display:none">0</span>
+        </a>
+        <a href="cart.html" class="nav-action-btn" aria-label="Shopping cart">
+          🛒
+          <span class="nav-badge" id="cart-count" aria-label="0 items in cart" style="display:none">0</span>
+        </a>
+        <div class="nav-user" id="nav-user-area">
+          <button class="nav-user-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">
+            <div class="nav-user-avatar" id="nav-avatar">👤</div>
+            <span id="nav-username">Account</span>
+            <span>▾</span>
+          </button>
+          <div class="nav-dropdown" id="user-dropdown" role="menu"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Mega Menu -->
+    <div class="mega-menu" id="mega-menu" aria-label="Category menu" role="navigation">
+      <div class="container">
+        <div class="mega-menu-grid" id="mega-menu-grid"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu-drawer">
+      <div class="mobile-menu-header">
+        <a href="../index.html" class="nav-logo-text">🛍️ ShopVerse</a>
+        <button class="modal-close" id="mobile-close-btn" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <div class="mobile-nav-section-title">Navigation</div>
+        <a href="../index.html" class="mobile-nav-link"><span class="icon">🏠</span> Home</a>
+        <a href="products.html" class="mobile-nav-link"><span class="icon">📦</span> Products</a>
+        <a href="categories.html" class="mobile-nav-link"><span class="icon">📁</span> Categories</a>
+        <a href="offers.html" class="mobile-nav-link"><span class="icon">🔥</span> Deals & Offers</a>
+        <div class="mobile-nav-section-title">Account</div>
+        <a href="login.html" class="mobile-nav-link" id="mobile-login-link"><span class="icon">🔐</span> Sign In</a>
+        <a href="profile.html" class="mobile-nav-link" id="mobile-profile-link" style="display:none"><span class="icon">👤</span> My Profile</a>
+        <a href="orders.html" class="mobile-nav-link"><span class="icon">📋</span> My Orders</a>
+        <a href="wishlist.html" class="mobile-nav-link"><span class="icon">🤍</span> Wishlist</a>
+        <a href="cart.html" class="mobile-nav-link"><span class="icon">🛒</span> Cart</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero Banner -->
+  <div class="products-page-hero" id="page-hero">
+    <div class="container">
+      <h1 id="hero-heading">All Products</h1>
+      <p id="hero-sub">Discover millions of products at unbeatable prices</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span id="breadcrumb-current">Products</span>
+      </nav>
+
+      <!-- Search title (shown when search query present) -->
+      <h2 id="search-title"></h2>
+
+      <!-- Mobile filter button -->
+      <button class="filter-toggle-btn" id="filter-toggle-btn" aria-label="Open filters">
+        ⚙️ Filters
+      </button>
+
+      <!-- Active filter chips -->
+      <div class="filter-chips" id="filter-chips" aria-label="Active filters"></div>
+
+      <div class="products-layout">
+
+        <!-- ── Sidebar ─────────────────────────────────────── -->
+        <aside class="filter-sidebar" id="filter-sidebar" aria-label="Product filters">
+          <!-- Mobile close header -->
+          <div class="filter-sidebar-close" id="filter-sidebar-close" style="display:none">
+            <span>🎛 Filters</span>
+            <button style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-primary)" aria-label="Close filters" id="filter-close-btn">✕</button>
+          </div>
+
+          <div class="filter-card">
+            <div class="filter-card-header">
+              <h3>🎛 Filters</h3>
+              <button id="clear-filters" aria-label="Clear all filters">Clear All</button>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="filter-section">
+              <div class="filter-section-title" data-target="cat-body" role="button" aria-expanded="true" tabindex="0">
+                Category <span class="toggle-icon">▼</span>
+              </div>
+              <div class="filter-section-body" id="cat-body">
+                <div id="category-filters" role="radiogroup" aria-label="Filter by category">
+                  <!-- Populated by JS -->
+                  <div class="checkbox-group"><div class="custom-checkbox" style="border-color:var(--border-color);animation:pulse 1.5s infinite"></div><span class="skeleton-text w-3-4" style="height:14px;border-radius:4px;background:var(--bg-tertiary);flex:1"></span></div>
+                  <div class="checkbox-group"><div class="custom-checkbox" style="border-color:var(--border-color)"></div><span class="skeleton-text" style="height:14px;border-radius:4px;background:var(--bg-tertiary);width:60%"></span></div>
+                  <div class="checkbox-group"><div class="custom-checkbox" style="border-color:var(--border-color)"></div><span class="skeleton-text" style="height:14px;border-radius:4px;background:var(--bg-tertiary);width:75%"></span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="filter-section">
+              <div class="filter-section-title" data-target="brand-body" role="button" aria-expanded="true" tabindex="0">
+                Brand <span class="toggle-icon">▼</span>
+              </div>
+              <div class="filter-section-body" id="brand-body">
+                <div id="brand-filters" role="group" aria-label="Filter by brand"></div>
+              </div>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="filter-section">
+              <div class="filter-section-title" data-target="price-body" role="button" aria-expanded="true" tabindex="0">
+                Price Range <span class="toggle-icon">▼</span>
+              </div>
+              <div class="filter-section-body" id="price-body">
+                <div class="price-inputs">
+                  <div class="price-input-group">
+                    <label class="price-input-label" for="min-price">Min (₹)</label>
+                    <input type="number" id="min-price" class="price-input" placeholder="0" min="0" aria-label="Minimum price">
+                  </div>
+                  <div class="price-input-group">
+                    <label class="price-input-label" for="max-price">Max (₹)</label>
+                    <input type="number" id="max-price" class="price-input" placeholder="Any" min="0" aria-label="Maximum price">
+                  </div>
+                </div>
+                <button class="price-apply-btn" id="apply-price">Apply Price Filter</button>
+                <!-- Quick price presets -->
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+                  <button class="filter-chip" style="cursor:pointer;border:1.5px solid var(--border-color);background:var(--bg-secondary);color:var(--text-secondary)" data-min="0" data-max="500" id="price-preset-1">Under ₹500</button>
+                  <button class="filter-chip" style="cursor:pointer;border:1.5px solid var(--border-color);background:var(--bg-secondary);color:var(--text-secondary)" data-min="500" data-max="2000" id="price-preset-2">₹500–₹2K</button>
+                  <button class="filter-chip" style="cursor:pointer;border:1.5px solid var(--border-color);background:var(--bg-secondary);color:var(--text-secondary)" data-min="2000" data-max="10000" id="price-preset-3">₹2K–₹10K</button>
+                  <button class="filter-chip" style="cursor:pointer;border:1.5px solid var(--border-color);background:var(--bg-secondary);color:var(--text-secondary)" data-min="10000" data-max="" id="price-preset-4">₹10K+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rating Filter -->
+            <div class="filter-section">
+              <div class="filter-section-title" data-target="rating-body" role="button" aria-expanded="true" tabindex="0">
+                Customer Rating <span class="toggle-icon">▼</span>
+              </div>
+              <div class="filter-section-body" id="rating-body" role="radiogroup" aria-label="Filter by rating">
+                <div>
+                  <input type="radio" name="rating-filter" id="rating-4" class="rating-radio" value="4">
+                  <label for="rating-4" class="rating-label">
+                    <span class="rating-stars">★★★★</span> 4★ &amp; above
+                  </label>
+                </div>
+                <div>
+                  <input type="radio" name="rating-filter" id="rating-3" class="rating-radio" value="3">
+                  <label for="rating-3" class="rating-label">
+                    <span class="rating-stars">★★★</span> 3★ &amp; above
+                  </label>
+                </div>
+                <div>
+                  <input type="radio" name="rating-filter" id="rating-2" class="rating-radio" value="2">
+                  <label for="rating-2" class="rating-label">
+                    <span class="rating-stars">★★</span> 2★ &amp; above
+                  </label>
+                </div>
+                <div>
+                  <input type="radio" name="rating-filter" id="rating-all" class="rating-radio" value="" checked>
+                  <label for="rating-all" class="rating-label">All Ratings</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Condition Filter -->
+            <div class="filter-section">
+              <div class="filter-section-title" data-target="cond-body" role="button" aria-expanded="true" tabindex="0">
+                Condition <span class="toggle-icon">▼</span>
+              </div>
+              <div class="filter-section-body" id="cond-body" role="radiogroup" aria-label="Filter by condition">
+                <div>
+                  <input type="radio" name="condition-filter" id="cond-all" class="rating-radio" value="" checked>
+                  <label for="cond-all" class="rating-label">All Items</label>
+                </div>
+                <div>
+                  <input type="radio" name="condition-filter" id="cond-new" class="rating-radio" value="new">
+                  <label for="cond-new" class="rating-label">✨ New Arrivals</label>
+                </div>
+                <div>
+                  <input type="radio" name="condition-filter" id="cond-sale" class="rating-radio" value="sale">
+                  <label for="cond-sale" class="rating-label">🏷️ On Sale</label>
+                </div>
+                <div>
+                  <input type="radio" name="condition-filter" id="cond-best" class="rating-radio" value="best_seller">
+                  <label for="cond-best" class="rating-label">🏆 Best Sellers</label>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /filter-card -->
+        </aside>
+
+        <!-- ── Products Main ──────────────────────────────── -->
+        <section class="products-main" aria-labelledby="products-heading">
+          <h2 class="sr-only" id="products-heading">Products listing</h2>
+
+          <!-- Toolbar -->
+          <div class="products-toolbar" role="toolbar" aria-label="Product listing controls">
+            <div class="toolbar-left">
+              <span class="product-count-text">
+                <strong id="product-count">Loading…</strong>
+              </span>
+            </div>
+            <div class="toolbar-right">
+              <select class="sort-select" id="sort-select" aria-label="Sort products">
+                <option value="newest">Newest First</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="rating">Top Rated</option>
+                <option value="best_seller">Best Selling</option>
+              </select>
+              <div class="view-toggle" role="group" aria-label="View mode">
+                <button class="view-btn active" id="view-grid" aria-label="Grid view" title="Grid view">⊞</button>
+                <button class="view-btn" id="view-list" aria-label="List view" title="List view">☰</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="products-grid" id="products-grid" aria-live="polite" aria-label="Products">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Pagination -->
+          <nav class="pagination" id="pagination" aria-label="Page navigation"></nav>
+
+        </section>
+      </div><!-- /products-layout -->
+    </div><!-- /container -->
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+            <div class="nav-logo-icon">🛍️</div>
+            <span class="nav-logo-text">ShopVerse</span>
+          </a>
+          <p class="footer-brand-desc">India's premium e-commerce destination. Millions of products, trusted by 5M+ customers. Shop with confidence.</p>
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+            <a href="#" class="footer-social-link" aria-label="Twitter">X</a>
+            <a href="#" class="footer-social-link" aria-label="YouTube">▶</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Company</h3>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">About Us</a></li>
+            <li><a href="#" class="footer-link">Careers</a></li>
+            <li><a href="#" class="footer-link">Press & Media</a></li>
+            <li><a href="#" class="footer-link">Blog</a></li>
+            <li><a href="#" class="footer-link">Sitemap</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Help</h3>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Customer Support</a></li>
+            <li><a href="#" class="footer-link">Track Order</a></li>
+            <li><a href="#" class="footer-link">Returns & Refunds</a></li>
+            <li><a href="#" class="footer-link">Shipping Policy</a></li>
+            <li><a href="#" class="footer-link">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Categories</h3>
+          <ul class="footer-links">
+            <li><a href="products.html?category=electronics" class="footer-link">Electronics</a></li>
+            <li><a href="products.html?category=fashion" class="footer-link">Fashion</a></li>
+            <li><a href="products.html?category=home-living" class="footer-link">Home & Living</a></li>
+            <li><a href="products.html?category=sports-fitness" class="footer-link">Sports & Fitness</a></li>
+            <li><a href="products.html?category=beauty-personal-care" class="footer-link">Beauty & Care</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Contact</h3>
+          <div class="footer-links">
+            <div class="footer-contact-item"><span class="footer-contact-icon">📍</span><div class="footer-contact-text"><div class="footer-contact-label">Address</div>123 Tech Park, Bengaluru, Karnataka 560001</div></div>
+            <div class="footer-contact-item"><span class="footer-contact-icon">📞</span><div class="footer-contact-text"><div class="footer-contact-label">Phone</div>1800-123-4567 (Toll Free)</div></div>
+            <div class="footer-contact-item"><span class="footer-contact-icon">✉️</span><div class="footer-contact-text"><div class="footer-contact-label">Email</div>support@shopverse.in</div></div>
+          </div>
+          <div class="footer-app-badges">
+            <a href="#" class="app-badge"><span class="app-badge-icon">🍎</span><div class="app-badge-text"><span class="app-badge-sub">Download on</span><span class="app-badge-name">App Store</span></div></a>
+            <a href="#" class="app-badge"><span class="app-badge-icon">🤖</span><div class="app-badge-text"><span class="app-badge-sub">Get it on</span><span class="app-badge-name">Google Play</span></div></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2024 ShopVerse Pvt. Ltd. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#" class="footer-bottom-link">Privacy Policy</a>
+          <a href="#" class="footer-bottom-link">Terms of Service</a>
+          <a href="#" class="footer-bottom-link">Cookie Policy</a>
+        </div>
+        <div class="footer-payment-icons" aria-label="Accepted payment methods">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.75rem">We Accept:</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">VISA</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">MC</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">UPI</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">EMI</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">COD</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../assets/js/pages/products.js"></script>
+</body>
+</html>

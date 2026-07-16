@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — ShopVerse</title>
+  <meta name="description" content="Sign in to your ShopVerse account. Access your orders, wishlist, and exclusive deals.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/pages.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <style>
+    /* ── Auth page extra styles not covered by pages.css ─── */
+
+    body { overflow-x: hidden; }
+
+    /* Floating blobs on the auth-left panel */
+    .auth-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .auth-blob-1 {
+      width: 350px; height: 350px;
+      background: var(--color-primary-light);
+      top: -80px; right: -80px;
+    }
+    .auth-blob-2 {
+      width: 260px; height: 260px;
+      background: var(--color-secondary);
+      bottom: 40px; left: -60px;
+    }
+    .auth-blob-3 {
+      width: 200px; height: 200px;
+      background: var(--color-accent);
+      top: 40%; left: 30%;
+    }
+
+    /* Floating stat cards on the left panel */
+    .auth-stat-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+      margin-top: var(--space-10);
+    }
+    .auth-stat-card {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-4);
+      text-align: center;
+      transition: transform var(--transition-base);
+    }
+    .auth-stat-card:hover { transform: translateY(-3px); }
+    .auth-stat-val {
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      color: white;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .auth-stat-lbl { font-size: var(--font-size-xs); color: rgba(255,255,255,0.7); }
+
+    /* Form group */
+    .form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+    .form-label {
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .form-label .required { color: var(--color-danger); margin-left: 2px; }
+
+    /* Input wrapper with icon */
+    .input-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon-prefix {
+      position: absolute;
+      left: 14px;
+      font-size: 1rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .input-with-icon {
+      padding-left: 42px !important;
+    }
+    .input-icon-suffix {
+      position: absolute;
+      right: 14px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color var(--transition-fast);
+      z-index: 1;
+      line-height: 1;
+    }
+    .input-icon-suffix:hover { color: var(--color-primary); }
+
+    /* Error text */
+    .input-error-text {
+      font-size: var(--font-size-xs);
+      color: var(--color-danger);
+      font-weight: 600;
+      display: none;
+      margin-top: 2px;
+    }
+    .input-error-text.visible { display: block; animation: fadeInScale 0.2s ease; }
+
+    /* Input invalid state */
+    .form-control.invalid {
+      border-color: var(--color-danger) !important;
+      background: rgba(239,68,68,0.04);
+    }
+    .form-control.valid {
+      border-color: var(--color-success) !important;
+    }
+
+    /* Remember + Forgot row */
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      cursor: pointer;
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      user-select: none;
+    }
+    .remember-label input[type="checkbox"] { accent-color: var(--color-primary); width: 16px; height: 16px; }
+    .forgot-link {
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: opacity var(--transition-fast);
+    }
+    .forgot-link:hover { opacity: 0.8; text-decoration: underline; }
+
+    /* Submit button */
+    .auth-submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-lg);
+      font-size: var(--font-size-base);
+      font-weight: 800;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.3px;
+    }
+    .auth-submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(108,99,255,0.4);
+    }
+    .auth-submit-btn:active { transform: translateY(0); }
+    .auth-submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .auth-submit-btn.loading::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: rgba(255,255,255,0.5);
+      animation: loading-bar 1.2s ease infinite;
+    }
+    @keyframes loading-bar {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Social buttons */
+    .auth-social-icon {
+      width: 22px; height: 22px;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .social-google { background: linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4); color: white; }
+    .social-facebook { background: #1877F2; color: white; }
+
+    /* Form error alert */
+    .auth-alert {
+      padding: var(--space-4);
+      border-radius: var(--border-radius);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      display: none;
+      animation: fadeInScale 0.25s ease;
+    }
+    .auth-alert.visible { display: flex; align-items: center; gap: var(--space-3); }
+    .auth-alert.error {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: var(--color-danger);
+    }
+    .auth-alert.success {
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.2);
+      color: var(--color-success);
+    }
+
+    /* Trusted badges on auth right */
+    .auth-trust-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-5);
+      margin-top: var(--space-6);
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--border-color);
+    }
+    .auth-trust-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    @media (max-width: 480px) {
+      .auth-stat-cards { grid-template-columns: 1fr 1fr; }
+      .auth-trust-row { flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-logo">🛍️ ShopVerse</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- ── Auth Page ────────────────────────────────────────── -->
+  <main class="auth-page" id="main-content">
+    <div class="auth-container">
+
+      <!-- Left Panel — Brand showcase -->
+      <div class="auth-left" role="complementary" aria-label="ShopVerse features">
+        <!-- Decorative blobs -->
+        <div class="auth-blob auth-blob-1" aria-hidden="true"></div>
+        <div class="auth-blob auth-blob-2" aria-hidden="true"></div>
+        <div class="auth-blob auth-blob-3" aria-hidden="true"></div>
+
+        <div class="auth-left-content">
+          <!-- Logo -->
+          <a href="../index.html" class="auth-left-logo" aria-label="ShopVerse Home">
+            🛍️ ShopVerse
+          </a>
+
+          <h1 class="auth-left-title">
+            Welcome Back!<br>
+            <span style="font-weight:400;font-size:0.75em;opacity:0.9">Great to see you again</span>
+          </h1>
+          <p class="auth-left-subtitle">
+            Sign in to access your orders, wishlist, exclusive deals, and a personalised shopping experience tailored just for you.
+          </p>
+
+          <div class="auth-left-features">
+            <div class="auth-feature">
+              <span class="auth-feature-icon">🚀</span>
+              <div class="auth-feature-text">
+                <div class="auth-feature-title">Lightning-Fast Delivery</div>
+                Free delivery on orders above ₹499. Same-day delivery available in select cities.
+              </div>
+            </div>
+            <div class="auth-feature">
+              <span class="auth-feature-icon">🔒</span>
+              <div class="auth-feature-text">
+                <div class="auth-feature-title">100% Secure Shopping</div>
+                Your data is encrypted and payments are protected with bank-grade security.
+              </div>
+            </div>
+            <div class="auth-feature">
+              <span class="auth-feature-icon">🔄</span>
+              <div class="auth-feature-text">
+                <div class="auth-feature-title">Easy Returns & Refunds</div>
+                30-day hassle-free return policy. No questions asked.
+              </div>
+            </div>
+            <div class="auth-feature">
+              <span class="auth-feature-icon">🎁</span>
+              <div class="auth-feature-text">
+                <div class="auth-feature-title">Exclusive Member Deals</div>
+                Get access to member-only flash sales, coupons, and early access to new arrivals.
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="auth-stat-cards" aria-label="ShopVerse statistics">
+            <div class="auth-stat-card">
+              <div class="auth-stat-val">5M+</div>
+              <div class="auth-stat-lbl">Happy Customers</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-val">1M+</div>
+              <div class="auth-stat-lbl">Products</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-val">4.8★</div>
+              <div class="auth-stat-lbl">App Rating</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-val">24/7</div>
+              <div class="auth-stat-lbl">Support</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel — Login Form -->
+      <div class="auth-right">
+        <div style="max-width: 440px; width: 100%; margin: 0 auto;">
+
+          <!-- Header -->
+          <div style="margin-bottom: var(--space-8);">
+            <!-- Mobile logo (hidden on desktop via CSS) -->
+            <a href="../index.html" style="display:none;align-items:center;gap:8px;text-decoration:none;color:var(--text-primary);font-weight:900;font-size:1.25rem;margin-bottom:var(--space-6)" id="mobile-logo">
+              🛍️ ShopVerse
+            </a>
+            <h2 class="auth-right-title">Sign in to your account</h2>
+            <p class="auth-right-subtitle">Enter your credentials to access your ShopVerse dashboard</p>
+          </div>
+
+          <!-- Alert box for form-level errors -->
+          <div class="auth-alert error" id="login-alert" role="alert">
+            <span id="login-alert-icon">⚠️</span>
+            <span id="login-alert-msg"></span>
+          </div>
+
+          <!-- Social Login -->
+          <div class="auth-social-btns" style="margin-bottom: var(--space-6);">
+            <button class="auth-social-btn" id="google-login-btn" type="button" aria-label="Continue with Google">
+              <div class="auth-social-icon social-google" aria-hidden="true">G</div>
+              <span>Continue with Google</span>
+            </button>
+            <button class="auth-social-btn" id="facebook-login-btn" type="button" aria-label="Continue with Facebook">
+              <div class="auth-social-icon social-facebook" aria-hidden="true">f</div>
+              <span>Continue with Facebook</span>
+            </button>
+          </div>
+
+          <!-- Divider -->
+          <div class="auth-divider">or sign in with email</div>
+
+          <!-- Login Form -->
+          <form class="auth-form" id="login-form" novalidate autocomplete="on">
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label" for="login-email">
+                Email Address <span class="required" aria-hidden="true">*</span>
+              </label>
+              <div class="input-icon-wrap">
+                <span class="input-icon-prefix" aria-hidden="true">✉️</span>
+                <input
+                  type="email"
+                  id="login-email"
+                  name="email"
+                  class="form-control input-with-icon"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  inputmode="email"
+                  required
+                  aria-required="true"
+                  aria-describedby="email-error"
+                >
+              </div>
+              <span class="input-error-text" id="email-error" role="alert"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <label class="form-label" for="login-password">
+                Password <span class="required" aria-hidden="true">*</span>
+              </label>
+              <div class="input-icon-wrap">
+                <span class="input-icon-prefix" aria-hidden="true">🔒</span>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  class="form-control input-with-icon"
+                  placeholder="Enter your password"
+                  autocomplete="current-password"
+                  required
+                  aria-required="true"
+                  aria-describedby="password-error"
+                  style="padding-right: 48px;"
+                >
+                <button
+                  type="button"
+                  class="input-icon-suffix"
+                  id="toggle-password"
+                  aria-label="Show password"
+                  title="Show/Hide password"
+                >👁</button>
+              </div>
+              <span class="input-error-text" id="password-error" role="alert"></span>
+            </div>
+
+            <!-- Remember me + Forgot password -->
+            <div class="form-row">
+              <label class="remember-label" for="remember-me">
+                <input type="checkbox" id="remember-me" name="remember">
+                Remember me for 30 days
+              </label>
+              <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="auth-submit-btn" id="login-btn">
+              Sign In →
+            </button>
+
+          </form>
+
+          <!-- Register link -->
+          <div class="auth-link" style="margin-top: var(--space-6);">
+            Don't have an account?
+            <a href="register.html" id="register-link">Create one free</a>
+          </div>
+
+          <!-- Trust row -->
+          <div class="auth-trust-row">
+            <div class="auth-trust-item"><span>🔒</span> SSL Secured</div>
+            <div class="auth-trust-item"><span>✅</span> Verified Platform</div>
+            <div class="auth-trust-item"><span>🛡️</span> Data Protected</div>
+          </div>
+
+        </div><!-- /max-width wrapper -->
+      </div><!-- /auth-right -->
+
+    </div><!-- /auth-container -->
+  </main>
+
+  <!-- Show mobile logo on small screens -->
+  <style>
+    @media (max-width: 1024px) {
+      #mobile-logo { display: flex !important; }
+    }
+  </style>
+
+  <script type="module" src="../assets/js/pages/login.js"></script>
+</body>
+</html>

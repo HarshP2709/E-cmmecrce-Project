@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist — ShopVerse</title>
+  <meta name="description" content="Your saved products on ShopVerse. Move items to cart or remove them.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/navbar.css">
+  <link rel="stylesheet" href="../assets/css/pages.css">
+  <link rel="stylesheet" href="../assets/css/products.css">
+  <link rel="stylesheet" href="../assets/css/footer.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-logo">🛍️ ShopVerse</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- Top Bar -->
+  <div class="top-bar" role="banner">
+    <div class="container top-bar-inner">
+      <div class="top-bar-text">🚚 <strong>Free Delivery</strong> on orders above <strong>₹499</strong></div>
+      <div class="top-bar-links">
+        <a href="#">Sell on ShopVerse</a>
+        <a href="#">Download App</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="../index.html" class="nav-logo" aria-label="ShopVerse Home">
+        <div class="nav-logo-icon" aria-hidden="true">🛍️</div>
+        <span class="nav-logo-text">ShopVerse</span>
+      </a>
+      <div class="nav-search" role="search">
+        <div class="search-input-wrapper">
+          <input type="search" class="search-input" id="nav-search-input" placeholder="Search for products, brands & more..." autocomplete="off" aria-label="Search products" aria-controls="search-dropdown" aria-autocomplete="list">
+          <button class="search-btn" aria-label="Search" id="nav-search-btn">🔍</button>
+          <div class="search-dropdown" id="search-dropdown" role="listbox"></div>
+        </div>
+      </div>
+      <ul class="nav-links" role="list">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="products.html" class="nav-link">Products</a></li>
+        <li><button class="nav-link" id="mega-menu-trigger" aria-expanded="false">Categories ▾</button></li>
+        <li><a href="offers.html" class="nav-link">🔥 Deals</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <a href="wishlist.html" class="nav-action-btn" aria-label="Wishlist" aria-current="page">🤍<span class="nav-badge" id="wishlist-count" style="display:none">0</span></a>
+        <a href="cart.html" class="nav-action-btn" aria-label="Shopping cart">🛒<span class="nav-badge" id="cart-count" style="display:none">0</span></a>
+        <div class="nav-user" id="nav-user-area">
+          <button class="nav-user-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">
+            <div class="nav-user-avatar" id="nav-avatar">👤</div>
+            <span id="nav-username">Account</span><span>▾</span>
+          </button>
+          <div class="nav-dropdown" id="user-dropdown" role="menu"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mega-menu" id="mega-menu" aria-label="Category menu" role="navigation">
+      <div class="container"><div class="mega-menu-grid" id="mega-menu-grid"></div></div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu-drawer">
+      <div class="mobile-menu-header">
+        <a href="../index.html" class="nav-logo-text">🛍️ ShopVerse</a>
+        <button class="modal-close" id="mobile-close-btn" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <a href="../index.html" class="mobile-nav-link"><span class="icon">🏠</span> Home</a>
+        <a href="products.html" class="mobile-nav-link"><span class="icon">📦</span> Products</a>
+        <a href="login.html" class="mobile-nav-link" id="mobile-login-link"><span class="icon">🔐</span> Sign In</a>
+        <a href="profile.html" class="mobile-nav-link" id="mobile-profile-link" style="display:none"><span class="icon">👤</span> My Profile</a>
+        <a href="orders.html" class="mobile-nav-link"><span class="icon">📋</span> My Orders</a>
+        <a href="wishlist.html" class="mobile-nav-link active"><span class="icon">🤍</span> Wishlist</a>
+        <a href="cart.html" class="mobile-nav-link"><span class="icon">🛒</span> Cart</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" style="padding:var(--space-8) 0;min-height:calc(100vh - var(--navbar-height) - 120px)">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom:var(--space-6)">
+        <a href="../index.html" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-item active" aria-current="page">My Wishlist</span>
+      </nav>
+
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4);margin-bottom:var(--space-6)">
+        <div>
+          <h1 style="font-size:var(--font-size-2xl);font-weight:900;margin-bottom:var(--space-1)">My Wishlist 🤍</h1>
+          <p style="color:var(--text-muted);font-size:var(--font-size-sm)" id="wishlist-count-label">Loading…</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3)">
+          <button class="btn btn-primary" id="move-all-to-cart-btn" style="display:none" aria-label="Move all wishlist items to cart">
+            🛒 Move All to Cart
+          </button>
+          <button class="btn btn-ghost" id="clear-wishlist-btn" style="display:none;color:var(--color-danger)" aria-label="Clear entire wishlist">
+            🗑 Clear All
+          </button>
+        </div>
+      </div>
+
+      <!-- Wishlist Grid -->
+      <div id="wishlist-grid" class="products-grid stagger-children" aria-live="polite" aria-label="Wishlist products">
+        <!-- Skeleton placeholders -->
+        <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text skeleton-title" style="margin-top:var(--space-3)"></div><div class="skeleton skeleton-text w-3-4"></div><div class="skeleton skeleton-btn" style="margin-top:var(--space-3)"></div></div>
+        <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text skeleton-title" style="margin-top:var(--space-3)"></div><div class="skeleton skeleton-text w-3-4"></div><div class="skeleton skeleton-btn" style="margin-top:var(--space-3)"></div></div>
+        <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text skeleton-title" style="margin-top:var(--space-3)"></div><div class="skeleton skeleton-text w-3-4"></div><div class="skeleton skeleton-btn" style="margin-top:var(--space-3)"></div></div>
+        <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text skeleton-title" style="margin-top:var(--space-3)"></div><div class="skeleton skeleton-text w-3-4"></div><div class="skeleton skeleton-btn" style="margin-top:var(--space-3)"></div></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+            <div class="nav-logo-icon">🛍️</div>
+            <span class="nav-logo-text">ShopVerse</span>
+          </a>
+          <p class="footer-brand-desc">India's premium e-commerce destination. Millions of products, trusted by 5M+ customers.</p>
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+            <a href="#" class="footer-social-link" aria-label="Twitter">X</a>
+          </div>
+        </div>
+        <div><h3 class="footer-col-title">Company</h3><ul class="footer-links"><li><a href="#" class="footer-link">About Us</a></li><li><a href="#" class="footer-link">Blog</a></li></ul></div>
+        <div><h3 class="footer-col-title">Help</h3><ul class="footer-links"><li><a href="#" class="footer-link">Customer Support</a></li><li><a href="orders.html" class="footer-link">Track Order</a></li><li><a href="#" class="footer-link">FAQ</a></li></ul></div>
+        <div><h3 class="footer-col-title">Categories</h3><ul class="footer-links"><li><a href="products.html?category=electronics" class="footer-link">Electronics</a></li><li><a href="products.html?category=fashion" class="footer-link">Fashion</a></li></ul></div>
+        <div><h3 class="footer-col-title">Contact</h3><div class="footer-links"><div class="footer-contact-item"><span class="footer-contact-icon">📞</span><div class="footer-contact-text"><div class="footer-contact-label">Phone</div>1800-123-4567</div></div></div></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2024 ShopVerse Pvt. Ltd. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../assets/js/pages/wishlist.js"></script>
+</body>
+</html>

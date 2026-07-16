@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — ShopVerse Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body>
+  <div id="page-loader"><div class="loader-logo">🛍️ ShopVerse</div><div class="loader-bar"></div></div>
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="admin-sidebar" role="navigation" aria-label="Admin navigation">
+      <div class="admin-sidebar-logo">
+        <span class="admin-sidebar-logo-icon" aria-hidden="true">🛍️</span>
+        <div>
+          <div class="admin-sidebar-logo-text">ShopVerse</div>
+          <span class="admin-sidebar-logo-tag">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="admin-nav">
+        <div class="admin-nav-section">Overview</div>
+        <a href="dashboard.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">📊</span> Dashboard</a>
+        <div class="admin-nav-section">Catalogue</div>
+        <a href="products.html" class="admin-nav-link active" aria-current="page"><span class="admin-nav-icon" aria-hidden="true">📦</span> Products</a>
+        <a href="add-product.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">➕</span> Add Product</a>
+        <a href="categories.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">📁</span> Categories</a>
+        <div class="admin-nav-section">Commerce</div>
+        <a href="orders.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">🛒</span> All Orders</a>
+        <a href="customers.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">👥</span> Customers</a>
+        <div class="admin-nav-section">Insights</div>
+        <a href="analytics.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">📈</span> Revenue</a>
+        <div class="admin-nav-section">System</div>
+        <a href="settings.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">⚙️</span> Settings</a>
+        <a href="../../index.html" class="admin-nav-link"><span class="admin-nav-icon" aria-hidden="true">🏠</span> Storefront</a>
+      </nav>
+      <div class="admin-sidebar-user" id="sidebar-user">
+        <div class="admin-sidebar-avatar" id="sidebar-avatar" aria-hidden="true">A</div>
+        <div class="admin-sidebar-user-info">
+          <div class="admin-sidebar-user-name" id="sidebar-name">Admin</div>
+          <div class="admin-sidebar-user-role">Administrator</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="admin-main" id="admin-main">
+      <header class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="admin-hamburger" id="admin-hamburger" aria-label="Toggle sidebar" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1 class="admin-page-title">Products</h1>
+        </div>
+        <div class="admin-topbar-actions">
+          <button class="admin-topbar-btn" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+          <div class="admin-topbar-user" id="topbar-user">
+            <div class="admin-topbar-avatar" id="topbar-avatar" aria-hidden="true">A</div>
+            <span id="topbar-name">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content page-enter">
+
+        <!-- Toolbar -->
+        <div class="admin-toolbar">
+          <div class="admin-toolbar-left">
+            <div class="search-input-wrapper" style="width:280px">
+              <input type="search" class="search-input" id="product-search" placeholder="Search products…" autocomplete="off" aria-label="Search products">
+              <button class="search-btn" aria-label="Search">🔍</button>
+            </div>
+            <select class="form-control form-select" id="category-filter" style="width:160px" aria-label="Filter by category">
+              <option value="">All Categories</option>
+            </select>
+            <select class="form-control form-select" id="status-filter" style="width:140px" aria-label="Filter by status">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="low_stock">Low Stock</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="add-product-btn">
+            ➕ Add Product
+          </button>
+        </div>
+
+        <!-- Products Table -->
+        <div class="admin-table-wrap reveal">
+          <div class="admin-table-header">
+            <h2 class="admin-table-title">All Products <span class="badge badge-primary" id="total-count"></span></h2>
+            <div class="admin-table-header-right">
+              <span class="text-muted text-sm" id="products-range"></span>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table" aria-label="Products list">
+              <thead>
+                <tr>
+                  <th scope="col" style="width:60px">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Stock</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" style="width:120px">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="products-tbody">
+                <tr><td colspan="7" class="admin-table-loading">Loading products…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Pagination -->
+          <div class="admin-pagination" id="products-pagination" aria-label="Pagination"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="admin-sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+  <!-- Add / Edit Product Modal -->
+  <div class="modal-overlay" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal" style="max-width:720px;width:95vw">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Add Product</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" style="max-height:75vh;overflow-y:auto">
+        <form id="product-form" novalidate>
+          <input type="hidden" id="edit-product-id">
+
+          <!-- Row 1 -->
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label required" for="p-name">Product Name</label>
+              <input type="text" class="form-control" id="p-name" name="name" placeholder="e.g. iPhone 15 Pro Max" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-slug">Slug <span class="text-muted text-xs">(auto)</span></label>
+              <input type="text" class="form-control" id="p-slug" name="slug" placeholder="iphone-15-pro-max">
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label required" for="p-price">Price (₹)</label>
+              <input type="number" class="form-control" id="p-price" name="price" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-compare-price">Compare Price (₹)</label>
+              <input type="number" class="form-control" id="p-compare-price" name="compare_price" min="0" step="0.01">
+            </div>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label required" for="p-category">Category</label>
+              <select class="form-control form-select" id="p-category" name="category_id" required>
+                <option value="">Select Category</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-brand">Brand</label>
+              <select class="form-control form-select" id="p-brand" name="brand_id">
+                <option value="">Select Brand</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 4 -->
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="p-stock">Stock Quantity</label>
+              <input type="number" class="form-control" id="p-stock" name="stock" min="0" value="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-sku">SKU</label>
+              <input type="text" class="form-control" id="p-sku" name="sku" placeholder="SKU-001">
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label class="form-label" for="p-desc">Description</label>
+            <textarea class="form-control form-textarea" id="p-desc" name="description" rows="3" placeholder="Describe your product…"></textarea>
+          </div>
+
+          <!-- Flags -->
+          <div class="form-group">
+            <label class="form-label">Product Flags</label>
+            <div class="admin-flags-row">
+              <label class="admin-flag-check">
+                <input type="checkbox" name="is_featured" id="p-featured">
+                <span>⭐ Featured</span>
+              </label>
+              <label class="admin-flag-check">
+                <input type="checkbox" name="is_best_seller" id="p-bestseller">
+                <span>🏆 Best Seller</span>
+              </label>
+              <label class="admin-flag-check">
+                <input type="checkbox" name="is_flash_sale" id="p-flash">
+                <span>⚡ Flash Sale</span>
+              </label>
+              <label class="admin-flag-check">
+                <input type="checkbox" name="is_new_arrival" id="p-new">
+                <span>🆕 New Arrival</span>
+              </label>
+              <label class="admin-flag-check">
+                <input type="checkbox" name="is_active" id="p-active" checked>
+                <span>✅ Active</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Image Upload (shown only on edit) -->
+          <div class="form-group" id="image-upload-section" hidden>
+            <label class="form-label">Product Images</label>
+            <div class="file-upload-area" id="image-drop-zone" tabindex="0" role="button" aria-label="Upload product images">
+              <div class="file-upload-icon" aria-hidden="true">🖼️</div>
+              <div class="file-upload-text">
+                <span>Click to upload</span> or drag and drop<br>
+                <small class="text-muted">PNG, JPG, WebP — max 5 MB each</small>
+              </div>
+              <input type="file" id="image-files" accept="image/*" multiple hidden>
+            </div>
+            <div id="image-previews" class="admin-image-previews"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="save-product-btn" type="button">
+          💾 Save Product
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="modal" style="max-width:420px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="confirm-title">Confirm Delete</h2>
+        <button class="modal-close" id="confirm-modal-close" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="confirm-product-name"></strong>?<br>
+        <span class="text-muted text-sm">This action cannot be undone.</span></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete-btn">🗑️ Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../assets/js/pages/admin/products.js"></script>
+</body>
+</html>

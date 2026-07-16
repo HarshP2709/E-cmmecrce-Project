@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found — ShopVerse</title>
+  <meta name="description" content="Oops! This page seems to have gone shopping and never came back.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/navbar.css">
+  <link rel="stylesheet" href="../assets/css/pages.css">
+  <link rel="stylesheet" href="../assets/css/footer.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <style>
+    /* ── 404 Extras ──────────────────────────────────────── */
+    .floating-icons {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .floating-icon {
+      position: absolute;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      opacity: 0.08;
+      animation: float-drift linear infinite;
+      user-select: none;
+    }
+    @keyframes float-drift {
+      0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.08; }
+      90%  { opacity: 0.08; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+    .error-search-form {
+      display: flex;
+      gap: var(--space-3);
+      max-width: 480px;
+      margin: 0 auto var(--space-8);
+    }
+    .error-search-form .form-control {
+      flex: 1;
+      padding: 14px var(--space-5);
+      font-size: var(--font-size-base);
+    }
+    .error-links {
+      display: flex;
+      gap: var(--space-4);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .error-quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-4);
+      max-width: 720px;
+      margin: var(--space-8) auto 0;
+    }
+    .error-quick-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-5);
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all var(--transition-base);
+      display: flex; flex-direction: column; align-items: center; gap: var(--space-2);
+    }
+    .error-quick-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+      color: var(--color-primary);
+    }
+    .error-quick-icon {
+      font-size: 2rem;
+    }
+    .error-quick-label {
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+    }
+    /* Glitch animation for 404 */
+    .error-code {
+      position: relative;
+    }
+    .error-code::before,
+    .error-code::after {
+      content: '404';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      font-size: inherit;
+      font-weight: inherit;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .error-code::before {
+      left: 2px;
+      text-shadow: -2px 0 var(--color-secondary);
+      animation: glitch-1 3s infinite linear;
+      clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    }
+    .error-code::after {
+      left: -2px;
+      text-shadow: 2px 0 var(--color-info);
+      animation: glitch-2 3s infinite linear;
+      clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+    }
+    @keyframes glitch-1 {
+      0%, 14%, 15%, 49%, 50%, 99%, 100% { opacity: 0; }
+      14.1%, 49.9% { opacity: 1; }
+    }
+    @keyframes glitch-2 {
+      0%, 20%, 21%, 62%, 63%, 99%, 100% { opacity: 0; }
+      20.1%, 62.9% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-logo">🛍️ ShopVerse</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- Top Bar -->
+  <div class="top-bar" role="banner">
+    <div class="container top-bar-inner">
+      <div class="top-bar-text">🚚 <strong>Free Delivery</strong> on orders above <strong>₹499</strong></div>
+      <div class="top-bar-links">
+        <a href="#">Sell on ShopVerse</a>
+        <a href="#">Download App</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="../index.html" class="nav-logo" aria-label="ShopVerse Home">
+        <div class="nav-logo-icon" aria-hidden="true">🛍️</div>
+        <span class="nav-logo-text">ShopVerse</span>
+      </a>
+      <div class="nav-search" role="search">
+        <div class="search-input-wrapper">
+          <input type="search" class="search-input" id="nav-search-input" placeholder="Search for products, brands & more..." autocomplete="off" aria-label="Search products">
+          <button class="search-btn" aria-label="Search" id="nav-search-btn">🔍</button>
+          <div class="search-dropdown" id="search-dropdown" role="listbox"></div>
+        </div>
+      </div>
+      <ul class="nav-links" role="list">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="products.html" class="nav-link">Products</a></li>
+        <li><button class="nav-link" id="mega-menu-trigger" aria-expanded="false">Categories ▾</button></li>
+        <li><a href="offers.html" class="nav-link">🔥 Deals</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <a href="wishlist.html" class="nav-action-btn" aria-label="Wishlist">🤍<span class="nav-badge" id="wishlist-count" style="display:none">0</span></a>
+        <a href="cart.html" class="nav-action-btn" aria-label="Shopping cart">🛒<span class="nav-badge" id="cart-count" style="display:none">0</span></a>
+        <div class="nav-user" id="nav-user-area">
+          <button class="nav-user-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">
+            <div class="nav-user-avatar" id="nav-avatar">👤</div>
+            <span id="nav-username">Account</span><span>▾</span>
+          </button>
+          <div class="nav-dropdown" id="user-dropdown" role="menu"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mega-menu" id="mega-menu" aria-label="Category menu" role="navigation">
+      <div class="container"><div class="mega-menu-grid" id="mega-menu-grid"></div></div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu-drawer">
+      <div class="mobile-menu-header">
+        <a href="../index.html" class="nav-logo-text">🛍️ ShopVerse</a>
+        <button class="modal-close" id="mobile-close-btn" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <a href="../index.html" class="mobile-nav-link"><span class="icon">🏠</span> Home</a>
+        <a href="products.html" class="mobile-nav-link"><span class="icon">📦</span> Products</a>
+        <a href="login.html" class="mobile-nav-link" id="mobile-login-link"><span class="icon">🔐</span> Sign In</a>
+        <a href="profile.html" class="mobile-nav-link" id="mobile-profile-link" style="display:none"><span class="icon">👤</span> My Profile</a>
+        <a href="orders.html" class="mobile-nav-link"><span class="icon">📋</span> My Orders</a>
+        <a href="cart.html" class="mobile-nav-link"><span class="icon">🛒</span> Cart</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main 404 Content -->
+  <main id="main-content" style="position:relative;overflow:hidden">
+
+    <!-- Floating Background Icons -->
+    <div class="floating-icons" aria-hidden="true" id="floating-icons"></div>
+
+    <div class="error-page" style="flex-direction:column;gap:0;position:relative;z-index:1">
+      <div class="error-code" aria-label="Error 404">404</div>
+
+      <h1 class="error-title" style="margin-top:var(--space-4)">
+        Page Gone Shopping 🛒
+      </h1>
+
+      <p class="error-desc">
+        Oops! Looks like this page went shopping and never came back. Let's help you find what you're really looking for.
+      </p>
+
+      <!-- Search Bar -->
+      <form class="error-search-form" id="error-search-form" role="search" aria-label="Search for products">
+        <input
+          type="search"
+          class="form-control"
+          id="error-search-input"
+          placeholder="What were you looking for?"
+          aria-label="Search products"
+          autocomplete="off"
+        >
+        <button type="submit" class="btn btn-primary">🔍 Search</button>
+      </form>
+
+      <!-- Action Buttons -->
+      <div class="error-links">
+        <a href="../index.html" class="btn btn-primary btn-lg">🏠 Go Home</a>
+        <a href="products.html" class="btn btn-ghost btn-lg">📦 Browse Products</a>
+        <button class="btn btn-ghost btn-lg" onclick="history.back()">← Go Back</button>
+      </div>
+
+      <!-- Quick Links Grid -->
+      <div class="error-quick-links" aria-label="Quick links to popular sections">
+        <a href="products.html?category=electronics" class="error-quick-card">
+          <span class="error-quick-icon">💻</span>
+          <span class="error-quick-label">Electronics</span>
+        </a>
+        <a href="products.html?category=fashion" class="error-quick-card">
+          <span class="error-quick-icon">👗</span>
+          <span class="error-quick-label">Fashion</span>
+        </a>
+        <a href="products.html?category=home-living" class="error-quick-card">
+          <span class="error-quick-icon">🏠</span>
+          <span class="error-quick-label">Home & Living</span>
+        </a>
+        <a href="products.html?flash_sale=true" class="error-quick-card">
+          <span class="error-quick-icon">⚡</span>
+          <span class="error-quick-label">Flash Sale</span>
+        </a>
+        <a href="wishlist.html" class="error-quick-card">
+          <span class="error-quick-icon">🤍</span>
+          <span class="error-quick-label">Wishlist</span>
+        </a>
+        <a href="orders.html" class="error-quick-card">
+          <span class="error-quick-icon">📦</span>
+          <span class="error-quick-label">My Orders</span>
+        </a>
+      </div>
+
+      <!-- Fun easter egg text -->
+      <p style="margin-top:var(--space-12);font-size:var(--font-size-xs);color:var(--text-muted);text-align:center">
+        Error 404 · Page not found · If you think this is a mistake,
+        <a href="#" style="color:var(--color-primary)" onclick="event.preventDefault();alert('Support contacted! We\'ll be in touch.')">contact support</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+            <div class="nav-logo-icon">🛍️</div><span class="nav-logo-text">ShopVerse</span>
+          </a>
+          <p class="footer-brand-desc">India's premium e-commerce destination.</p>
+        </div>
+        <div><h3 class="footer-col-title">Help</h3><ul class="footer-links"><li><a href="#" class="footer-link">Customer Support</a></li><li><a href="orders.html" class="footer-link">Track Order</a></li></ul></div>
+        <div><h3 class="footer-col-title">Categories</h3><ul class="footer-links"><li><a href="products.html?category=electronics" class="footer-link">Electronics</a></li><li><a href="products.html?category=fashion" class="footer-link">Fashion</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2024 ShopVerse Pvt. Ltd. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../assets/js/pages/404.js"></script>
+</body>
+</html>

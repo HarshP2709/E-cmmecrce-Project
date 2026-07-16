@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — ShopVerse</title>
+  <meta name="description" content="Complete your purchase securely on ShopVerse.">
+  <meta property="og:title" content="Checkout — ShopVerse">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://shopverse.in/pages/checkout.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/navbar.css">
+  <link rel="stylesheet" href="../assets/css/products.css">
+  <link rel="stylesheet" href="../assets/css/pages.css">
+  <link rel="stylesheet" href="../assets/css/footer.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+
+  <style>
+    /* ── Checkout Step Indicator ───────────────────────────── */
+    .checkout-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: var(--space-8) var(--space-4);
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .checkout-step {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      position: relative;
+    }
+    .checkout-step + .checkout-step::before {
+      content: '';
+      display: block;
+      width: clamp(40px, 8vw, 100px);
+      height: 2px;
+      background: var(--border-color);
+      margin: 0 var(--space-3);
+      flex-shrink: 0;
+      transition: background var(--transition-base);
+    }
+    .checkout-step.done + .checkout-step::before { background: var(--color-success); }
+    .checkout-step.active + .checkout-step::before { background: var(--color-primary); }
+
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+      font-weight: 800;
+      border: 2px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      transition: all var(--transition-base);
+      flex-shrink: 0;
+    }
+    .checkout-step.active .step-circle {
+      background: var(--gradient-primary);
+      border-color: var(--color-primary);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(108,99,255,0.2);
+    }
+    .checkout-step.done .step-circle {
+      background: var(--color-success);
+      border-color: var(--color-success);
+      color: white;
+    }
+    .step-label {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: color var(--transition-base);
+      white-space: nowrap;
+    }
+    .checkout-step.active .step-label,
+    .checkout-step.done .step-label { color: var(--text-primary); }
+
+    /* ── Step Panel visibility ─────────────────────────────── */
+    .checkout-step-panel { display: none; }
+    .checkout-step-panel.active { display: block; animation: fadeInUp 0.3s ease; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── New Address Form toggle ───────────────────────────── */
+    .new-address-form {
+      display: none;
+      margin-top: var(--space-5);
+      padding: var(--space-5);
+      background: var(--bg-secondary);
+      border-radius: var(--border-radius-lg);
+      border: 1px dashed var(--border-color);
+      animation: fadeInUp 0.25s ease;
+    }
+    .new-address-form.open { display: block; }
+
+    /* ── Payment card form ─────────────────────────────────── */
+    .card-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+    @media (max-width: 480px) { .card-input-row { grid-template-columns: 1fr; } }
+
+    /* ── Review table ──────────────────────────────────────── */
+    .review-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: var(--font-size-sm);
+      gap: var(--space-4);
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-row-label { color: var(--text-muted); font-weight: 500; flex-shrink: 0; }
+    .review-row-value { color: var(--text-primary); font-weight: 600; text-align: right; }
+  </style>
+</head>
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-logo">🛍️ ShopVerse</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- Top Bar -->
+  <div class="top-bar" role="banner">
+    <div class="container top-bar-inner">
+      <div class="top-bar-text">
+        🔒 <strong>Secure Checkout</strong> — All transactions are encrypted &amp; 100% safe
+      </div>
+      <div class="top-bar-links">
+        <a href="/pages/cart.html">← Back to Cart</a>
+        <a href="#">Need Help?</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="/index.html" class="nav-logo" aria-label="ShopVerse Home">
+        <div class="nav-logo-icon" aria-hidden="true">🛍️</div>
+        <span class="nav-logo-text">ShopVerse</span>
+      </a>
+      <div class="nav-search" role="search">
+        <div class="search-input-wrapper">
+          <input type="search" class="search-input" id="nav-search-input"
+            placeholder="Search for products, brands & more..."
+            autocomplete="off" aria-label="Search products"
+            aria-controls="search-dropdown" aria-autocomplete="list">
+          <button class="search-btn" aria-label="Search" id="nav-search-btn">🔍</button>
+          <div class="search-dropdown" id="search-dropdown" role="listbox" aria-label="Search suggestions"></div>
+        </div>
+      </div>
+      <ul class="nav-links" role="list">
+        <li><a href="/index.html" class="nav-link">Home</a></li>
+        <li><a href="/pages/products.html" class="nav-link">Products</a></li>
+        <li>
+          <button class="nav-link" id="mega-menu-trigger" aria-expanded="false">Categories ▾</button>
+        </li>
+        <li><a href="/pages/offers.html" class="nav-link">🔥 Deals</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">🌙</button>
+        <a href="/pages/wishlist.html" class="nav-action-btn" aria-label="Wishlist">
+          🤍
+          <span class="nav-badge" id="wishlist-count" aria-label="0 items in wishlist" style="display:none">0</span>
+        </a>
+        <a href="/pages/cart.html" class="nav-action-btn" aria-label="Shopping cart">
+          🛒
+          <span class="nav-badge" id="cart-count" aria-label="0 items in cart" style="display:none">0</span>
+        </a>
+        <div class="nav-user" id="nav-user-area">
+          <button class="nav-user-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">
+            <div class="nav-user-avatar" id="nav-avatar">👤</div>
+            <span id="nav-username">Account</span>
+            <span>▾</span>
+          </button>
+          <div class="nav-dropdown" id="user-dropdown" role="menu"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mega-menu" id="mega-menu" aria-label="Category menu" role="navigation">
+      <div class="container">
+        <div class="mega-menu-grid" id="mega-menu-grid"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu-drawer">
+      <div class="mobile-menu-header">
+        <a href="/index.html" class="nav-logo-text">🛍️ ShopVerse</a>
+        <button class="modal-close" id="mobile-close-btn" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <div class="mobile-nav-section-title">Navigation</div>
+        <a href="/index.html" class="mobile-nav-link"><span class="icon">🏠</span> Home</a>
+        <a href="/pages/products.html" class="mobile-nav-link"><span class="icon">📦</span> Products</a>
+        <a href="/pages/categories.html" class="mobile-nav-link"><span class="icon">📁</span> Categories</a>
+        <div class="mobile-nav-section-title">Account</div>
+        <a href="/pages/login.html" class="mobile-nav-link" id="mobile-login-link"><span class="icon">🔐</span> Sign In</a>
+        <a href="/pages/profile.html" class="mobile-nav-link" id="mobile-profile-link" style="display:none"><span class="icon">👤</span> My Profile</a>
+        <a href="/pages/orders.html" class="mobile-nav-link"><span class="icon">📋</span> My Orders</a>
+        <a href="/pages/cart.html" class="mobile-nav-link"><span class="icon">🛒</span> Cart</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" style="padding-top: var(--navbar-height)">
+
+    <!-- Step Indicator -->
+    <div class="checkout-steps" role="navigation" aria-label="Checkout steps">
+      <div class="checkout-step active" id="step-indicator-1" role="listitem" aria-current="step">
+        <div class="step-circle" aria-hidden="true">1</div>
+        <span class="step-label">Shipping</span>
+      </div>
+      <div class="checkout-step" id="step-indicator-2" role="listitem">
+        <div class="step-circle" aria-hidden="true">2</div>
+        <span class="step-label">Payment</span>
+      </div>
+      <div class="checkout-step" id="step-indicator-3" role="listitem">
+        <div class="step-circle" aria-hidden="true">3</div>
+        <span class="step-label">Review</span>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="container" style="padding: var(--space-8) var(--space-4)">
+      <div class="checkout-layout">
+
+        <!-- ── Left: Step Panels ────────────────────────────── -->
+        <div>
+
+          <!-- ══ STEP 1: Shipping Address ══════════════════════ -->
+          <div class="checkout-step-panel active" id="step-panel-1">
+            <div class="checkout-card">
+              <div class="checkout-card-title">
+                <span class="checkout-card-num">1</span>
+                Shipping Address
+              </div>
+
+              <!-- Saved Addresses -->
+              <div id="saved-addresses" aria-label="Saved addresses" aria-live="polite">
+                <!-- skeleton -->
+                <div class="skeleton" style="height:100px;border-radius:var(--border-radius-lg);margin-bottom:var(--space-4)"></div>
+                <div class="skeleton" style="height:100px;border-radius:var(--border-radius-lg)"></div>
+              </div>
+
+              <!-- Add New Address Toggle -->
+              <button
+                id="toggle-new-address-btn"
+                class="btn btn-outline btn-sm"
+                style="margin-top:var(--space-5)"
+                aria-expanded="false"
+                aria-controls="new-address-form"
+              >
+                ＋ Add New Address
+              </button>
+
+              <!-- New Address Collapsible Form -->
+              <div class="new-address-form" id="new-address-form" aria-hidden="true">
+                <h4 style="font-size:var(--font-size-sm);font-weight:700;margin-bottom:var(--space-4);color:var(--text-primary)">
+                  New Delivery Address
+                </h4>
+                <form id="new-address-form-el" novalidate>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)">
+                    <div class="form-group">
+                      <label class="form-label required" for="addr-full-name">Full Name</label>
+                      <input type="text" id="addr-full-name" name="full_name" class="form-control" placeholder="John Doe" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label required" for="addr-phone">Phone</label>
+                      <input type="tel" id="addr-phone" name="phone" class="form-control" placeholder="9876543210" required autocomplete="tel" pattern="[0-9]{10}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label required" for="addr-line1">Address Line 1</label>
+                    <input type="text" id="addr-line1" name="address_line1" class="form-control" placeholder="Flat / House No., Building" required autocomplete="address-line1">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="addr-line2">Address Line 2</label>
+                    <input type="text" id="addr-line2" name="address_line2" class="form-control" placeholder="Area, Colony (optional)" autocomplete="address-line2">
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4)">
+                    <div class="form-group">
+                      <label class="form-label required" for="addr-city">City</label>
+                      <input type="text" id="addr-city" name="city" class="form-control" placeholder="Mumbai" required autocomplete="address-level2">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label required" for="addr-state">State</label>
+                      <input type="text" id="addr-state" name="state" class="form-control" placeholder="Maharashtra" required autocomplete="address-level1">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label required" for="addr-pincode">PIN Code</label>
+                      <input type="text" id="addr-pincode" name="pincode" class="form-control" placeholder="400001" required pattern="[0-9]{6}" maxlength="6" autocomplete="postal-code">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="addr-type">Address Type</label>
+                    <select id="addr-type" name="address_type" class="form-control form-select">
+                      <option value="home">🏠 Home</option>
+                      <option value="work">💼 Work</option>
+                      <option value="other">📍 Other</option>
+                    </select>
+                  </div>
+                  <label class="checkbox-group" style="cursor:pointer">
+                    <span class="custom-checkbox" id="addr-default-check"></span>
+                    <span class="checkbox-label">Set as default address</span>
+                    <input type="checkbox" name="is_default" id="addr-default-input" style="display:none">
+                  </label>
+                  <div style="display:flex;gap:var(--space-3);margin-top:var(--space-5)">
+                    <button type="submit" class="btn btn-primary" id="save-address-btn">Save Address</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-address-btn">Cancel</button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+
+            <!-- Step nav -->
+            <div style="display:flex;justify-content:flex-end;margin-top:var(--space-5)">
+              <button class="btn btn-primary btn-lg" id="step1-next-btn">
+                Continue to Payment →
+              </button>
+            </div>
+          </div>
+          <!-- /step 1 -->
+
+          <!-- ══ STEP 2: Payment ════════════════════════════════ -->
+          <div class="checkout-step-panel" id="step-panel-2">
+            <div class="checkout-card">
+              <div class="checkout-card-title">
+                <span class="checkout-card-num">2</span>
+                Payment Method
+              </div>
+
+              <div class="payment-methods" role="radiogroup" aria-label="Payment methods" id="payment-methods-list">
+
+                <!-- COD -->
+                <div class="payment-method-item selected" data-method="cod" role="radio" aria-checked="true" tabindex="0">
+                  <span class="payment-method-icon">💵</span>
+                  <div>
+                    <div class="payment-method-name">Cash on Delivery</div>
+                    <div class="payment-method-desc">Pay when your order arrives. Extra ₹30 COD fee applies.</div>
+                  </div>
+                  <div class="radio-dot" style="margin-left:auto"></div>
+                </div>
+
+                <!-- Card -->
+                <div class="payment-method-item" data-method="card" role="radio" aria-checked="false" tabindex="0">
+                  <span class="payment-method-icon">💳</span>
+                  <div>
+                    <div class="payment-method-name">Credit / Debit Card</div>
+                    <div class="payment-method-desc">Visa, Mastercard, Rupay &amp; more. Secure 3D authentication.</div>
+                  </div>
+                  <div class="radio-dot" style="margin-left:auto"></div>
+                </div>
+
+                <!-- Card form (Stripe) -->
+                <div class="payment-card-form" id="stripe-form" style="display:none" aria-hidden="true">
+                  <div class="form-group">
+                    <label class="form-label required" for="card-holder-name">Name on Card</label>
+                    <input type="text" id="card-holder-name" class="form-control" placeholder="JOHN DOE" autocomplete="cc-name" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label required" for="card-number">Card Number</label>
+                    <div class="input-group">
+                      <span class="input-icon">💳</span>
+                      <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456"
+                        maxlength="19" inputmode="numeric" autocomplete="cc-number" required>
+                    </div>
+                  </div>
+                  <div class="card-input-row">
+                    <div class="form-group">
+                      <label class="form-label required" for="card-expiry">Expiry Date</label>
+                      <input type="text" id="card-expiry" class="form-control" placeholder="MM / YY"
+                        maxlength="7" autocomplete="cc-exp" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label required" for="card-cvv">CVV</label>
+                      <div class="input-group">
+                        <input type="password" id="card-cvv" class="form-control" placeholder="•••"
+                          maxlength="4" inputmode="numeric" autocomplete="cc-csc" required>
+                        <span class="input-suffix" title="3-digit code on back of card" aria-label="CVV info">?</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p style="font-size:var(--font-size-xs);color:var(--text-muted);margin-top:var(--space-2);display:flex;align-items:center;gap:4px">
+                    🔒 Your card info is encrypted with TLS 256-bit encryption
+                  </p>
+                </div>
+
+                <!-- UPI -->
+                <div class="payment-method-item" data-method="upi" role="radio" aria-checked="false" tabindex="0">
+                  <span class="payment-method-icon">📱</span>
+                  <div>
+                    <div class="payment-method-name">UPI</div>
+                    <div class="payment-method-desc">Pay via GPay, PhonePe, Paytm or any UPI app.</div>
+                  </div>
+                  <div class="radio-dot" style="margin-left:auto"></div>
+                </div>
+
+                <!-- UPI form -->
+                <div class="payment-card-form" id="upi-form" style="display:none" aria-hidden="true">
+                  <div class="form-group">
+                    <label class="form-label required" for="upi-id">UPI ID</label>
+                    <div class="input-group">
+                      <span class="input-icon">@</span>
+                      <input type="text" id="upi-id" class="form-control" placeholder="yourname@upi" autocomplete="off">
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-3)">
+                    <span style="font-size:0.7rem;background:var(--bg-tertiary);padding:4px 10px;border-radius:6px;font-weight:700">GPay</span>
+                    <span style="font-size:0.7rem;background:var(--bg-tertiary);padding:4px 10px;border-radius:6px;font-weight:700">PhonePe</span>
+                    <span style="font-size:0.7rem;background:var(--bg-tertiary);padding:4px 10px;border-radius:6px;font-weight:700">Paytm</span>
+                    <span style="font-size:0.7rem;background:var(--bg-tertiary);padding:4px 10px;border-radius:6px;font-weight:700">BHIM</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Step nav -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-5);gap:var(--space-4)">
+              <button class="btn btn-secondary" id="step2-back-btn">← Back</button>
+              <button class="btn btn-primary btn-lg" id="step2-next-btn">Review Order →</button>
+            </div>
+          </div>
+          <!-- /step 2 -->
+
+          <!-- ══ STEP 3: Review ═════════════════════════════════ -->
+          <div class="checkout-step-panel" id="step-panel-3">
+            <div class="checkout-card">
+              <div class="checkout-card-title">
+                <span class="checkout-card-num">3</span>
+                Review Your Order
+              </div>
+
+              <!-- Delivery Address review -->
+              <div style="margin-bottom:var(--space-5)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3)">
+                  <h4 style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">
+                    Delivering To
+                  </h4>
+                  <button class="btn btn-sm btn-secondary" id="edit-address-btn" style="font-size:var(--font-size-xs)">Edit</button>
+                </div>
+                <div id="review-address" style="background:var(--bg-secondary);border-radius:var(--border-radius-lg);padding:var(--space-4);font-size:var(--font-size-sm);color:var(--text-secondary);line-height:1.7">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Payment method review -->
+              <div style="margin-bottom:var(--space-5)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3)">
+                  <h4 style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">
+                    Payment Method
+                  </h4>
+                  <button class="btn btn-sm btn-secondary" id="edit-payment-btn" style="font-size:var(--font-size-xs)">Edit</button>
+                </div>
+                <div id="review-payment" style="background:var(--bg-secondary);border-radius:var(--border-radius-lg);padding:var(--space-4);font-size:var(--font-size-sm);color:var(--text-secondary)">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Price summary review -->
+              <div>
+                <h4 style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:var(--space-3)">
+                  Price Details
+                </h4>
+                <div style="background:var(--bg-secondary);border-radius:var(--border-radius-lg);padding:var(--space-4)">
+                  <div class="review-row"><span class="review-row-label">Subtotal</span><span class="review-row-value" id="review-subtotal">₹0</span></div>
+                  <div class="review-row"><span class="review-row-label">Shipping</span><span class="review-row-value" id="review-shipping">FREE</span></div>
+                  <div class="review-row"><span class="review-row-label">Tax (GST)</span><span class="review-row-value" id="review-tax">₹0</span></div>
+                  <div class="review-row" id="review-coupon-row" style="display:none"><span class="review-row-label">Coupon</span><span class="review-row-value" id="review-coupon" style="color:var(--color-success)">−₹0</span></div>
+                  <div class="review-row" style="border-top:2px solid var(--border-color);padding-top:var(--space-3);margin-top:var(--space-2)">
+                    <span class="review-row-label" style="font-size:var(--font-size-base);font-weight:800;color:var(--text-primary)">Total</span>
+                    <span class="review-row-value" id="review-total" style="font-size:var(--font-size-xl);font-weight:900;color:var(--text-primary)">₹0</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Terms & Conditions -->
+            <label class="checkbox-group" style="cursor:pointer;margin:var(--space-4) 0">
+              <span class="custom-checkbox" id="terms-check-box"></span>
+              <span class="checkbox-label" style="font-size:var(--font-size-xs)">
+                I agree to the <a href="#" style="color:var(--color-primary)">Terms of Service</a>
+                and <a href="#" style="color:var(--color-primary)">Privacy Policy</a>.
+                I confirm the order details above are correct.
+              </span>
+              <input type="checkbox" id="terms-checkbox" style="display:none" aria-required="true">
+            </label>
+
+            <!-- Step nav -->
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-4)">
+              <button class="btn btn-secondary" id="step3-back-btn">← Back</button>
+              <button class="btn btn-primary btn-xl" id="place-order-btn" style="background:var(--gradient-green);box-shadow:0 4px 20px rgba(67,233,123,0.35)">
+                🔒 Place Order
+              </button>
+            </div>
+          </div>
+          <!-- /step 3 -->
+
+        </div>
+        <!-- /left -->
+
+        <!-- ── Right: Order Summary Sidebar ────────────────── -->
+        <div>
+          <div class="order-summary-card" style="position:sticky;top:calc(var(--navbar-height) + var(--space-4))">
+            <div class="order-summary-header">Order Summary</div>
+
+            <!-- Items list -->
+            <div class="order-summary-items" id="checkout-order-items" aria-label="Order items">
+              <!-- Skeleton -->
+              <div class="order-summary-item">
+                <div class="skeleton" style="width:56px;height:56px;border-radius:var(--border-radius)"></div>
+                <div style="flex:1">
+                  <div class="skeleton skeleton-text w-3-4"></div>
+                  <div class="skeleton skeleton-text" style="width:40%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Totals -->
+            <div class="order-summary-totals">
+              <div class="summary-row"><span>Subtotal</span><span id="co-subtotal">₹0</span></div>
+              <div class="summary-row"><span>Shipping</span><span id="co-shipping"><span style="color:var(--color-success)">FREE</span></span></div>
+              <div class="summary-row"><span>Tax (18% GST)</span><span id="co-tax">₹0</span></div>
+              <div class="summary-row discount" id="co-coupon-row" style="display:none">
+                <span>Coupon</span><span id="co-coupon">−₹0</span>
+              </div>
+              <div class="summary-row total"><span>Total</span><span id="co-total">₹0</span></div>
+            </div>
+
+            <!-- Trust badges -->
+            <div style="padding:var(--space-4) var(--space-5);border-top:1px solid var(--border-color);display:flex;flex-direction:column;gap:var(--space-2)">
+              <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-xs);color:var(--text-muted)">
+                🔒 <span>End-to-end encrypted checkout</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-xs);color:var(--text-muted)">
+                🔄 <span>Easy 30-day returns policy</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-xs);color:var(--text-muted)">
+                ✅ <span>100% genuine products</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- /right -->
+
+      </div>
+    </div>
+    <!-- /container -->
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+            <div class="nav-logo-icon">🛍️</div>
+            <span class="nav-logo-text">ShopVerse</span>
+          </a>
+          <p class="footer-brand-desc">India's premium e-commerce destination. Millions of products, trusted by 5M+ customers.</p>
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+            <a href="#" class="footer-social-link" aria-label="Twitter">X</a>
+            <a href="#" class="footer-social-link" aria-label="YouTube">▶</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Help</h3>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Customer Support</a></li>
+            <li><a href="#" class="footer-link">Returns & Refunds</a></li>
+            <li><a href="#" class="footer-link">Shipping Policy</a></li>
+            <li><a href="#" class="footer-link">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Contact</h3>
+          <div class="footer-links">
+            <div class="footer-contact-item"><span class="footer-contact-icon">📞</span><div class="footer-contact-text"><div class="footer-contact-label">Phone</div>1800-123-4567 (Toll Free)</div></div>
+            <div class="footer-contact-item"><span class="footer-contact-icon">✉️</span><div class="footer-contact-text"><div class="footer-contact-label">Email</div>support@shopverse.in</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2024 ShopVerse Pvt. Ltd. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#" class="footer-bottom-link">Privacy Policy</a>
+          <a href="#" class="footer-bottom-link">Terms of Service</a>
+        </div>
+        <div class="footer-payment-icons" aria-label="Accepted payment methods">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.75rem">We Accept:</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">VISA</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">MC</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">UPI</span>
+          <span style="background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;color:white;font-size:0.7rem;font-weight:700">COD</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../assets/js/pages/checkout.js"></script>
+</body>
+</html>
