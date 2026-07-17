@@ -191,26 +191,11 @@ function renderGallery(images) {
 
   if (!mainImg) return;
 
-  // Helper to parse CSS transforms based on synthetic views
-  const getTransform = (url) => {
-    if (!url) return '';
-    if (url.includes('view=left')) return 'transform: scaleX(-1);';
-    if (url.includes('view=zoom')) return 'transform: scale(1.4);';
-    if (url.includes('view=rotate')) return 'transform: rotate(-10deg) scale(1.1);';
-    return '';
-  };
-
   // Set first image
   const setMain = (src, alt) => {
     mainImg.src = src;
     mainImg.alt = alt || product.name;
-    mainImg.style = getTransform(src);
-
-    if (zoomImg) {
-      zoomImg.src = src;
-      zoomImg.style = getTransform(src);
-    }
-
+    if (zoomImg) zoomImg.src = src;
     // Update active thumbnail
     document.querySelectorAll('.product-thumb').forEach(t => {
       t.classList.toggle('active', t.dataset.src === src);
@@ -229,10 +214,8 @@ function renderGallery(images) {
         tabindex="0"
         aria-label="Product image ${i + 1}"
         title="Image ${i + 1}"
-        style="overflow: hidden;"
       >
         <img src="${escapeHTML(src)}" alt="Product thumbnail ${i + 1}" loading="lazy"
-          style="${getTransform(src)}"
           onerror="this.onerror=null; this.src='/assets/images/placeholder.webp';">
       </div>
     `).join('');

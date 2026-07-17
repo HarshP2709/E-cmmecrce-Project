@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,67 @@
   <link rel="stylesheet" href="../assets/css/footer.css">
   <link rel="stylesheet" href="../assets/css/animations.css">
   <style>
+    /* ── Print formatting for Invoice Download ──────────── */
+    @media print {
+
+      body,
+      #main-content {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .top-bar,
+      .navbar,
+      .mobile-menu,
+      .footer,
+      #page-loader,
+      #toast-container,
+      #back-to-top,
+      .success-checkmark,
+      #order-tracker-container,
+      .confetti-piece,
+      .btn,
+      .success-subtitle {
+        display: none !important;
+      }
+
+      .success-card {
+        box-shadow: none !important;
+        border: 2px solid #ddd !important;
+        margin: 0 !important;
+        padding: 40px !important;
+        border-radius: 4px !important;
+        max-width: 100% !important;
+      }
+
+      .success-title {
+        color: #000 !important;
+        text-align: left !important;
+        font-size: 24px !important;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+      }
+
+      .success-title::after {
+        content: " - Invoice Snapshot";
+        font-size: 16px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .success-details {
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+      }
+
+      p[style*="confirmation email"] {
+        display: none !important;
+      }
+    }
+
     /* ── Success Page Extras ─────────────────────────────── */
     .confetti-piece {
       position: fixed;
@@ -22,24 +84,52 @@
       z-index: 9999;
       animation: confetti-fall linear forwards;
     }
+
     @keyframes confetti-fall {
-      0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+      0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
     }
+
     @keyframes bounce-in {
-      0%   { transform: scale(0.3); opacity: 0; }
-      50%  { transform: scale(1.15); }
-      70%  { transform: scale(0.95); }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+
+      70% {
+        transform: scale(0.95);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
+
     @keyframes check-draw {
-      to { stroke-dashoffset: 0; }
+      to {
+        stroke-dashoffset: 0;
+      }
     }
+
     .success-checkmark {
-      width: 100px; height: 100px;
+      width: 100px;
+      height: 100px;
       margin: 0 auto var(--space-6);
       animation: bounce-in 0.6s var(--transition-spring) forwards;
     }
+
     .check-circle {
       fill: none;
       stroke: var(--color-success);
@@ -48,6 +138,7 @@
       stroke-dashoffset: 282;
       animation: check-draw 0.6s ease forwards 0.3s;
     }
+
     .check-mark {
       fill: none;
       stroke: var(--color-success);
@@ -58,6 +149,7 @@
       stroke-dashoffset: 60;
       animation: check-draw 0.4s ease forwards 0.7s;
     }
+
     .order-step-tracker {
       display: flex;
       justify-content: space-between;
@@ -65,6 +157,7 @@
       position: relative;
       padding: var(--space-4) 0;
     }
+
     .order-step-tracker::before {
       content: '';
       position: absolute;
@@ -75,6 +168,7 @@
       background: var(--border-color);
       z-index: 0;
     }
+
     .order-step-tracker .step {
       display: flex;
       flex-direction: column;
@@ -82,19 +176,25 @@
       gap: var(--space-2);
       z-index: 1;
     }
+
     .order-step-tracker .step-dot {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       border: 3px solid var(--border-color);
       background: var(--bg-card);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1.1rem;
       transition: all var(--transition-base);
     }
+
     .order-step-tracker .step.active .step-dot {
       border-color: var(--color-success);
       background: var(--color-success);
     }
+
     .order-step-tracker .step-label {
       font-size: 11px;
       font-weight: 600;
@@ -102,11 +202,13 @@
       text-align: center;
       max-width: 70px;
     }
+
     .order-step-tracker .step.active .step-label {
       color: var(--text-primary);
     }
   </style>
 </head>
+
 <body>
   <!-- Page Loader -->
   <div id="page-loader">
@@ -143,7 +245,9 @@
       </a>
       <div class="nav-search" role="search">
         <div class="search-input-wrapper">
-          <input type="search" class="search-input" id="nav-search-input" placeholder="Search for products, brands & more..." autocomplete="off" aria-label="Search products" aria-controls="search-dropdown">
+          <input type="search" class="search-input" id="nav-search-input"
+            placeholder="Search for products, brands & more..." autocomplete="off" aria-label="Search products"
+            aria-controls="search-dropdown">
           <button class="search-btn" aria-label="Search" id="nav-search-btn">🔍</button>
           <div class="search-dropdown" id="search-dropdown" role="listbox"></div>
         </div>
@@ -155,8 +259,10 @@
       </ul>
       <div class="nav-actions">
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
-        <a href="wishlist.html" class="nav-action-btn" aria-label="Wishlist">🤍<span class="nav-badge" id="wishlist-count" style="display:none">0</span></a>
-        <a href="cart.html" class="nav-action-btn" aria-label="Shopping cart">🛒<span class="nav-badge" id="cart-count" style="display:none">0</span></a>
+        <a href="wishlist.html" class="nav-action-btn" aria-label="Wishlist">🤍<span class="nav-badge"
+            id="wishlist-count" style="display:none">0</span></a>
+        <a href="cart.html" class="nav-action-btn" aria-label="Shopping cart">🛒<span class="nav-badge" id="cart-count"
+            style="display:none">0</span></a>
         <div class="nav-user" id="nav-user-area">
           <button class="nav-user-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">
             <div class="nav-user-avatar" id="nav-avatar">👤</div>
@@ -167,7 +273,9 @@
       </div>
     </div>
     <div class="mega-menu" id="mega-menu" aria-label="Category menu" role="navigation">
-      <div class="container"><div class="mega-menu-grid" id="mega-menu-grid"></div></div>
+      <div class="container">
+        <div class="mega-menu-grid" id="mega-menu-grid"></div>
+      </div>
     </div>
   </nav>
 
@@ -183,7 +291,8 @@
         <a href="../index.html" class="mobile-nav-link"><span class="icon">🏠</span> Home</a>
         <a href="products.html" class="mobile-nav-link"><span class="icon">📦</span> Products</a>
         <a href="login.html" class="mobile-nav-link" id="mobile-login-link"><span class="icon">🔐</span> Sign In</a>
-        <a href="profile.html" class="mobile-nav-link" id="mobile-profile-link" style="display:none"><span class="icon">👤</span> My Profile</a>
+        <a href="profile.html" class="mobile-nav-link" id="mobile-profile-link" style="display:none"><span
+            class="icon">👤</span> My Profile</a>
         <a href="orders.html" class="mobile-nav-link"><span class="icon">📋</span> My Orders</a>
       </nav>
     </div>
@@ -196,8 +305,8 @@
 
         <!-- Animated Checkmark SVG -->
         <svg class="success-checkmark" viewBox="0 0 100 100" aria-hidden="true" role="img">
-          <circle class="check-circle" cx="50" cy="50" r="44"/>
-          <polyline class="check-mark" points="30,52 44,66 70,36"/>
+          <circle class="check-circle" cx="50" cy="50" r="44" />
+          <polyline class="check-mark" points="30,52 44,66 70,36" />
         </svg>
 
         <h1 class="success-title" id="success-title">Order Placed! 🎉</h1>
@@ -234,8 +343,11 @@
         </div>
 
         <!-- Order Tracker -->
-        <div style="background:var(--bg-secondary);border-radius:var(--border-radius-lg);padding:var(--space-5);margin-bottom:var(--space-8)">
-          <div style="font-weight:800;font-size:var(--font-size-sm);margin-bottom:var(--space-4);color:var(--text-secondary)">ORDER PROGRESS</div>
+        <div id="order-tracker-container"
+          style="background:var(--bg-secondary);border-radius:var(--border-radius-lg);padding:var(--space-5);margin-bottom:var(--space-8)">
+          <div
+            style="font-weight:800;font-size:var(--font-size-sm);margin-bottom:var(--space-4);color:var(--text-secondary)">
+            ORDER PROGRESS</div>
           <div class="order-step-tracker" id="order-tracker" aria-label="Order status tracker">
             <div class="step active" aria-label="Order placed">
               <div class="step-dot">✅</div>
@@ -262,7 +374,9 @@
 
         <!-- Order Items Preview -->
         <div id="order-items-preview" style="display:none;margin-bottom:var(--space-8)">
-          <div style="font-weight:800;font-size:var(--font-size-sm);margin-bottom:var(--space-4);color:var(--text-secondary)">ITEMS IN YOUR ORDER</div>
+          <div
+            style="font-weight:800;font-size:var(--font-size-sm);margin-bottom:var(--space-4);color:var(--text-secondary)">
+            ITEMS IN YOUR ORDER</div>
           <div id="items-list" style="display:flex;flex-direction:column;gap:var(--space-3)"></div>
         </div>
 
@@ -271,6 +385,10 @@
           <a href="orders.html" class="btn btn-primary btn-lg" style="flex:1;max-width:220px;text-align:center">
             📦 Track Order
           </a>
+          <button id="download-invoice-btn" class="btn btn-outline btn-lg"
+            style="flex:1;max-width:220px;text-align:center">
+            📥 Download Invoice
+          </button>
           <a href="../index.html" class="btn btn-ghost btn-lg" style="flex:1;max-width:220px;text-align:center">
             🛍️ Continue Shopping
           </a>
@@ -294,8 +412,20 @@
           </a>
           <p class="footer-brand-desc">India's premium e-commerce destination.</p>
         </div>
-        <div><h3 class="footer-col-title">Help</h3><ul class="footer-links"><li><a href="#" class="footer-link">Customer Support</a></li><li><a href="orders.html" class="footer-link">Track Order</a></li></ul></div>
-        <div><h3 class="footer-col-title">Categories</h3><ul class="footer-links"><li><a href="products.html?category=electronics" class="footer-link">Electronics</a></li><li><a href="products.html?category=fashion" class="footer-link">Fashion</a></li></ul></div>
+        <div>
+          <h3 class="footer-col-title">Help</h3>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Customer Support</a></li>
+            <li><a href="orders.html" class="footer-link">Track Order</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Categories</h3>
+          <ul class="footer-links">
+            <li><a href="products.html?category=electronics" class="footer-link">Electronics</a></li>
+            <li><a href="products.html?category=fashion" class="footer-link">Fashion</a></li>
+          </ul>
+        </div>
       </div>
       <div class="footer-bottom">
         <p class="footer-copyright">© 2024 ShopVerse Pvt. Ltd. All rights reserved.</p>
@@ -305,4 +435,5 @@
 
   <script type="module" src="../assets/js/pages/order-success.js"></script>
 </body>
+
 </html>

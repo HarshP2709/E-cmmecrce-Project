@@ -69,6 +69,7 @@ export async function apiFetch(endpoint, options = {}) {
         storage.remove('token');
         storage.remove('user');
         window.location.href = '/pages/login.html';
+        return new Promise(() => { }); // Halt execution entirely to safely allow the browser redirect to engage
       }
       throw new Error(data.message || `HTTP ${res.status}`);
     }

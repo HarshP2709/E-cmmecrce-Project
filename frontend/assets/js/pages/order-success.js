@@ -14,16 +14,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   initPage();
   await initNavbar();
 
-  const { order_id } = getParams();
+  const params = getParams();
+  const orderId = params.order_id || params.id;
 
-  if (!order_id) {
+  if (!orderId) {
     // No order ID — still show the page but with generic content
     renderGenericSuccess();
     launchConfetti(80);
     return;
   }
 
-  await loadOrderDetails(order_id);
+  await loadOrderDetails(orderId);
   // Launch confetti after a short delay for drama
   setTimeout(() => launchConfetti(80), 400);
 });
@@ -90,6 +91,9 @@ function renderOrderDetails(order) {
   // Render items preview
   const items = order.order_items || [];
   if (items.length) renderItemsPreview(items);
+
+  // Initialize Invoice button
+  initInvoiceDownload(order);
 }
 
 // ── Update Order Tracker ──────────────────────────────────────
@@ -178,11 +182,23 @@ function updatePageTitle(orderNumber) {
 // ── Add Business Days ─────────────────────────────────────────
 function addBusinessDays(date, days) {
   const result = new Date(date);
-  let added = 0;
-  while (added < days) {
+  let count = 0;
+  while (count < days) {
     result.setDate(result.getDate() + 1);
     const day = result.getDay();
-    if (day !== 0 && day !== 6) added++; // skip weekends
+    if (day !== 0 && day !== 6) count++;
   }
   return result;
+}
+
+// ── Invoice Download ─────────────────────────────────────────
+function initInvoiceDownload(order) {
+  const downloadBtn = document.getElementById('download-invoice-btn');
+  if (!downloadBtn) return;
+
+  downloadBtn.addEventListener('click', () => {
+    // In a real app we'd fetch a PDF from the server, but for the demo
+    // we instruct the browser to open the print dialog styled for receipt format.
+    window.print();
+  });
 }
