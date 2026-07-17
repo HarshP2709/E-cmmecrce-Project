@@ -9,9 +9,9 @@ import { requireAuth, Auth } from '../modules/auth.js';
 import { Cart } from '../modules/cart.js';
 
 // ── State ─────────────────────────────────────────────────────
-let currentStep  = 1;
-let cartData     = null;
-let addresses    = [];
+let currentStep = 1;
+let cartData = null;
+let addresses = [];
 let selectedAddr = null;    // selected address object
 let paymentMethod = 'cod';  // 'cod' | 'card' | 'upi'
 let summaryTotals = {};     // { subtotal, shipping, tax, couponDiscount, total }
@@ -93,12 +93,12 @@ function renderSavedAddresses() {
           <div class="address-select-name">${escHTML(addr.full_name || Auth.getUser()?.full_name || 'User')}</div>
           <div style="font-size:var(--font-size-xs);color:var(--text-secondary);line-height:1.7">
             ${escHTML(addr.address_line1)}${addr.address_line2 ? ', ' + escHTML(addr.address_line2) : ''}<br>
-            ${escHTML(addr.city)}, ${escHTML(addr.state)} — ${escHTML(addr.pincode)}<br>
+            ${escHTML(addr.city)}, ${escHTML(addr.state)} — ${escHTML(addr.postal_code)}<br>
             📞 ${escHTML(addr.phone)}
           </div>
           <div style="margin-top:var(--space-2);display:flex;gap:var(--space-2)">
             <span style="font-size:0.65rem;background:var(--bg-tertiary);padding:3px 8px;border-radius:4px;font-weight:600;text-transform:capitalize">
-              ${addr.address_type || 'home'}
+              ${addr.type || 'home'}
             </span>
             ${addr.is_default ? '<span style="font-size:0.65rem;background:rgba(108,99,255,0.1);color:var(--color-primary);padding:3px 8px;border-radius:4px;font-weight:600">Default</span>' : ''}
           </div>
@@ -133,8 +133,8 @@ function renderCheckoutItems() {
 
   container.innerHTML = cartData.cart_items.map(item => {
     const product = item.products || item;
-    const img     = product.product_images?.[0]?.url || product.primary_image || '../assets/images/placeholder.webp';
-    const price   = item.price || product.price || 0;
+    const img = product.product_images?.[0]?.url || product.primary_image || '../assets/images/placeholder.webp';
+    const price = item.price || product.price || 0;
     return `
       <div class="order-summary-item">
         <img src="${escHTML(img)}" alt="${escHTML(product.name)}" class="order-summary-img"
@@ -157,9 +157,9 @@ function computeTotals() {
     return s + (item.price || item.products?.price || 0) * item.quantity;
   }, 0);
   const couponDiscount = cartData.coupon_discount || 0;
-  const shipping       = subtotal >= 499 ? 0 : 49;
-  const tax            = Math.round((subtotal - couponDiscount) * 0.18);
-  const total          = subtotal - couponDiscount + shipping + tax;
+  const shipping = subtotal >= 499 ? 0 : 49;
+  const tax = Math.round((subtotal - couponDiscount) * 0.18);
+  const total = subtotal - couponDiscount + shipping + tax;
 
   summaryTotals = { subtotal, couponDiscount, shipping, tax, total };
 }
@@ -197,8 +197,8 @@ function initStepNavigation() {
 
   document.getElementById('step3-back-btn')?.addEventListener('click', () => goToStep(2));
 
-  document.getElementById('edit-address-btn')?.addEventListener('click',  () => goToStep(1));
-  document.getElementById('edit-payment-btn')?.addEventListener('click',  () => goToStep(2));
+  document.getElementById('edit-address-btn')?.addEventListener('click', () => goToStep(1));
+  document.getElementById('edit-payment-btn')?.addEventListener('click', () => goToStep(2));
 }
 
 function goToStep(n) {
@@ -236,14 +236,14 @@ function validateStep1() {
 // ── Step 2 Validation ─────────────────────────────────────────
 function validateStep2() {
   if (paymentMethod === 'card') {
-    const name   = document.getElementById('card-holder-name')?.value.trim();
+    const name = document.getElementById('card-holder-name')?.value.trim();
     const number = document.getElementById('card-number')?.value.replace(/\s/g, '');
     const expiry = document.getElementById('card-expiry')?.value.trim();
-    const cvv    = document.getElementById('card-cvv')?.value.trim();
+    const cvv = document.getElementById('card-cvv')?.value.trim();
 
-    if (!name)            { showToast('Enter cardholder name',           'warning'); return false; }
+    if (!name) { showToast('Enter cardholder name', 'warning'); return false; }
     if (number.length < 16) { showToast('Enter a valid 16-digit card number', 'warning'); return false; }
-    if (!expiry)          { showToast('Enter card expiry date',          'warning'); return false; }
+    if (!expiry) { showToast('Enter card expiry date', 'warning'); return false; }
     if (!cvv || cvv.length < 3) { showToast('Enter a valid CVV', 'warning'); return false; }
   }
   if (paymentMethod === 'upi') {
@@ -280,9 +280,9 @@ function selectPaymentMethod(method) {
 
   // Toggle sub-forms
   const stripeForm = document.getElementById('stripe-form');
-  const upiForm    = document.getElementById('upi-form');
+  const upiForm = document.getElementById('upi-form');
   if (stripeForm) { stripeForm.style.display = method === 'card' ? 'block' : 'none'; stripeForm.setAttribute('aria-hidden', method !== 'card'); }
-  if (upiForm)    { upiForm.style.display    = method === 'upi'  ? 'block' : 'none'; upiForm.setAttribute('aria-hidden', method !== 'upi'); }
+  if (upiForm) { upiForm.style.display = method === 'upi' ? 'block' : 'none'; upiForm.setAttribute('aria-hidden', method !== 'upi'); }
 }
 
 // ── Card Number Formatting ────────────────────────────────────
@@ -303,9 +303,9 @@ function initCardFormatting() {
 
 // ── New Address Form ──────────────────────────────────────────
 function initNewAddressForm() {
-  const toggleBtn    = document.getElementById('toggle-new-address-btn');
-  const cancelBtn    = document.getElementById('cancel-address-btn');
-  const form         = document.getElementById('new-address-form-el');
+  const toggleBtn = document.getElementById('toggle-new-address-btn');
+  const cancelBtn = document.getElementById('cancel-address-btn');
+  const form = document.getElementById('new-address-form-el');
   const defaultCheck = document.getElementById('addr-default-check');
   const defaultInput = document.getElementById('addr-default-input');
 
@@ -316,9 +316,8 @@ function initNewAddressForm() {
 
   cancelBtn?.addEventListener('click', () => toggleNewAddressForm(false));
 
-  defaultCheck?.addEventListener('click', () => {
-    defaultCheck.classList.toggle('checked');
-    if (defaultInput) defaultInput.checked = defaultCheck.classList.contains('checked');
+  defaultInput?.addEventListener('change', () => {
+    if (defaultCheck) defaultCheck.classList.toggle('checked', defaultInput.checked);
   });
 
   form?.addEventListener('submit', async (e) => {
@@ -327,19 +326,19 @@ function initNewAddressForm() {
     btn.classList.add('loading');
 
     const payload = {
-      full_name:     document.getElementById('addr-full-name')?.value.trim(),
-      phone:         document.getElementById('addr-phone')?.value.trim(),
+      full_name: document.getElementById('addr-full-name')?.value.trim(),
+      phone: document.getElementById('addr-phone')?.value.trim(),
       address_line1: document.getElementById('addr-line1')?.value.trim(),
       address_line2: document.getElementById('addr-line2')?.value.trim(),
-      city:          document.getElementById('addr-city')?.value.trim(),
-      state:         document.getElementById('addr-state')?.value.trim(),
-      pincode:       document.getElementById('addr-pincode')?.value.trim(),
-      address_type:  document.getElementById('addr-type')?.value,
-      is_default:    document.getElementById('addr-default-input')?.checked || false,
+      city: document.getElementById('addr-city')?.value.trim(),
+      state: document.getElementById('addr-state')?.value.trim(),
+      postal_code: document.getElementById('addr-pincode')?.value.trim(),
+      type: document.getElementById('addr-type')?.value,
+      is_default: document.getElementById('addr-default-input')?.checked || false,
     };
 
     // Basic validation
-    if (!payload.full_name || !payload.address_line1 || !payload.city || !payload.pincode || !payload.phone) {
+    if (!payload.full_name || !payload.address_line1 || !payload.city || !payload.postal_code || !payload.phone) {
       showToast('Please fill all required fields', 'warning');
       btn.classList.remove('loading');
       return;
@@ -349,7 +348,7 @@ function initNewAddressForm() {
       btn.classList.remove('loading');
       return;
     }
-    if (!/^\d{6}$/.test(payload.pincode)) {
+    if (!/^\d{6}$/.test(payload.postal_code)) {
       showToast('Enter a valid 6-digit PIN code', 'warning');
       btn.classList.remove('loading');
       return;
@@ -378,8 +377,8 @@ function initNewAddressForm() {
 }
 
 function toggleNewAddressForm(open) {
-  const form    = document.getElementById('new-address-form');
-  const btn     = document.getElementById('toggle-new-address-btn');
+  const form = document.getElementById('new-address-form');
+  const btn = document.getElementById('toggle-new-address-btn');
   if (!form) return;
   form.classList.toggle('open', open);
   form.setAttribute('aria-hidden', !open);
@@ -398,13 +397,13 @@ function populateReviewStep() {
     addrEl.innerHTML = `
       <strong>${escHTML(a.full_name || Auth.getUser()?.full_name || 'User')}</strong><br>
       ${escHTML(a.address_line1)}${a.address_line2 ? ', ' + escHTML(a.address_line2) : ''}<br>
-      ${escHTML(a.city)}, ${escHTML(a.state)} — ${escHTML(a.pincode)}<br>
+      ${escHTML(a.city)}, ${escHTML(a.state)} — ${escHTML(a.postal_code)}<br>
       📞 ${escHTML(a.phone)}
     `;
   }
 
   // Payment
-  const payEl  = document.getElementById('review-payment');
+  const payEl = document.getElementById('review-payment');
   const labels = { cod: '💵 Cash on Delivery', card: '💳 Credit/Debit Card', upi: '📱 UPI' };
   if (payEl) payEl.innerHTML = `<strong>${labels[paymentMethod] || paymentMethod}</strong>`;
 
@@ -428,9 +427,8 @@ function populateReviewStep() {
 function initTermsCheckbox() {
   const visual = document.getElementById('terms-check-box');
   const hidden = document.getElementById('terms-checkbox');
-  visual?.addEventListener('click', () => {
-    visual.classList.toggle('checked');
-    if (hidden) hidden.checked = visual.classList.contains('checked');
+  hidden?.addEventListener('change', () => {
+    if (visual) visual.classList.toggle('checked', hidden.checked);
   });
 }
 
@@ -459,12 +457,15 @@ function initPlaceOrderButton() {
     btn.classList.add('loading');
 
     const payload = {
-      address_id:     selectedAddr.id,
+      shipping_address: selectedAddr,
+      billing_address: selectedAddr,
       payment_method: paymentMethod,
+      items: cartData?.cart_items?.map(i => ({ product_id: i.product_id, variant_id: i.variant_id, quantity: i.quantity })) || [],
+      coupon_id: cartData?.coupon_id || null,
       // Include card/upi details for non-COD methods (backend tokenises)
       ...(paymentMethod === 'card' && {
-        card_last4:   document.getElementById('card-number')?.value.replace(/\s/g, '').slice(-4),
-        card_name:    document.getElementById('card-holder-name')?.value.trim(),
+        card_last4: document.getElementById('card-number')?.value.replace(/\s/g, '').slice(-4),
+        card_name: document.getElementById('card-holder-name')?.value.trim(),
       }),
       ...(paymentMethod === 'upi' && {
         upi_id: document.getElementById('upi-id')?.value.trim(),

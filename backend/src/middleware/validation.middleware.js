@@ -44,7 +44,6 @@ const validateOrder = [
 
 const validateReview = [
   body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be 1-5'),
-  body('product_id').isUUID().withMessage('Valid product ID required'),
   handleValidationErrors,
 ];
 

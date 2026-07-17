@@ -33,14 +33,14 @@ export function renderProductCard(product) {
       <div class="product-card-img-wrap">
         <img
           data-src="${escapeHTML(img)}"
-          src="assets/images/placeholder.webp"
+          src="/assets/images/placeholder.webp"
           alt="${escapeHTML(product.name)}"
           class="product-card-img"
           loading="lazy"
-          onerror="this.src='assets/images/placeholder.webp'"
+          onerror="this.onerror=null; this.src='/assets/images/placeholder.webp';"
         >
         ${!inStock ? '<div class="product-card-badges"><span class="card-badge card-badge-out">Out of Stock</span></div>' :
-          (isNew || isSale || isBestSeller) ? `
+      (isNew || isSale || isBestSeller) ? `
           <div class="product-card-badges">
             ${isNew ? '<span class="card-badge card-badge-new">New</span>' : ''}
             ${isSale ? `<span class="card-badge card-badge-sale">${discount}% Off</span>` : ''}
@@ -124,24 +124,24 @@ export function renderFlashCard(product) {
   return `
     <article class="flash-card" data-product-id="${product.id}">
       <div class="product-card-img-wrap">
-        <img data-src="${img}" src="assets/images/placeholder.webp" alt="${escapeHTML(product.name)}" class="product-card-img" loading="lazy">
+        <img data-src="${img}" src="/assets/images/placeholder.webp" alt="${escapeHTML(product.name)}" class="product-card-img" loading="lazy" onerror="this.onerror=null; this.src='/assets/images/placeholder.webp';">
         <div class="product-card-badges">
           ${discount > 0 ? `<span class="card-badge card-badge-sale">${discount}% Off</span>` : ''}
         </div>
       </div>
       <div class="product-card-body" onclick="window.location.href='/pages/product-detail.html?slug=${product.slug}'" style="cursor:pointer">
-        <div class="product-card-name" style="color:rgba(255,255,255,0.9)">${escapeHTML(product.name)}</div>
+        <div class="product-card-name">${escapeHTML(product.name)}</div>
         <div class="product-card-price-row">
-          <span class="product-card-price" style="color:white">${formatPrice(product.price)}</span>
-          ${product.compare_price > product.price ? `<span class="product-card-original" style="color:rgba(255,255,255,0.5)">${formatPrice(product.compare_price)}</span>` : ''}
+          <span class="product-card-price">${formatPrice(product.price)}</span>
+          ${product.compare_price > product.price ? `<span class="product-card-original">${formatPrice(product.compare_price)}</span>` : ''}
         </div>
         <div class="flash-progress" aria-label="${sold}% sold">
           <div class="flash-progress-bar" style="width:${sold}%"></div>
         </div>
-        <div class="flash-sold-count" style="color:rgba(255,255,255,0.5)">${available} left</div>
+        <div class="flash-sold-count">${available} left</div>
       </div>
       <div class="product-card-footer">
-        <button class="product-card-add-btn" data-product-id="${product.id}" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8)">
+        <button class="product-card-add-btn" data-product-id="${product.id}">
           🛒 Add to Cart
         </button>
       </div>

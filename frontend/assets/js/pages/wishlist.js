@@ -79,7 +79,7 @@ async function loadWishlist() {
 
 // ── Render Wishlist Card ──────────────────────────────────────
 function renderWishlistCard(item) {
-  const product = item.products || item;
+  const product = item.product || item.products || item;
   const img = product.primary_image || product.product_images?.[0]?.url || '../assets/images/placeholder.webp';
   const discount = calcDiscount(product.price, product.compare_price);
   const inStock = (product.available_quantity || product.stock_quantity || 1) > 0;
@@ -238,7 +238,7 @@ function attachCardEvents() {
                 if (countLabel) countLabel.textContent = `${remaining} item${remaining !== 1 ? 's' : ''} in your wishlist`;
               }, { once: true });
             }
-          } catch {}
+          } catch { }
         }, 1200);
       } catch (err) {
         moveBtn.classList.remove('loading');
@@ -270,13 +270,13 @@ function initMoveAllToCart() {
       try {
         await Cart.addItem(productId, 1);
         successCount++;
-      } catch {}
+      } catch { }
     }
 
     // Clear wishlist
     try {
       await apiFetch('/wishlist/clear', { method: 'DELETE' });
-    } catch {}
+    } catch { }
 
     btn.classList.remove('loading');
     btn.textContent = '🛒 Move All to Cart';

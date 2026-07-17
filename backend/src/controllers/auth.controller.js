@@ -30,7 +30,13 @@ const register = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const { data, error } = await supabaseAdmin.auth.signInWithPassword({ email, password });
+  // Use a local, non-persistent client for sign in to avoid mutating the global admin singleton!
+  const { createClient } = require('@supabase/supabase-js');
+  const localClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+
+  const { data, error } = await localClient.auth.signInWithPassword({ email, password });
 
   if (error) {
     throw new AppError('Invalid email or password.', 401);

@@ -28,7 +28,7 @@ const protect = async (req, res, next) => {
       .eq('id', user.id)
       .single();
 
-    if (!profile?.is_active) {
+    if (profile && profile.is_active === false) {
       return next(new AppError('Your account has been deactivated.', 403));
     }
 

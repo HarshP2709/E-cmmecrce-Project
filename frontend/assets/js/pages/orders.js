@@ -81,6 +81,14 @@ async function loadOrders(status = currentStatus, page = 1) {
     }
 
     list.innerHTML = orders.map(renderOrderCard).join('');
+
+    // Manually trigger the reveal animations since these were dynamically injected
+    requestAnimationFrame(() => {
+      list.querySelectorAll('.reveal').forEach((el, idx) => {
+        setTimeout(() => el.classList.add('revealed'), idx * 75);
+      });
+    });
+
     renderPagination(total, page, ORDERS_PER_PAGE);
 
     // Attach cancel buttons
@@ -148,7 +156,7 @@ function renderOrderCard(order) {
         ${items.slice(0, 3).map(item => `
           <div class="order-item-row">
             <img
-              src="${escapeHTML(item.products?.primary_image || item.primary_image || '../assets/images/placeholder.webp')}"
+              src="${escapeHTML((Array.isArray(item.products?.product_images) ? (item.products.product_images.find(i => i.is_primary) || item.products.product_images[0])?.url : item.products?.primary_image) || item.primary_image || '../assets/images/placeholder.webp')}"
               alt="${escapeHTML(item.products?.name || item.name || 'Product')}"
               class="order-item-img"
               loading="lazy"
@@ -158,7 +166,7 @@ function renderOrderCard(order) {
               <div class="order-item-name">${escapeHTML(item.products?.name || item.name || 'Product')}</div>
               <div class="order-item-qty">Qty: ${item.quantity}</div>
             </div>
-            <div class="order-item-price">${formatPrice(item.unit_price * item.quantity)}</div>
+            <div class="order-item-price">${formatPrice(item.price * item.quantity)}</div>
           </div>
         `).join('')}
         ${items.length > 3 ? `
@@ -299,6 +307,12 @@ function initOrderSearch() {
         const orders = data.data || [];
         if (countLabel) countLabel.textContent = `${orders.length} result${orders.length !== 1 ? 's' : ''} for "${q}"`;
         list.innerHTML = orders.length ? orders.map(renderOrderCard).join('') : renderEmptyState('');
+
+        requestAnimationFrame(() => {
+          list.querySelectorAll('.reveal').forEach((el, idx) => {
+            setTimeout(() => el.classList.add('revealed'), idx * 75);
+          });
+        });
       } catch (err) {
         showToast('Search failed.', 'error');
       }

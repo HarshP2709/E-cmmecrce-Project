@@ -123,7 +123,9 @@ function renderItemsPreview(items) {
 
   list.innerHTML = items.slice(0, 4).map(item => {
     const product = item.products || item;
-    const img = product.primary_image || '../assets/images/placeholder.webp';
+    // Extract image either from product_images array or legacy primary_image
+    const imgObj = Array.isArray(product.product_images) ? product.product_images.find(img => img.is_primary) || product.product_images[0] : null;
+    const img = imgObj?.url || product.primary_image || '../assets/images/placeholder.webp';
     return `
       <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);background:var(--bg-secondary);border-radius:var(--border-radius)">
         <img
@@ -134,9 +136,9 @@ function renderItemsPreview(items) {
         >
         <div style="flex:1">
           <div style="font-weight:700;font-size:var(--font-size-sm);color:var(--text-primary)">${escapeHTML(product.name || 'Product')}</div>
-          <div style="font-size:var(--font-size-xs);color:var(--text-muted)">Qty: ${item.quantity} × ${formatPrice(item.unit_price)}</div>
+          <div style="font-size:var(--font-size-xs);color:var(--text-muted)">Qty: ${item.quantity} × ${formatPrice(item.price || item.unit_price)}</div>
         </div>
-        <div style="font-weight:800;font-size:var(--font-size-sm)">${formatPrice(item.unit_price * item.quantity)}</div>
+        <div style="font-weight:800;font-size:var(--font-size-sm)">${formatPrice((item.price || item.unit_price) * item.quantity)}</div>
       </div>
     `;
   }).join('');

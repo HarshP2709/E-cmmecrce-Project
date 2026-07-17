@@ -4,3 +4,58 @@
 [2026-07-16 17:56:41] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?flash_sale=true&limit=4 - ::1
 [2026-07-16 17:57:08] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?category=fashion&sort=newest&page=1&limit=20 - ::1
 [2026-07-16 17:57:15] error: Could not find the table 'public.product_summary' in the schema cache - GET /api/v1/products?category=fashion&sort=newest&page=1&limit=20 - ::1
+[2026-07-16 18:17:48] error: Your account has been deactivated. - GET /api/v1/cart - ::1
+[2026-07-16 18:17:48] error: Your account has been deactivated. - GET /api/v1/wishlist - ::1
+[2026-07-16 18:17:49] error: Your account has been deactivated. - GET /api/v1/cart - ::1
+[2026-07-16 18:18:01] error: Your account has been deactivated. - GET /api/v1/wishlist - ::1
+[2026-07-16 18:18:01] error: Your account has been deactivated. - GET /api/v1/cart - ::1
+[2026-07-16 18:18:25] error: Your account has been deactivated. - GET /api/v1/cart - ::1
+[2026-07-16 18:18:25] error: Your account has been deactivated. - GET /api/v1/wishlist - ::1
+[2026-07-16 18:18:26] error: Your account has been deactivated. - GET /api/v1/cart - ::1
+[2026-07-16 18:22:05] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/cart - ::1
+[2026-07-16 18:22:05] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/wishlist - ::1
+[2026-07-16 18:37:30] error: Could not find a relationship between 'reviews' and 'profiles' in the schema cache - GET /api/v1/products/3c726566-f5f9-4107-99e2-a36879bd6283/reviews?page=1&limit=5 - ::1
+[2026-07-16 18:37:36] error: Could not find a relationship between 'reviews' and 'profiles' in the schema cache - GET /api/v1/products/3c726566-f5f9-4107-99e2-a36879bd6283/reviews?page=1&limit=5 - ::1
+[2026-07-16 18:49:11] error: Order must have at least one item. - POST /api/v1/orders - ::1
+[2026-07-16 18:49:19] error: Order must have at least one item. - POST /api/v1/orders - ::1
+[2026-07-16 18:51:50] error: Order must have at least one item. - POST /api/v1/orders - ::1
+[2026-07-16 18:55:59] error: Could not find the 'payment_method' column of 'orders' in the schema cache - POST /api/v1/orders - ::1
+[2026-07-16 18:56:09] error: Could not find the 'payment_method' column of 'orders' in the schema cache - POST /api/v1/orders - ::1
+[2026-07-16 19:23:05] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-16 19:23:05] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-16 19:23:27] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/cart - ::1
+[2026-07-16 19:23:27] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/wishlist - ::1
+[2026-07-16 19:25:29] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/cart - ::1
+[2026-07-16 19:25:29] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/wishlist - ::1
+[2026-07-16 19:25:37] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/cart - ::1
+[2026-07-16 19:25:37] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/wishlist - ::1
+[2026-07-17 10:33:34] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:33:49] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:34:00] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:34:02] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:34:07] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:34:32] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:34:37] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:34:38] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:39:27] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:39:28] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:43:26] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:43:26] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-17 10:44:22] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:44:41] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:47:27] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:47:39] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 10:48:55] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/wishlist - ::1
+[2026-07-17 10:48:56] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/cart - ::1
+[2026-07-17 10:49:05] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/cart - ::1
+[2026-07-17 10:49:05] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/wishlist - ::1
+[2026-07-17 10:49:06] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/orders?page=1&limit=5 - ::1
+[2026-07-17 10:49:13] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/cart - ::1
+[2026-07-17 10:49:14] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/wishlist - ::1
+[2026-07-17 10:49:14] error: infinite recursion detected in policy for relation "profiles" - GET /api/v1/orders?page=1&limit=5 - ::1
+[2026-07-17 10:52:43] error: Order not found. - GET /api/v1/orders/ded0f4b5-ca01-41f0-87f6-04c005c7f4e2 - ::1
+[2026-07-17 10:56:46] error: Order not found. - GET /api/v1/orders/ded0f4b5-ca01-41f0-87f6-04c005c7f4e2 - ::1
+[2026-07-17 11:51:17] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-17 11:51:17] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-17 12:55:57] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-17 12:55:57] error: Invalid or expired token. - GET /api/v1/wishlist - ::1

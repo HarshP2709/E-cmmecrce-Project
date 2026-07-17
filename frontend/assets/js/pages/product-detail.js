@@ -54,7 +54,7 @@ async function loadProduct(slug) {
 // ── Render Product ────────────────────────────────────────────
 function renderProduct() {
   // ── Meta / SEO ─────────────────────────────────────────────
-  document.getElementById('page-title').textContent    = `${product.name} — ShopVerse`;
+  document.getElementById('page-title').textContent = `${product.name} — ShopVerse`;
   document.getElementById('page-description')?.setAttribute('content', product.short_description || product.description?.slice(0, 160) || '');
   document.getElementById('og-title')?.setAttribute('content', `${product.name} — ShopVerse`);
   document.getElementById('og-description')?.setAttribute('content', product.short_description || '');
@@ -73,7 +73,7 @@ function renderProduct() {
   // ── Images ─────────────────────────────────────────────────
   const images = product.product_images?.length
     ? product.product_images.map(i => i.url || i)
-    : [product.primary_image || '../assets/images/placeholder.webp'];
+    : [product.primary_image || '/assets/images/placeholder.webp'];
 
   renderGallery(images);
 
@@ -132,11 +132,11 @@ function renderProduct() {
   setText('product-price', formatPrice(product.price));
   const discount = calcDiscount(product.price, product.compare_price);
   const comparePriceEl = document.getElementById('product-compare-price');
-  const discountBadge  = document.getElementById('product-discount-badge');
+  const discountBadge = document.getElementById('product-discount-badge');
 
   if (product.compare_price > product.price) {
     if (comparePriceEl) { comparePriceEl.textContent = formatPrice(product.compare_price); comparePriceEl.style.display = 'inline'; }
-    if (discountBadge)  { discountBadge.textContent  = `${discount}% OFF`; discountBadge.style.display = 'inline-flex'; }
+    if (discountBadge) { discountBadge.textContent = `${discount}% OFF`; discountBadge.style.display = 'inline-flex'; }
   }
 
   // EMI
@@ -153,15 +153,15 @@ function renderProduct() {
 
   // ── Add to Cart / Buy Now buttons ─────────────────────────
   const addCartBtn = document.getElementById('add-to-cart-btn');
-  const buyNowBtn  = document.getElementById('buy-now-btn');
+  const buyNowBtn = document.getElementById('buy-now-btn');
   const inStock = stockCount > 0;
 
   if (!inStock) {
     if (addCartBtn) { addCartBtn.disabled = true; addCartBtn.textContent = '❌ Out of Stock'; }
-    if (buyNowBtn)  { buyNowBtn.disabled  = true; }
+    if (buyNowBtn) { buyNowBtn.disabled = true; }
   } else {
     addCartBtn?.addEventListener('click', handleAddToCart);
-    buyNowBtn?.addEventListener('click',  handleBuyNow);
+    buyNowBtn?.addEventListener('click', handleBuyNow);
   }
 
   // ── Wishlist Button ────────────────────────────────────────
@@ -172,7 +172,7 @@ function renderProduct() {
   const descEl = document.getElementById('product-description');
   if (descEl) {
     descEl.innerHTML = product.description
-      ? product.description.replace(/\n/g, '<br>')
+      ? (product.description.trim().startsWith('<') || product.description.includes('</div>') ? product.description : product.description.replace(/\n/g, '<br>'))
       : '<p style="color:var(--text-muted)">No description available for this product.</p>';
   }
 
@@ -182,20 +182,35 @@ function renderProduct() {
 
 // ── Gallery ───────────────────────────────────────────────────
 function renderGallery(images) {
-  const mainImg     = document.getElementById('main-image');
-  const thumbsWrap  = document.getElementById('thumbnails');
-  const mainWrap    = document.getElementById('main-image-wrap');
+  const mainImg = document.getElementById('main-image');
+  const thumbsWrap = document.getElementById('thumbnails');
+  const mainWrap = document.getElementById('main-image-wrap');
   const zoomOverlay = document.getElementById('zoom-overlay');
-  const zoomImg     = document.getElementById('zoom-img');
-  const zoomClose   = document.getElementById('zoom-close');
+  const zoomImg = document.getElementById('zoom-img');
+  const zoomClose = document.getElementById('zoom-close');
 
   if (!mainImg) return;
+
+  // Helper to parse CSS transforms based on synthetic views
+  const getTransform = (url) => {
+    if (!url) return '';
+    if (url.includes('view=left')) return 'transform: scaleX(-1);';
+    if (url.includes('view=zoom')) return 'transform: scale(1.4);';
+    if (url.includes('view=rotate')) return 'transform: rotate(-10deg) scale(1.1);';
+    return '';
+  };
 
   // Set first image
   const setMain = (src, alt) => {
     mainImg.src = src;
     mainImg.alt = alt || product.name;
-    if (zoomImg) zoomImg.src = src;
+    mainImg.style = getTransform(src);
+
+    if (zoomImg) {
+      zoomImg.src = src;
+      zoomImg.style = getTransform(src);
+    }
+
     // Update active thumbnail
     document.querySelectorAll('.product-thumb').forEach(t => {
       t.classList.toggle('active', t.dataset.src === src);
@@ -214,9 +229,11 @@ function renderGallery(images) {
         tabindex="0"
         aria-label="Product image ${i + 1}"
         title="Image ${i + 1}"
+        style="overflow: hidden;"
       >
         <img src="${escapeHTML(src)}" alt="Product thumbnail ${i + 1}" loading="lazy"
-          onerror="this.src='../assets/images/placeholder.webp'">
+          style="${getTransform(src)}"
+          onerror="this.onerror=null; this.src='/assets/images/placeholder.webp';">
       </div>
     `).join('');
 
@@ -269,9 +286,9 @@ function renderVariants(variants) {
       </div>
       <div class="variant-options">
         ${items.map(v => {
-          const isColor = label.toLowerCase().includes('color') || label.toLowerCase().includes('colour');
-          if (isColor && v.color_hex) {
-            return `
+    const isColor = label.toLowerCase().includes('color') || label.toLowerCase().includes('colour');
+    if (isColor && v.color_hex) {
+      return `
               <button
                 class="color-swatch ${v.stock_quantity <= 0 ? 'disabled' : ''}"
                 data-variant-id="${v.id}"
@@ -283,8 +300,8 @@ function renderVariants(variants) {
                 ${v.stock_quantity <= 0 ? 'disabled aria-disabled="true"' : ''}
               ></button>
             `;
-          }
-          return `
+    }
+    return `
             <button
               class="variant-btn ${v.stock_quantity <= 0 ? '' : ''}"
               data-variant-id="${v.id}"
@@ -296,7 +313,7 @@ function renderVariants(variants) {
               ${escapeHTML(v.option_value)}
             </button>
           `;
-        }).join('')}
+  }).join('')}
       </div>
     </div>
   `).join('');
@@ -457,8 +474,8 @@ async function loadReviews(append = false) {
   try {
     const data = await apiFetch(`/products/${product.id}/reviews?page=${reviewPage}&limit=${REVIEWS_PER_PAGE}`);
     const reviews = data.data || data.reviews || [];
-    const total   = data.total || data.count || reviews.length;
-    const stats   = data.stats || {};
+    const total = data.total || data.count || reviews.length;
+    const stats = data.stats || {};
 
     // Update count badge in tab
     setText('reviews-tab-count', total);
@@ -490,7 +507,7 @@ function renderRatingSummary(avgRating, totalCount, stats) {
 
   barsEl.innerHTML = [5, 4, 3, 2, 1].map(star => {
     const count = stats[`star_${star}`] || stats[star] || 0;
-    const pct   = totalCount > 0 ? Math.round(count / totalCount * 100) : 0;
+    const pct = totalCount > 0 ? Math.round(count / totalCount * 100) : 0;
     return `
       <div class="rating-bar-row">
         <span class="rating-bar-label">${star} ★</span>
@@ -518,10 +535,10 @@ function renderReviewCards(reviews, append = false) {
   }
 
   const html = reviews.map(r => {
-    const author  = r.user_name || r.user?.full_name || 'Anonymous';
+    const author = r.user_name || r.user?.full_name || 'Anonymous';
     const initial = author[0]?.toUpperCase() || 'A';
-    const date    = r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-    const stars   = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+    const date = r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+    const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
     return `
       <div class="review-item">
         <div class="review-item-header">
@@ -551,12 +568,12 @@ function renderReviewCards(reviews, append = false) {
 
 // ── Write Review ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  const writeBtn    = document.getElementById('write-review-btn');
-  const cancelBtn   = document.getElementById('cancel-review-btn');
-  const reviewForm  = document.getElementById('write-review-form');
-  const formEl      = document.getElementById('review-form-el');
+  const writeBtn = document.getElementById('write-review-btn');
+  const cancelBtn = document.getElementById('cancel-review-btn');
+  const reviewForm = document.getElementById('write-review-form');
+  const formEl = document.getElementById('review-form-el');
   const loadMoreBtn = document.getElementById('load-more-reviews-btn');
-  const starPicker  = document.getElementById('star-picker');
+  const starPicker = document.getElementById('star-picker');
 
   writeBtn?.addEventListener('click', () => {
     if (!Auth.isLoggedIn()) {
@@ -571,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cancelBtn?.addEventListener('click', () => {
     if (reviewForm) reviewForm.style.display = 'none';
-    if (writeBtn)   writeBtn.style.display = '';
+    if (writeBtn) writeBtn.style.display = '';
     formEl?.reset();
     resetStarPicker();
   });
@@ -583,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('review-rating-input').value = val;
       starPicker.querySelectorAll('span').forEach((s, j) => {
         s.style.opacity = j < val ? '1' : '0.25';
-        s.style.color   = j < val ? 'var(--color-warning)' : '';
+        s.style.color = j < val ? 'var(--color-warning)' : '';
       });
     });
     star.addEventListener('mouseover', () => {
@@ -604,7 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetStarPicker() {
     starPicker?.querySelectorAll('span').forEach(s => {
       s.style.opacity = '0.35';
-      s.style.color   = '';
+      s.style.color = '';
     });
     const inp = document.getElementById('review-rating-input');
     if (inp) inp.value = '0';
@@ -615,12 +632,12 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     if (!product) return;
 
-    const rating  = parseInt(document.getElementById('review-rating-input')?.value || '0');
-    const title   = document.getElementById('review-title-input')?.value.trim();
+    const rating = parseInt(document.getElementById('review-rating-input')?.value || '0');
+    const title = document.getElementById('review-title-input')?.value.trim();
     const comment = document.getElementById('review-body-input')?.value.trim();
 
     if (rating === 0) { showToast('Please select a rating', 'warning'); return; }
-    if (!title)       { showToast('Please enter a review title', 'warning'); return; }
+    if (!title) { showToast('Please enter a review title', 'warning'); return; }
     if (!comment || comment.length < 20) { showToast('Review must be at least 20 characters', 'warning'); return; }
 
     const submitBtn = document.getElementById('submit-review-btn');
@@ -633,7 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       showToast('Review submitted! Thank you 🎉', 'success');
       if (reviewForm) reviewForm.style.display = 'none';
-      if (writeBtn)   writeBtn.style.display = '';
+      if (writeBtn) writeBtn.style.display = '';
       formEl.reset();
       resetStarPicker();
       reviewPage = 1;
@@ -695,9 +712,9 @@ async function loadRelatedProducts() {
 // ── Show Content / Error ──────────────────────────────────────
 function showContent() {
   const skeleton = document.getElementById('product-skeleton');
-  const content  = document.getElementById('product-detail-content');
+  const content = document.getElementById('product-detail-content');
   if (skeleton) skeleton.classList.add('hidden');
-  if (content)  content.style.display = 'block';
+  if (content) content.style.display = 'block';
 }
 
 function showError(msg) {

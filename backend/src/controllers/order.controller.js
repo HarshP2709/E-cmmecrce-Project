@@ -8,7 +8,7 @@ const getOrders = asyncHandler(async (req, res) => {
 
   let query = supabaseAdmin
     .from('orders')
-    .select('*, order_items(*, products:product_id(name, slug))', { count: 'exact' })
+    .select('*, order_items(*, products:product_id(name, slug, product_images(url, is_primary)))', { count: 'exact' })
     .eq('user_id', req.user.id)
     .order('created_at', { ascending: false })
     .range(offset, offset + parseInt(limit) - 1);
@@ -28,8 +28,13 @@ const getOrderById = asyncHandler(async (req, res) => {
     .from('orders')
     .select(`
       *,
-      order_items(*),
-      order_status_history(*, profiles(full_name)),
+      order_items(
+        *,
+        products:product_id(
+          id, name, slug, price,
+          product_images(url, is_primary)
+        )
+      ),
       payments(*)
     `)
     .eq('id', id)
@@ -87,7 +92,7 @@ const createOrder = asyncHandler(async (req, res) => {
   // Create order
   const { data: order, error } = await supabaseAdmin.from('orders').insert({
     user_id: req.user.id, shipping_address, billing_address: billing_address || shipping_address,
-    payment_method, subtotal, discount_amount: discountAmount, shipping_amount: shippingAmount,
+    subtotal, discount_amount: discountAmount, shipping_amount: shippingAmount,
     tax_amount: taxAmount, total_amount: totalAmount, coupon_id: coupon_id || null, notes,
     status: payment_method === 'cod' ? 'confirmed' : 'pending',
   }).select().single();
@@ -97,6 +102,15 @@ const createOrder = asyncHandler(async (req, res) => {
   // Create order items
   const orderItems = validatedItems.map(i => ({ ...i, order_id: order.id }));
   await supabaseAdmin.from('order_items').insert(orderItems);
+
+  // Create payment record
+  await supabaseAdmin.from('payments').insert({
+    order_id: order.id,
+    user_id: req.user.id,
+    payment_method,
+    amount: totalAmount,
+    payment_status: payment_method === 'cod' ? 'pending' : 'paid',
+  });
 
   // Reserve inventory
   for (const item of validatedItems) {

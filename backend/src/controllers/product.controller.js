@@ -104,7 +104,7 @@ const getProductBySlug = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    data: { ...product, images: images || [], variants: variants || [], reviews: reviews || [], related: related || [] },
+    data: { ...product, product_images: images || [], variants: variants || [], reviews: reviews || [], related: related || [] },
   });
 });
 
