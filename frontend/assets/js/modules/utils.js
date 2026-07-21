@@ -3,9 +3,7 @@
  * Shared utilities used across all pages
  */
 
-export const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? (window.location.port === '5000' ? '/api/v1' : 'http://localhost:5000/api/v1')
-  : '/api/v1';
+export const API_BASE = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') ? 'http://localhost:3000/api/v1' : '/api/v1';
 
 // ── Storage Helpers ─────────────────────────────────────────
 export const storage = {
@@ -68,7 +66,7 @@ export async function apiFetch(endpoint, options = {}) {
       if (res.status === 401) {
         storage.remove('token');
         storage.remove('user');
-        window.location.href = '/pages/login.html';
+        window.location.href = window.location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html';
         return new Promise(() => { }); // Halt execution entirely to safely allow the browser redirect to engage
       }
       throw new Error(data.message || `HTTP ${res.status}`);
@@ -76,10 +74,11 @@ export async function apiFetch(endpoint, options = {}) {
 
     return data;
   } catch (err) {
-    if (err.message !== 'Failed to fetch') {
-      throw err;
+    // Only mask true network-level failures (browser can't reach server at all)
+    if (err.message === 'Failed to fetch' || err.message === 'Load failed') {
+      throw new Error('Network error. Please check your connection and make sure the server is running.');
     }
-    throw new Error('Network error. Please check your connection.');
+    throw err;
   }
 }
 

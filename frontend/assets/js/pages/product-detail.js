@@ -66,7 +66,7 @@ function renderProduct() {
   if (bc) bc.textContent = product.name;
   if (product.category_name) {
     const catLi = document.createElement('li');
-    catLi.innerHTML = `<span style="opacity:0.5">›</span>&nbsp;<a href="/pages/products.html?category=${product.category_slug || ''}" style="color:var(--color-primary)">${escapeHTML(product.category_name)}</a>`;
+    catLi.innerHTML = `<span style="opacity:0.5">›</span>&nbsp;<a href="products.html?category=${product.category_slug || ''}" style="color:var(--color-primary)">${escapeHTML(product.category_name)}</a>`;
     bc?.parentElement?.insertBefore(catLi, bc);
   }
 
@@ -712,7 +712,7 @@ function showError(msg) {
       <div style="font-size:5rem;margin-bottom:var(--space-6)">😕</div>
       <h1 class="error-title">${escapeHTML(msg)}</h1>
       <div style="display:flex;gap:var(--space-4);justify-content:center;flex-wrap:wrap;margin-top:var(--space-8)">
-        <a href="/pages/products.html" class="btn btn-primary">Browse Products</a>
+        <a href="products.html" class="btn btn-primary">Browse Products</a>
         <button onclick="history.back()" class="btn btn-secondary">← Go Back</button>
       </div>
     </div>

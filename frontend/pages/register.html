@@ -581,13 +581,13 @@
             <!-- Phone (optional) -->
             <div class="form-group">
               <label class="form-label" for="reg-phone">
-                Phone Number <span style="color:var(--text-muted);font-weight:500">(optional)</span>
+                Phone Number <span class="required" aria-hidden="true">*</span>
               </label>
               <div class="input-icon-wrap">
                 <span class="input-icon-prefix" aria-hidden="true">📱</span>
                 <input type="tel" id="reg-phone" name="phone" class="form-control input-with-icon"
                   placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel" aria-describedby="phone-error"
-                  pattern="[+]?[0-9\s\-]{7,15}" maxlength="16">
+                  pattern="[+]?[0-9\s\-]{7,15}" maxlength="16" required aria-required="true">
               </div>
               <span class="input-error-text" id="phone-error" role="alert"></span>
             </div>
@@ -600,7 +600,7 @@
               <div class="input-icon-wrap">
                 <span class="input-icon-prefix" aria-hidden="true">🔒</span>
                 <input type="password" id="reg-password" name="password" class="form-control input-with-icon"
-                  placeholder="Create a strong password" autocomplete="new-password" required aria-required="true"
+                  placeholder="Min 8 chars, e.g. Hello@123" autocomplete="new-password" required aria-required="true"
                   aria-describedby="password-error password-strength-label" style="padding-right:48px" minlength="8">
                 <button type="button" class="input-icon-suffix" id="toggle-password"
                   aria-label="Show password">👁</button>

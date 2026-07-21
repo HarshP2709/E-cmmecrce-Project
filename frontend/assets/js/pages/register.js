@@ -104,7 +104,8 @@ async function handleSubmit(e) {
   }
 
   const fullName = nameInput.value.trim();
-  const email = emailInput.value.trim().toLowerCase();
+  const email    = emailInput.value.trim().toLowerCase();
+  const phone    = phoneInput.value.trim();
   const password = passwordInput.value;
 
   // Loading state
@@ -112,7 +113,7 @@ async function handleSubmit(e) {
   hideAlert();
 
   try {
-    await Auth.register(fullName, email, password);
+    await Auth.register(fullName, email, password, phone);
 
     // Auto-login after successful registration
     try {
@@ -181,7 +182,10 @@ function validateEmail(input) {
 
 function validatePhone(input) {
   const val = input?.value.trim() || '';
-  if (!val) { clearFieldError(input, 'phone-error'); return true; } // optional
+  if (!val) {
+    setFieldError(input, 'phone-error', 'Phone number is required');
+    return false;
+  }
   const phoneRegex = /^[+]?[0-9\s\-]{7,15}$/;
   if (!phoneRegex.test(val)) {
     setFieldError(input, 'phone-error', 'Please enter a valid phone number');
@@ -201,13 +205,20 @@ function validatePassword(input) {
     setFieldError(input, 'password-error', 'Password must be at least 8 characters');
     return false;
   }
-  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(val)) {
-    setFieldError(input, 'password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+  if (!/[A-Z]/.test(val)) {
+    setFieldError(input, 'password-error', 'Password must contain at least one uppercase letter');
     return false;
   }
-  const score = getPasswordScore(val);
-  if (score < 2) {
-    setFieldError(input, 'password-error', 'Password is too weak. Add symbols for better security.');
+  if (!/[a-z]/.test(val)) {
+    setFieldError(input, 'password-error', 'Password must contain at least one lowercase letter');
+    return false;
+  }
+  if (!/[0-9]/.test(val)) {
+    setFieldError(input, 'password-error', 'Password must contain at least one number');
+    return false;
+  }
+  if (!/[^A-Za-z0-9]/.test(val)) {
+    setFieldError(input, 'password-error', 'Password must contain at least one special character (e.g. @#$!%&*)');
     return false;
   }
   clearFieldError(input, 'password-error');
@@ -417,14 +428,12 @@ function getErrorMessage(raw = '') {
   if (msg.includes('invalid email') || msg.includes('email format')) {
     return 'Please provide a valid email address.';
   }
-  if (msg.includes('password') && msg.includes('weak')) {
-    return 'Your password is too weak. Please choose a stronger password.';
-  }
-  if (msg.includes('network') || msg.includes('fetch')) {
-    return 'Connection error. Please check your internet and try again.';
+  if (msg.includes('password') && (msg.includes('weak') || msg.includes('strength'))) {
+    return 'Password is too weak. Use at least 8 characters with uppercase, lowercase, a number, and a special character (e.g. Hello@123).';
   }
   if (msg.includes('rate limit') || msg.includes('too many')) {
     return 'Too many attempts. Please wait a moment before trying again.';
   }
+  // Show the real server error — do NOT mask it as "Connection error"
   return raw || 'Registration failed. Please try again.';
 }

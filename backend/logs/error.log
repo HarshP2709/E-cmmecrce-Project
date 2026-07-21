@@ -59,3 +59,165 @@
 [2026-07-17 11:51:17] error: Invalid or expired token. - GET /api/v1/cart - ::1
 [2026-07-17 12:55:57] error: Invalid or expired token. - GET /api/v1/cart - ::1
 [2026-07-17 12:55:57] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-17 15:14:01] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-17 15:14:01] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-17 15:21:02] error: Invalid or expired token. - POST /api/v1/orders - ::1
+[2026-07-17 15:21:07] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 15:21:30] error: Invalid or expired token. - POST /api/v1/orders - ::1
+[2026-07-17 15:21:35] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 15:21:35] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 15:21:36] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 15:21:37] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 15:27:15] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-17 15:28:31] error: Invalid or expired token. - POST /api/v1/orders - ::1
+[2026-07-17 15:29:28] error: Invalid or expired token. - POST /api/v1/orders - ::1
+[2026-07-17 17:20:07] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-17 17:20:07] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-17 18:40:27] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-17 18:40:27] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-17 19:46:38] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-17 19:46:38] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-18 19:33:47] error: Invalid or expired token. - GET /api/v1/cart - ::1
+[2026-07-18 19:33:47] error: Invalid or expired token. - GET /api/v1/wishlist - ::1
+[2026-07-18 19:33:51] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-18 19:34:00] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-18 19:34:22] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-18 19:37:13] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-18 19:37:14] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-18 19:37:15] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-18 19:37:16] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-18 19:37:52] error: fetch failed - POST /api/v1/auth/register - ::1
+[2026-07-18 19:43:17] error: fetch failed - POST /api/v1/auth/register - ::1
+[2026-07-18 19:43:26] error: fetch failed - POST /api/v1/auth/register - ::1
+[2026-07-18 19:47:48] error: fetch failed - POST /api/v1/auth/register - ::1
+[2026-07-18 19:47:56] error: fetch failed - POST /api/v1/auth/register - ::1
+[2026-07-18 19:51:44] error: Registration failed: fetch failed - POST /api/v1/auth/register - ::1
+[2026-07-18 20:00:55] error: Registration failed: fetch failed - POST /api/v1/auth/register - ::1
+[2026-07-20 18:48:44] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:49:31] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:49:31] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:49:31] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:49:31] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:49:46] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:49:46] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:49:46] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:49:46] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:49:57] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:49:57] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:49:57] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:49:57] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:50:07] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:50:07] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:50:07] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:50:07] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:50:19] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:50:19] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:50:19] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:50:19] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:50:27] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:50:27] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:50:27] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:50:27] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:50:37] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:50:37] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:50:37] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:50:37] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:50:52] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:50:52] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:50:52] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:50:52] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:51:13] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:51:13] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:51:13] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:51:13] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:51:24] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:51:24] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:51:24] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:51:24] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:51:32] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:51:32] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:51:32] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:51:32] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:51:45] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:51:45] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:51:45] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:51:45] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:52:14] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:52:14] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:52:14] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:52:14] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:52:22] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:52:22] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:52:22] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:52:22] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 18:52:44] error: TypeError: fetch failed - GET /api/v1/products?category=electronics&sort=newest&page=1&limit=20 - ::1
+[2026-07-20 18:59:12] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 18:59:12] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 18:59:12] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 18:59:12] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:16:52] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:16:52] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:16:52] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:16:52] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:17:18] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:17:18] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:17:18] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:17:18] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:17:26] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:17:26] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:17:26] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:17:26] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:17:37] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:17:37] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:17:37] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:17:37] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:17:50] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:17:50] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:17:50] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:17:50] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:18:26] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:18:26] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:18:26] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:18:26] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:20:51] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:20:51] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:20:51] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:20:51] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:21:01] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:21:01] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:21:01] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:21:01] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:21:09] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:21:09] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:21:09] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:21:09] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:21:26] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:21:26] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:21:26] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:21:26] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:21:42] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:21:42] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:21:42] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:21:42] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:21:52] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:21:52] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:21:52] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:21:52] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:22:02] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:22:02] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:22:02] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:22:02] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:22:17] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:22:17] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:22:17] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:22:17] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:22:29] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:22:29] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:22:29] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:22:29] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:22:51] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:22:51] error: TypeError: fetch failed - GET /api/v1/products?best_seller=true&limit=8 - ::1
+[2026-07-20 19:22:51] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-20 19:22:51] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
+[2026-07-20 19:23:26] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
+[2026-07-20 19:23:26] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1

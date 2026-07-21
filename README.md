@@ -15,7 +15,7 @@
 
 ### 🛒 Shopping
 - Product catalog with advanced search & filters
-- Product detail with image gallery, zoom, variants
+- Product detail with image gallery, zoom, variants, specifications table
 - Shopping cart with coupon codes
 - Wishlist management
 - One-page checkout with Stripe payments
@@ -130,7 +130,7 @@ shopverse/
 │
 ├── backend/
 │   ├── src/
-│   │   ├── server.js              ← Express entry point
+│   │   ├── server.js              ← Express entry point (port 3000)
 │   │   ├── config/
 │   │   │   ├── supabase.js        ← Supabase client
 │   │   │   ├── stripe.js          ← Stripe client
@@ -139,10 +139,16 @@ shopverse/
 │   │   ├── routes/                ← API routes
 │   │   ├── middleware/            ← Auth, validation, upload
 │   │   └── database/
+│   ├── scripts/
+│   │   ├── seed_products_csv.js   ← ⭐ Seed from products.csv (simple)
+│   │   ├── seed_from_csv.js       ← Seed from docs/data/ (full catalog)
+│   │   └── update_images.js       ← Update product images
 │   └── package.json
 │
 ├── docs/
 │   ├── schema.sql                 ← Complete Supabase schema
+│   ├── data/
+│   │   └── products.csv           ← ⭐ Product data (7 products with images & specs)
 │   ├── API.md                     ← API documentation
 │   └── DATABASE.md                ← Database documentation
 │
@@ -172,7 +178,7 @@ cd shopverse
 cd backend
 npm install
 cp ../.env.example .env
-# Edit .env with your credentials
+# Edit .env with your Supabase credentials
 npm run dev
 ```
 
@@ -182,35 +188,131 @@ npm run dev
 2. Go to **SQL Editor** in your Supabase dashboard
 3. Copy the contents of `docs/schema.sql`
 4. Paste and run the SQL
-5. Copy your project URL and API keys to `.env`
+5. Copy your project URL and API keys to `backend/.env`
 
-### 4. Frontend Setup
+### 4. Seed Products from CSV
+
+After the database schema is set up, seed your products with one command:
+
+```bash
+cd backend
+npm run seed
+```
+
+This reads [`docs/data/products.csv`](docs/data/products.csv) and:
+- Auto-creates missing categories and brands in the database
+- Inserts all 7 products with real Unsplash images
+- Attaches product specifications (key-value pairs)
+- Seeds customer reviews (requires at least one admin user)
+- Sets inventory to 50 units per product
+
+### 5. Frontend Setup
 
 The frontend is pure HTML/CSS/JS — no build step needed!
 
-**Option A — Live Server (VS Code)**
+**Option A — Via the backend server (recommended)**
+
+The Express server already serves the frontend at `localhost:3000`. Just start the backend:
+```bash
+cd backend
+npm run dev
+# then open http://localhost:3000
+```
+
+**Option B — Live Server (VS Code)**
 1. Install the "Live Server" extension
 2. Open `frontend/index.html`
 3. Click "Go Live"
 
-**Option B — Simple HTTP Server**
+**Option C — Simple HTTP Server**
 ```bash
 cd frontend
-python -m http.server 3000
-# or
-npx serve . -p 3000
+npx serve . -p 8080
 ```
 
-### 5. Environment Variables
+### 6. Environment Variables
+
+Copy `.env.example` to `backend/.env` and fill in your values:
 
 ```env
+PORT=3000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
+
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
+
 JWT_SECRET=your-super-secret-key
+JWT_EXPIRES_IN=7d
+
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PUBLISHABLE_KEY=pk_test_...
 ```
+
+---
+
+## 📦 Products CSV Format
+
+The products data file is at [`docs/data/products.csv`](docs/data/products.csv).
+
+### CSV Columns
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | number | Local row ID (not used in DB) |
+| `title` | string | Product name |
+| `brand` | string | Brand name (auto-created if new) |
+| `category` | string | Category name (auto-created if new) |
+| `price` | number | Selling price in ₹ |
+| `description` | string | Full product description |
+| `images` | JSON array | Array of image URLs (Unsplash etc.) |
+| `specifications` | JSON object | Key-value pairs shown in Specs tab |
+| `reviews` | JSON array | Seed reviews with rating & comment |
+
+### Example Row
+
+```csv
+id,title,brand,category,price,description,images,specifications,reviews
+1,"Apple Premium Shaver Pro","Apple","Personal Care Electronics",6499,"Experience an incredibly close shave...","[""https://images.unsplash.com/...""]","{""Model Number"":""AP-4321"",""Warranty"":""1 Year""}","[{""reviewer_name"":""Amit"",""rating"":5,""comment"":""Best trimmer!""}]"
+```
+
+### Images
+
+Images column is a JSON array of URL strings. These are stored in `product_images` table:
+- First image → primary image (shown in product card)
+- All images → image gallery on product detail page
+
+### Specifications
+
+Specifications column is a JSON object. Keys become the left column, values the right column in the **Specifications** tab on the product detail page:
+
+```json
+{
+  "Model Number": "AP-4321",
+  "Release Year": "2025",
+  "Warranty": "1 Year Brand Warranty",
+  "Dimensions": "18x6x5 cm",
+  "Weight": "0.35 kg",
+  "Color": "Space Gray"
+}
+```
+
+### Reviews
+
+Reviews column is a JSON array. Each review object:
+
+```json
+[{
+  "reviewer_name": "Amit Sharma",
+  "rating": 5,
+  "date": "2026-02-14",
+  "review_title": "Exceptional Quality",
+  "comment": "Best trimmer I have owned."
+}]
+```
+
+> **Note:** Reviews are seeded using the admin account's user_id. Make sure you have created an admin user before running `npm run seed`.
 
 ---
 
@@ -223,7 +325,7 @@ The complete normalized schema is in [`docs/schema.sql`](docs/schema.sql).
 | Table | Description |
 |---|---|
 | `profiles` | User profiles (extends Supabase auth) |
-| `products` | Product catalog |
+| `products` | Product catalog with `specifications` JSONB |
 | `product_images` | Multiple images per product |
 | `inventory` | Stock management |
 | `categories` | Hierarchical categories |
@@ -237,7 +339,7 @@ The complete normalized schema is in [`docs/schema.sql`](docs/schema.sql).
 | `notifications` | User notifications |
 
 ### Views
-- `product_summary` — Products with ratings, stock, category, brand
+- `product_summary` — Products with ratings, stock, category, brand, primary image
 - `order_summary` — Orders with customer info and payment status
 
 ### Key Features
@@ -245,12 +347,13 @@ The complete normalized schema is in [`docs/schema.sql`](docs/schema.sql).
 - Row Level Security (RLS) policies
 - Triggers for `updated_at`, order numbers, inventory management
 - Full-text search indexes (trigram)
+- ENUM types with `IF NOT EXISTS` guards (safe to re-run)
 
 ---
 
 ## 🔌 API Reference
 
-Base URL: `http://localhost:5000/api/v1`
+Base URL: `http://localhost:3000/api/v1`
 
 ### Auth
 ```
@@ -265,7 +368,7 @@ GET  /auth/me
 ### Products
 ```
 GET  /products                  # List (with filters/pagination)
-GET  /products/:slug            # Detail + images + reviews
+GET  /products/:slug            # Detail + images + specs + reviews
 POST /products                  # Create (admin)
 PUT  /products/:id              # Update (admin)
 DELETE /products/:id            # Delete (admin)
@@ -370,7 +473,21 @@ Font: -apple-system, Segoe UI, Roboto, Inter
 
 ## 👨‍💻 Development Notes
 
-### Adding a Product (Admin)
+### Seed Commands
+
+| Command | Description |
+|---|---|
+| `npm run seed` | Seed from `docs/data/products.csv` (7 products) |
+| `npm run seed:full` | Seed from full `docs/data/` folder (hundreds of products) |
+
+### Adding Products via CSV
+
+1. Edit `docs/data/products.csv`
+2. Add a new row with all columns filled
+3. Run `cd backend && npm run seed`
+
+### Adding a Product via Admin UI
+
 1. Login with admin credentials
 2. Navigate to `/pages/admin/dashboard.html`
 3. Go to Products → Add Product
@@ -378,6 +495,10 @@ Font: -apple-system, Segoe UI, Roboto, Inter
 5. Set stock in Inventory field
 
 ### Creating an Admin User
+
+1. Register a normal account via the signup page
+2. Run this SQL in Supabase SQL Editor:
+
 ```sql
 UPDATE public.profiles 
 SET role = 'admin' 
@@ -386,10 +507,30 @@ WHERE email = 'your@email.com';
 
 ### Stripe Test Cards
 ```
-Success: 4242 4242 4242 4242
-Decline: 4000 0000 0000 0002
+Success:   4242 4242 4242 4242
+Decline:   4000 0000 0000 0002
 3D Secure: 4000 0025 0000 3155
 ```
+
+---
+
+## 🗂️ Current Product Catalog (products.csv)
+
+| # | Product | Brand | Category | Price |
+|---|---|---|---|---|
+| 1 | Apple Premium Shaver Pro | Apple | Personal Care Electronics | ₹6,499 |
+| 2 | Sony Bravia Ultra Cinema TV | Sony | TV & Home Entertainment | ₹89,999 |
+| 3 | Dell Precision Book Pro | Dell | Computers & Laptops | ₹1,14,999 |
+| 4 | Samsung Odyssey Horizon Console | Samsung | Gaming & VR | ₹45,999 |
+| 5 | OnePlus Smart Juicer Pro | OnePlus | Kitchen Appliances | ₹3,499 |
+| 6 | Nike Air Max Flex Runner | Nike | Fashion | ₹8,499 |
+| 7 | boAt Rockerz Bass Headset | boAt | Electronics | ₹1,999 |
+
+Each product includes:
+- ✅ 2–4 real Unsplash product images
+- ✅ Full description paragraph
+- ✅ Specifications table (Model, Year, Warranty, Dimensions, Weight, Color)
+- ✅ 1 seed customer review
 
 ---
 

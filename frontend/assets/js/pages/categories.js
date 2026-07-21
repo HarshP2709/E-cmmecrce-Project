@@ -36,7 +36,7 @@ async function loadAllCategories() {
         };
 
         container.innerHTML = categories.map(cat => `
-      <a href="/pages/products.html?category=${cat.slug}" class="category-block reveal">
+      <a href="products.html?category=${cat.slug}" class="category-block reveal">
         <div class="category-block-icon">${icons[cat.slug] || cat.icon || '🛍️'}</div>
         <div class="category-block-name">${cat.name}</div>
         <p class="category-block-desc">${desc[cat.slug] || 'Explore the best products in this category tailored for you.'}</p>

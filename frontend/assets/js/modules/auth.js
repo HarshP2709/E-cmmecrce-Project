@@ -22,10 +22,10 @@ export class Auth {
     return data.user;
   }
 
-  static async register(fullName, email, password) {
+  static async register(fullName, email, password, phone) {
     return apiFetch('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ full_name: fullName, email, password }),
+      body: JSON.stringify({ full_name: fullName, email, password, phone: phone || undefined }),
     });
   }
 

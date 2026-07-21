@@ -3,25 +3,51 @@ const { asyncHandler, AppError } = require('../middleware/error.middleware');
 
 // POST /api/v1/auth/register
 const register = asyncHandler(async (req, res) => {
-  const { email, password, full_name } = req.body;
+  const { email, password, full_name, phone } = req.body;
 
+  // email_confirm:false so the user can log in immediately without email verification
   const { data, error } = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
-    user_metadata: { full_name },
-    email_confirm: true,
+    user_metadata: { full_name, phone },
+    email_confirm: false,
   });
 
   if (error) {
-    if (error.message.includes('already')) {
-      throw new AppError('Email already registered.', 409);
+    const msg = error.message.toLowerCase();
+    if (msg.includes('already') || msg.includes('exists') || msg.includes('duplicate')) {
+      throw new AppError('Email already registered. Please sign in instead.', 409);
     }
-    throw new AppError(error.message, 400);
+    if (msg.includes('password') || msg.includes('weak') || msg.includes('strength')) {
+      throw new AppError('Password is too weak. Use at least 8 characters with uppercase, lowercase, a number, and a special character (e.g. @#$!).', 400);
+    }
+    if (msg.includes('invalid') && msg.includes('email')) {
+      throw new AppError('Please enter a valid email address.', 400);
+    }
+    // Log the real Supabase error for debugging, then surface it
+    console.error('[Register] Supabase error:', error.message);
+    throw new AppError(`Registration failed: ${error.message}`, 400);
   }
+
+  // Manually insert profile + cart because admin.createUser does NOT fire
+  // the on_auth_user_created DB trigger
+  await supabaseAdmin.from('profiles').upsert({
+    id:        data.user.id,
+    email:     data.user.email,
+    full_name: full_name || data.user.email.split('@')[0],
+    phone:     phone || null,
+    role:      'customer',
+    is_active: true,
+  }, { onConflict: 'id' });
+
+  await supabaseAdmin.from('carts').upsert(
+    { user_id: data.user.id },
+    { onConflict: 'user_id' }
+  );
 
   res.status(201).json({
     success: true,
-    message: 'Account created successfully! Please check your email.',
+    message: 'Account created successfully!',
     user: { id: data.user.id, email: data.user.email },
   });
 });

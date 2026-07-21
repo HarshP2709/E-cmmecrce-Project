@@ -33,11 +33,11 @@ export function renderProductCard(product) {
       <div class="product-card-img-wrap">
         <img
           data-src="${escapeHTML(img)}"
-          src="/assets/images/placeholder.webp"
+          src="./assets/images/placeholder.webp"
           alt="${escapeHTML(product.name)}"
           class="product-card-img"
           loading="lazy"
-          onerror="this.onerror=null; this.src='/assets/images/placeholder.webp';"
+          onerror="this.onerror=null; this.src='./assets/images/placeholder.webp';"
         >
         ${!inStock ? '<div class="product-card-badges"><span class="card-badge card-badge-out">Out of Stock</span></div>' :
       (isNew || isSale || isBestSeller) ? `
@@ -101,7 +101,7 @@ export function renderProductGrid(products, container, emptyMessage = 'No produc
         <div class="empty-state-icon">📦</div>
         <h3>${emptyMessage}</h3>
         <p>Try adjusting your filters or search query</p>
-        <a href="/pages/products.html" class="btn btn-primary">Browse All Products</a>
+        <a href="pages/products.html" class="btn btn-primary">Browse All Products</a>
       </div>
     `;
     return;
@@ -124,7 +124,7 @@ export function renderFlashCard(product) {
   return `
     <article class="flash-card" data-product-id="${product.id}">
       <div class="product-card-img-wrap">
-        <img data-src="${img}" src="/assets/images/placeholder.webp" alt="${escapeHTML(product.name)}" class="product-card-img" loading="lazy" onerror="this.onerror=null; this.src='/assets/images/placeholder.webp';">
+        <img data-src="${img}" src="./assets/images/placeholder.webp" alt="${escapeHTML(product.name)}" class="product-card-img" loading="lazy" onerror="this.onerror=null; this.src='./assets/images/placeholder.webp';">
         <div class="product-card-badges">
           ${discount > 0 ? `<span class="card-badge card-badge-sale">${discount}% Off</span>` : ''}
         </div>

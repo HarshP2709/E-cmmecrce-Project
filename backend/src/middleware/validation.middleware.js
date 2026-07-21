@@ -13,17 +13,18 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 const validateRegister = [
-  body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
+  body('email').isEmail().withMessage('Valid email required'),
   body('password')
     .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Password must contain uppercase, lowercase, and number'),
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/)
+    .withMessage('Password must contain uppercase, lowercase, a number, and a special character (e.g. @#$!)'),
   body('full_name').trim().isLength({ min: 2, max: 100 }).withMessage('Full name is required (2-100 chars)'),
+  body('phone').optional({ checkFalsy: true }).matches(/^[+]?[0-9\s\-]{7,15}$/).withMessage('Please enter a valid phone number'),
   handleValidationErrors,
 ];
 
 const validateLogin = [
-  body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
+  body('email').isEmail().withMessage('Valid email required'),
   body('password').notEmpty().withMessage('Password is required'),
   handleValidationErrors,
 ];

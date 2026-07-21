@@ -137,3 +137,55 @@ JOIN inventory i ON i.product_id = p.id
 WHERE i.quantity <= i.low_stock_alert
 ORDER BY available ASC;
 ```
+
+---
+
+## Seed Data & CSV Files
+
+> 📖 For full seeding instructions see **[SEED_DATA.md](./SEED_DATA.md)**
+
+### Seed File Structure
+
+```
+docs/
+├── SEED_DATA.md                              ← Seeding guide
+├── DATABASE.md                               ← This file
+├── schema.sql                                ← Supabase schema
+└── data/                                     ← CSV seed files
+    ├── categories.csv                         22 categories
+    ├── brands.csv                             70 brands
+    │
+    ├── products_tv_home_entertainment.csv     cat-01 | 100 products
+    ├── products_computers_laptops.csv         cat-02 | 100 products
+    ├── products_mobiles_tablets_wearables.csv cat-03 | 100 products
+    ├── products_personal_care_electronics.csv cat-04 | 100 products
+    ├── products_gaming_vr.csv                 cat-05 | 100 products
+    ├── products_kitchen_appliances.csv        cat-06 | 100 products
+    ├── products_home_living.csv               cat-07 | 100 products
+    ├── products_major_home_appliances.csv     cat-08 | 100 products
+    ├── products_smart_home_security.csv       cat-09 | 100 products
+    ├── products_cameras_photography.csv       cat-10 | 100 products
+    ├── products_smartphones.csv               cat-11 | 100 products
+    ├── products_electronics.csv               cat-12 | 100 products
+    ├── products_laptops.csv                   cat-13 | 100 products
+    ├── products_fashion.csv                   cat-14 | 100 products
+    ├── products_audio.csv                     cat-15 | 100 products
+    ├── products_sports_fitness.csv            cat-17 | 100 products
+    ├── products_beauty_personal_care.csv      cat-18 | 100 products
+    ├── products_books_education.csv           cat-19 | 100 products
+    ├── products_toys_games.csv                cat-20 | 100 products
+    └── products_groceries.csv                 cat-21 | 100 products
+
+backend/
+└── scripts/
+    └── seed_from_csv.js                      ← Seed script (run with node)
+```
+
+### Quick Start — Run the Seed
+
+```bash
+# From project root:
+node backend/scripts/seed_from_csv.js
+```
+
+All 2,000+ products will be inserted into Supabase with inventory and placeholder images. The script is idempotent — safe to run multiple times.

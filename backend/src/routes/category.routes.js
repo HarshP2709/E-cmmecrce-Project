@@ -3,15 +3,17 @@ const router = express.Router();
 const { supabaseAdmin } = require('../config/supabase');
 const { asyncHandler } = require('../middleware/error.middleware');
 
+const localCsvService = require('../services/localCsv.service');
+
 router.get('/', asyncHandler(async (req, res) => {
-  const { data } = await supabaseAdmin.from('categories').select('*').eq('is_active', true).order('sort_order');
-  res.json({ success: true, data: data || [] });
+  res.json({ success: true, data: localCsvService.getCategories() });
 }));
 
 router.get('/:slug', asyncHandler(async (req, res) => {
-  const { data } = await supabaseAdmin.from('categories').select('*, subcategories:categories(*)').eq('slug', req.params.slug).single();
-  if (!data) return res.status(404).json({ success: false, message: 'Category not found' });
-  res.json({ success: true, data });
+  const category = localCsvService.getCategories().find(c => c.slug === req.params.slug);
+  if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
+  category.subcategories = [];
+  res.json({ success: true, data: category });
 }));
 
 module.exports = router;

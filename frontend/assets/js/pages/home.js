@@ -100,7 +100,7 @@ async function loadCategories() {
     const colors = { electronics: 'cat-electronics', fashion: 'cat-fashion', 'home-living': 'cat-home', 'sports-fitness': 'cat-sports', 'beauty-personal-care': 'cat-beauty', 'books-education': 'cat-books', 'toys-games': 'cat-toys', groceries: 'cat-grocery' };
 
     container.innerHTML = categories.map(cat => `
-      <a href="/pages/products.html?category=${cat.slug}" class="category-card" aria-label="${cat.name} category">
+      <a href="pages/products.html?category=${cat.slug}" class="category-card" aria-label="${cat.name} category">
         <div class="category-card-icon ${colors[cat.slug] || 'cat-electronics'}">${icons[cat.slug] || cat.icon || '📦'}</div>
         <div class="category-card-name">${cat.name}</div>
       </a>
@@ -186,7 +186,7 @@ async function loadBrands() {
     const data = await apiFetch('/categories'); // reusing for now; can add /brands endpoint
     container.innerHTML = ['Apple', 'Samsung', 'Sony', 'Nike', 'Adidas', 'OnePlus', 'Dell', 'HP', 'Boat', 'Puma']
       .map(brand => `
-        <a href="/pages/products.html?brand=${brand.toLowerCase()}" class="brand-logo-card" aria-label="${brand} products">
+        <a href="pages/products.html?brand=${brand.toLowerCase()}" class="brand-logo-card" aria-label="${brand} products">
           <div class="brand-logo-text">${brand}</div>
         </a>
       `).join('');

@@ -80,15 +80,15 @@ async function initMegaMenu() {
         <div>
           <div class="mega-menu-col-title">${escapeHTML(cat.name)}</div>
           <div class="mega-menu-items">
-            <a href="/pages/products.html?category=${cat.slug}" class="mega-menu-item">→ All ${escapeHTML(cat.name)}</a>
+            <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}products.html?category=${cat.slug}" class="mega-menu-item">→ All ${escapeHTML(cat.name)}</a>
             ${(data.data?.filter(c => c.parent_id === cat.id) || []).slice(0, 5).map(sub =>
-              `<a href="/pages/products.html?category=${sub.slug}" class="mega-menu-item">${escapeHTML(sub.name)}</a>`
-            ).join('')}
+        `<a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}products.html?category=${sub.slug}" class="mega-menu-item">${escapeHTML(sub.name)}</a>`
+      ).join('')}
           </div>
         </div>
       `).join('');
       loaded = true;
-    } catch {}
+    } catch { }
   };
 
   trigger.addEventListener('click', async (e) => {
@@ -134,7 +134,7 @@ function initNavSearch() {
           window.location.href = `/pages/product-detail.html?slug=${item.dataset.slug}`;
         });
       });
-    } catch {}
+    } catch { }
   }, 350);
 
   input.addEventListener('input', (e) => getSuggestions(e.target.value));
