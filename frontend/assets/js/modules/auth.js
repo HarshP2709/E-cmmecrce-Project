@@ -30,7 +30,7 @@ export class Auth {
   }
 
   static async logout() {
-    try { await apiFetch('/auth/logout', { method: 'POST' }); } catch {}
+    try { await apiFetch('/auth/logout', { method: 'POST' }); } catch { }
     storage.remove('token');
     storage.remove('refresh_token');
     storage.remove('user');
@@ -94,7 +94,7 @@ export function updateNavbarAuth() {
           <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}orders.html" class="dropdown-item"><span class="icon">📦</span> My Orders</a>
           <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}wishlist.html" class="dropdown-item"><span class="icon">🤍</span> Wishlist</a>
           <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}profile.html#addresses" class="dropdown-item"><span class="icon">📍</span> Addresses</a>
-          ${user.role === 'admin' ? '<a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}admin/dashboard.html" class="dropdown-item"><span class="icon">⚙️</span> Admin Panel</a>' : ''}
+          ${user.role === 'admin' ? `<a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}admin/dashboard.html" class="dropdown-item"><span class="icon">⚙️</span> Admin Panel</a>` : ''}
         </div>
         <div class="nav-dropdown-footer">
           <button class="dropdown-item danger w-full" id="logout-btn"><span class="icon">🚪</span> Sign Out</button>
