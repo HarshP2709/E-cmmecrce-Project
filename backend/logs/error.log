@@ -221,3 +221,4 @@
 [2026-07-20 19:22:51] error: TypeError: fetch failed - GET /api/v1/products?new_arrival=true&limit=8 - ::1
 [2026-07-20 19:23:26] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
 [2026-07-20 19:23:26] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
+[2026-07-21 18:14:29] error: TypeError: fetch failed - GET /api/v1/products/B07JB2Y4SR/reviews?page=1&limit=5 - ::1

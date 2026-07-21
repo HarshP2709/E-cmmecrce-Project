@@ -33,8 +33,7 @@ export function renderProductCard(product) {
     <article class="product-card" data-product-id="${product.id}" data-slug="${product.slug}">
       <div class="product-card-img-wrap">
         <img
-          data-src="${escapeHTML(img)}"
-          src="./assets/images/placeholder.webp"
+          src="${escapeHTML(img)}"
           alt="${escapeHTML(product.name)}"
           class="product-card-img"
           loading="lazy"

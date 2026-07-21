@@ -73,7 +73,7 @@ function renderProduct() {
   // ── Images ─────────────────────────────────────────────────
   const images = product.product_images?.length
     ? product.product_images.map(i => i.url || i)
-    : [product.primary_image || '/assets/images/placeholder.webp'];
+    : [product.primary_image || '../assets/images/placeholder.webp'];
 
   renderGallery(images);
 
@@ -216,7 +216,7 @@ function renderGallery(images) {
         title="Image ${i + 1}"
       >
         <img src="${escapeHTML(src)}" alt="Product thumbnail ${i + 1}" loading="lazy"
-          onerror="this.onerror=null; this.src='/assets/images/placeholder.webp';">
+          onerror="this.onerror=null; this.src='../assets/images/placeholder.webp';">
       </div>
     `).join('');
 

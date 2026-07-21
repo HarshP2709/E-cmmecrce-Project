@@ -88,8 +88,7 @@ function renderWishlistCard(item) {
     <article class="product-card wishlist-card" data-product-id="${product.id}" data-wishlist-item-id="${item.id}" aria-label="${escapeHTML(product.name)}">
       <div class="product-card-img-wrap">
         <img
-          data-src="${escapeHTML(img)}"
-          src="../assets/images/placeholder.webp"
+          src="${escapeHTML(img)}"
           alt="${escapeHTML(product.name)}"
           class="product-card-img"
           loading="lazy"
