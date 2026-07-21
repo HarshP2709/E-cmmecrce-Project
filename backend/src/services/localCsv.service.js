@@ -179,6 +179,10 @@ class LocalCsvService {
         return this.products.find(p => p.slug === slug);
     }
 
+    getProductById(id) {
+        return this.products.find(p => p.id === String(id));
+    }
+
     getCategories() {
         return this.categories;
     }

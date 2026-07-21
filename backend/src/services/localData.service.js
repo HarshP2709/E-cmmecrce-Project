@@ -12,7 +12,8 @@ if (!fs.existsSync(dataDir)) {
 let store = {
     users: [],
     carts: [],
-    wishlists: []
+    wishlists: [],
+    orders: []
 };
 
 if (fs.existsSync(storePath)) {
@@ -113,5 +114,34 @@ module.exports = {
         }
         saveStore();
         return { data: wishlist };
+    },
+
+    // === Orders ===
+    createOrder: (order) => {
+        store.orders = store.orders || [];
+        store.orders.unshift(order);
+        saveStore();
+        return { data: order };
+    },
+
+    getOrders: (userId) => {
+        store.orders = store.orders || [];
+        const userOrders = store.orders.filter(o => o.user_id === userId);
+        return { data: userOrders };
+    },
+
+    getOrderById: (orderId) => {
+        store.orders = store.orders || [];
+        const order = store.orders.find(o => o.id === orderId);
+        return order ? { data: order } : { error: { message: 'Order not found' } };
+    },
+
+    updateOrder: (orderId, updates) => {
+        store.orders = store.orders || [];
+        const idx = store.orders.findIndex(o => o.id === orderId);
+        if (idx === -1) return { error: { message: 'Order not found' } };
+        store.orders[idx] = { ...store.orders[idx], ...updates };
+        saveStore();
+        return { data: store.orders[idx] };
     }
 };

@@ -35,8 +35,13 @@ function initTheme() {
 // ── Get redirect target ───────────────────────────────────────
 function getRedirectTarget() {
   const params = getParams();
-  const redirect = params.redirect || params.next || '';
-  if (redirect && redirect.startsWith('/')) return redirect;
+  let redirect = params.redirect || params.next || '';
+
+  // Convert absolute root URLs to relative to support Live Server setups
+  if (redirect.startsWith('/')) {
+    redirect = '..' + redirect;
+  }
+
   if (redirect && !redirect.startsWith('http')) return redirect;
   return '../index.html';
 }
@@ -46,7 +51,7 @@ function initForm() {
   const form = document.getElementById('login-form');
   if (!form) return;
 
-  const emailInput    = document.getElementById('login-email');
+  const emailInput = document.getElementById('login-email');
   const passwordInput = document.getElementById('login-password');
 
   // Live validation on blur
@@ -64,17 +69,17 @@ function initForm() {
 async function handleSubmit(e) {
   e.preventDefault();
 
-  const emailInput    = document.getElementById('login-email');
+  const emailInput = document.getElementById('login-email');
   const passwordInput = document.getElementById('login-password');
-  const submitBtn     = document.getElementById('login-btn');
-  const rememberMe    = document.getElementById('remember-me');
+  const submitBtn = document.getElementById('login-btn');
+  const rememberMe = document.getElementById('remember-me');
 
   // Validate all fields
-  const emailOk    = validateEmail(emailInput);
+  const emailOk = validateEmail(emailInput);
   const passwordOk = validatePassword(passwordInput);
   if (!emailOk || !passwordOk) return;
 
-  const email    = emailInput.value.trim();
+  const email = emailInput.value.trim();
   const password = passwordInput.value;
 
   // UI: loading state
@@ -85,7 +90,7 @@ async function handleSubmit(e) {
     const user = await Auth.login(email, password);
 
     // Merge guest cart after login
-    try { await Cart.mergeGuestCart(); } catch {}
+    try { await Cart.mergeGuestCart(); } catch { }
 
     // Remember me — store flag
     if (rememberMe?.checked) {

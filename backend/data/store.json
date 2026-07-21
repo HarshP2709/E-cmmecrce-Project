@@ -9,8 +9,241 @@
       "role": "customer",
       "is_active": true,
       "created_at": "2026-07-21T13:30:09.865Z"
+    },
+    {
+      "id": "local_1784641418329_4fg5cdft7",
+      "email": "harsh@123gmail.com",
+      "password": "123456Ab@",
+      "full_name": "harsh",
+      "phone": "+919714672225",
+      "role": "customer",
+      "is_active": true,
+      "created_at": "2026-07-21T13:43:38.329Z"
     }
   ],
-  "carts": [],
-  "wishlists": []
+  "carts": [
+    {
+      "user_id": "local_1784641418329_4fg5cdft7",
+      "items": [
+        {
+          "product_id": "B00N1U9AJS",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B00NH11PEY",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B00NH11PEY",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B00NH11PEY",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B00N1U9AJS",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B098NS6PVG",
+          "quantity": 2,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B084N18QZY",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B0BMXMLSMM",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        }
+      ]
+    },
+    {
+      "user_id": "guest",
+      "items": []
+    }
+  ],
+  "wishlists": [
+    {
+      "user_id": "local_1784641418329_4fg5cdft7",
+      "items": [
+        "B098NS6PVG",
+        "B096MSW6CT"
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "id": "mock_order_1784644973022",
+      "order_number": "SV783744",
+      "user_id": "local_1784641418329_4fg5cdft7",
+      "status": "confirmed",
+      "total_amount": 7833,
+      "items": [
+        {
+          "product_id": "B00N1U9AJS",
+          "quantity": 1,
+          "price": 130
+        },
+        {
+          "product_id": "B00NH11PEY",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B00NH11PEY",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B00NH11PEY",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B00N1U9AJS",
+          "quantity": 1,
+          "price": 130
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "price": 798
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "price": 798
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "price": 798
+        },
+        {
+          "product_id": "B076B8G5D8",
+          "quantity": 1,
+          "price": 798
+        },
+        {
+          "product_id": "B098NS6PVG",
+          "quantity": 2,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B084N18QZY",
+          "quantity": 1,
+          "price": 599
+        },
+        {
+          "product_id": "B0BMXMLSMM",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        }
+      ],
+      "shipping_address": {},
+      "payment_method": "cod",
+      "created_at": "2026-07-21T14:42:53.022Z",
+      "estimated_delivery": "2026-07-26T14:42:53.022Z"
+    }
+  ]
 }

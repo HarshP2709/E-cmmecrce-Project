@@ -35,7 +35,13 @@ function initTheme() {
 // ── Redirect target ───────────────────────────────────────────
 function getRedirectTarget() {
   const params = getParams();
-  const redirect = params.redirect || params.next || '';
+  let redirect = params.redirect || params.next || '';
+
+  // Convert absolute root URLs to relative to support Live Server setups
+  if (redirect.startsWith('/')) {
+    redirect = '..' + redirect;
+  }
+
   if (redirect && !redirect.startsWith('http')) return redirect;
   return '../index.html';
 }
@@ -104,8 +110,8 @@ async function handleSubmit(e) {
   }
 
   const fullName = nameInput.value.trim();
-  const email    = emailInput.value.trim().toLowerCase();
-  const phone    = phoneInput.value.trim();
+  const email = emailInput.value.trim().toLowerCase();
+  const phone = phoneInput.value.trim();
   const password = passwordInput.value;
 
   // Loading state
