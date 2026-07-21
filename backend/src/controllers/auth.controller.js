@@ -1,54 +1,31 @@
-const { supabaseAdmin } = require('../config/supabase');
+const localData = require('../services/localData.service.js');
 const { asyncHandler, AppError } = require('../middleware/error.middleware');
+const jwt = require('jsonwebtoken');
+
+// Ensure we have a local JWT secret for mock tokens
+const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_local_mock_token_key_12345';
 
 // POST /api/v1/auth/register
 const register = asyncHandler(async (req, res) => {
   const { email, password, full_name, phone } = req.body;
 
-  // email_confirm:false so the user can log in immediately without email verification
-  const { data, error } = await supabaseAdmin.auth.admin.createUser({
-    email,
-    password,
-    user_metadata: { full_name, phone },
-    email_confirm: false,
-  });
+  // Use local mock database
+  const { data, error } = localData.createUser(email, password, full_name, phone);
 
   if (error) {
     const msg = error.message.toLowerCase();
     if (msg.includes('already') || msg.includes('exists') || msg.includes('duplicate')) {
       throw new AppError('Email already registered. Please sign in instead.', 409);
     }
-    if (msg.includes('password') || msg.includes('weak') || msg.includes('strength')) {
-      throw new AppError('Password is too weak. Use at least 8 characters with uppercase, lowercase, a number, and a special character (e.g. @#$!).', 400);
-    }
-    if (msg.includes('invalid') && msg.includes('email')) {
-      throw new AppError('Please enter a valid email address.', 400);
-    }
-    // Log the real Supabase error for debugging, then surface it
-    console.error('[Register] Supabase error:', error.message);
     throw new AppError(`Registration failed: ${error.message}`, 400);
   }
 
-  // Manually insert profile + cart because admin.createUser does NOT fire
-  // the on_auth_user_created DB trigger
-  await supabaseAdmin.from('profiles').upsert({
-    id:        data.user.id,
-    email:     data.user.email,
-    full_name: full_name || data.user.email.split('@')[0],
-    phone:     phone || null,
-    role:      'customer',
-    is_active: true,
-  }, { onConflict: 'id' });
-
-  await supabaseAdmin.from('carts').upsert(
-    { user_id: data.user.id },
-    { onConflict: 'user_id' }
-  );
+  // Carts and Wishlists automatically initialize lazily on fetch in localData.service, so no upsert needed here
 
   res.status(201).json({
     success: true,
     message: 'Account created successfully!',
-    user: { id: data.user.id, email: data.user.email },
+    user: { id: data.user.id, email: data.user.email, full_name: data.user.full_name },
   });
 });
 
@@ -56,23 +33,18 @@ const register = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  // Use a local, non-persistent client for sign in to avoid mutating the global admin singleton!
-  const { createClient } = require('@supabase/supabase-js');
-  const localClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-
-  const { data, error } = await localClient.auth.signInWithPassword({ email, password });
+  const { data, error } = localData.authenticateUser(email, password);
 
   if (error) {
     throw new AppError('Invalid email or password.', 401);
   }
 
-  const { data: profile } = await supabaseAdmin
-    .from('profiles').select('*').eq('id', data.user.id).single();
+  // Create mock JWT session token
+  const token = jwt.sign({ id: data.user.id, email: data.user.email, role: data.user.role }, JWT_SECRET, { expiresIn: '7d' });
+  const refresh_token = 'mock_refresh_' + Date.now();
 
   // Set httpOnly cookie
-  res.cookie('token', data.session.access_token, {
+  res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
@@ -82,14 +54,14 @@ const login = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: 'Login successful',
-    token: data.session.access_token,
-    refresh_token: data.session.refresh_token,
+    token: token,
+    refresh_token: refresh_token,
     user: {
       id: data.user.id,
       email: data.user.email,
-      full_name: profile?.full_name,
-      avatar_url: profile?.avatar_url,
-      role: profile?.role,
+      full_name: data.user.full_name,
+      avatar_url: null,
+      role: data.user.role,
     },
   });
 });
@@ -103,18 +75,15 @@ const logout = asyncHandler(async (req, res) => {
 // POST /api/v1/auth/forgot-password
 const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
-  const { error } = await supabaseAdmin.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.FRONTEND_URL}/pages/reset-password.html`,
-  });
-  if (error) throw new AppError(error.message, 400);
-  res.json({ success: true, message: 'Password reset link sent to your email.' });
+  // Mock success always
+  res.json({ success: true, message: 'Password reset link sent to your email (MOCKED IN LOCAL MODE).' });
 });
 
 // POST /api/v1/auth/reset-password
 const resetPassword = asyncHandler(async (req, res) => {
   const { token, password } = req.body;
-  const { error } = await supabaseAdmin.auth.admin.updateUserById(req.user.id, { password });
-  if (error) throw new AppError(error.message, 400);
+  // Update the user directly
+  localData.updateUser(req.user.id, { password });
   res.json({ success: true, message: 'Password reset successfully.' });
 });
 
@@ -125,14 +94,7 @@ const getMe = asyncHandler(async (req, res) => {
 
 // POST /api/v1/auth/refresh
 const refreshToken = asyncHandler(async (req, res) => {
-  const { refresh_token } = req.body;
-  const { data, error } = await supabaseAdmin.auth.refreshSession({ refresh_token });
-  if (error) throw new AppError('Invalid refresh token.', 401);
-  res.json({
-    success: true,
-    token: data.session.access_token,
-    refresh_token: data.session.refresh_token,
-  });
+  throw new AppError('Refresh unsupported in Local Mock Mode. Please sign in again.', 401);
 });
 
 module.exports = { register, login, logout, forgotPassword, resetPassword, getMe, refreshToken };

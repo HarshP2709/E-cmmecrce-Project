@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { supabaseAdmin } = require('../config/supabase');
+const localData = require('../services/localData.service.js');
 const { AppError } = require('./error.middleware');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_local_mock_token_key_12345';
 
 const protect = async (req, res, next) => {
   try {
@@ -15,24 +17,19 @@ const protect = async (req, res, next) => {
       return next(new AppError('Authentication required. Please log in.', 401));
     }
 
-    // Verify with Supabase
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
-    if (error || !user) {
+    // Verify with local JWT Secret
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = localData.getUserById(decoded.id);
+
+    if (!user) {
       return next(new AppError('Invalid or expired token.', 401));
     }
 
-    // Get profile
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-
-    if (profile && profile.is_active === false) {
+    if (user.is_active === false) {
       return next(new AppError('Your account has been deactivated.', 403));
     }
 
-    req.user = { ...user, ...profile };
+    req.user = user;
     next();
   } catch (err) {
     next(new AppError('Authentication failed.', 401));
@@ -46,11 +43,10 @@ const optionalAuth = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
     }
     if (token) {
-      const { data: { user } } = await supabaseAdmin.auth.getUser(token);
+      const decoded = jwt.verify(token, JWT_SECRET);
+      const user = localData.getUserById(decoded.id);
       if (user) {
-        const { data: profile } = await supabaseAdmin
-          .from('profiles').select('*').eq('id', user.id).single();
-        req.user = { ...user, ...profile };
+        req.user = user;
       }
     }
     next();

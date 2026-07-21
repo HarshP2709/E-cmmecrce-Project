@@ -63,7 +63,7 @@ export async function apiFetch(endpoint, options = {}) {
     const data = await res.json();
 
     if (!res.ok) {
-      if (res.status === 401) {
+      if (res.status === 401 && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/register')) {
         storage.remove('token');
         storage.remove('user');
         window.location.href = window.location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html';

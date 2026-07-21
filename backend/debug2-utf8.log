@@ -1,0 +1,81 @@
+﻿
+> shopverse-backend@1.0.0 start
+> node src/server.js
+
+node.exe : C:\Users\ha
+rsh_prajapati_27\Downl
+oads\E-cmmecrce Projec
+t\backend\node_modules
+\express\lib\router\ro
+ute.js:216
+At C:\Program Files\no
+dejs\npm.ps1:29 char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (C:\Users\h   
+ arsh_...er\route.    
+js:216:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+        throw new 
+Error(msg);
+        ^
+
+Error: Route.patch() 
+requires a callback 
+function but got a 
+[object Undefined]
+    at 
+Route.<computed> [as 
+patch] (C:\Users\harsh
+_prajapati_27\Download
+s\E-cmmecrce Project\b
+ackend\node_modules\ex
+press\lib\router\route
+.js:216:15)
+    at 
+proto.<computed> [as 
+patch] (C:\Users\harsh
+_prajapati_27\Download
+s\E-cmmecrce Project\b
+ackend\node_modules\ex
+press\lib\router\index
+.js:521:19)
+    at 
+Object.<anonymous> (C:
+\Users\harsh_prajapati
+_27\Downloads\E-cmmecr
+ce Project\backend\src
+\routes\order.routes.j
+s:11:8)
+    at 
+Module._compile (node:
+internal/modules/cjs/l
+oader:1730:14)
+    at Object..js (nod
+e:internal/modules/cjs
+/loader:1895:10)
+    at Module.load (no
+de:internal/modules/cj
+s/loader:1465:32)
+    at Function._load 
+(node:internal/modules
+/cjs/loader:1282:12)
+    at TracingChannel.
+traceSync (node:diagno
+stics_channel:322:14)
+    at wrapModuleLoad 
+(node:internal/modules
+/cjs/loader:235:24)
+    at Module.require 
+(node:internal/modules
+/cjs/loader:1487:12)
+
+Node.js v22.17.1

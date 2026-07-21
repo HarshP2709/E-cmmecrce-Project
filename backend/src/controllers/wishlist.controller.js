@@ -1,63 +1,44 @@
-const { supabaseAdmin } = require('../config/supabase');
+const localData = require('../services/localData.service.js');
 const { asyncHandler, AppError } = require('../middleware/error.middleware');
 
 // GET /api/v1/wishlist
 const getWishlist = asyncHandler(async (req, res) => {
-  const { data, error } = await supabaseAdmin
-    .from('wishlists')
-    .select('*, product:product_id(*, product_images(url, is_primary))')
-    .eq('user_id', req.user.id)
-    .order('created_at', { ascending: false });
-
-  if (error) throw new AppError(error.message, 500);
-  res.json({ success: true, data: data || [] });
+  const { data, error } = localData.getWishlist(req.user.id);
+  if (error) throw new AppError(error.message, 400);
+  res.json({ success: true, wishlist: data });
 });
 
-// POST /api/v1/wishlist
+// POST /api/v1/wishlist 
+// Assuming it toggles a single product_id
 const toggleWishlist = asyncHandler(async (req, res) => {
-  const { product_id } = req.body;
+  const { productId } = req.body;
+  const wishlist = localData.getWishlist(req.user.id).data;
+  wishlist.items = wishlist.items || [];
 
-  const { data: existing } = await supabaseAdmin
-    .from('wishlists').select('id').eq('user_id', req.user.id).eq('product_id', product_id).maybeSingle();
-
-  if (existing) {
-    await supabaseAdmin.from('wishlists').delete().eq('id', existing.id);
-    return res.json({ success: true, message: 'Removed from wishlist', in_wishlist: false });
+  if (wishlist.items.includes(productId)) {
+    wishlist.items = wishlist.items.filter(id => id !== productId);
   } else {
-    await supabaseAdmin.from('wishlists').insert({ user_id: req.user.id, product_id });
-    return res.json({ success: true, message: 'Added to wishlist', in_wishlist: true });
+    wishlist.items.push(productId);
   }
+
+  const { data } = localData.updateWishlistItems(req.user.id, wishlist.items);
+  res.json({ success: true, wishlist: data });
 });
 
 // DELETE /api/v1/wishlist/:productId
 const removeFromWishlist = asyncHandler(async (req, res) => {
   const { productId } = req.params;
-  await supabaseAdmin.from('wishlists').delete().eq('user_id', req.user.id).eq('product_id', productId);
-  res.json({ success: true, message: 'Removed from wishlist' });
+  const wishlist = localData.getWishlist(req.user.id).data;
+  wishlist.items = (wishlist.items || []).filter(id => id !== productId);
+
+  const { data } = localData.updateWishlistItems(req.user.id, wishlist.items);
+  res.json({ success: true, wishlist: data });
 });
 
 // POST /api/v1/wishlist/move-to-cart
 const moveToCart = asyncHandler(async (req, res) => {
-  const { product_id } = req.body;
-
-  // Add to cart
-  const { data: product } = await supabaseAdmin.from('product_summary').select('id, price').eq('id', product_id).single();
-  if (!product) throw new AppError('Product not found.', 404);
-
-  let { data: cart } = await supabaseAdmin.from('carts').select('id').eq('user_id', req.user.id).single();
-  if (!cart) {
-    const { data: newCart } = await supabaseAdmin.from('carts').insert({ user_id: req.user.id }).select().single();
-    cart = newCart;
-  }
-
-  await supabaseAdmin.from('cart_items').upsert({
-    cart_id: cart.id, product_id, quantity: 1, price: product.price,
-  }, { onConflict: 'cart_id,product_id,variant_id' });
-
-  // Remove from wishlist
-  await supabaseAdmin.from('wishlists').delete().eq('user_id', req.user.id).eq('product_id', product_id);
-
-  res.json({ success: true, message: 'Moved to cart' });
+  // Mock move to cart response
+  res.json({ success: true, message: 'Moved to cart mock' });
 });
 
 module.exports = { getWishlist, toggleWishlist, removeFromWishlist, moveToCart };

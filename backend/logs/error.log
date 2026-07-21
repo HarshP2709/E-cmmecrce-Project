@@ -222,3 +222,4 @@
 [2026-07-20 19:23:26] error: TypeError: fetch failed - GET /api/v1/products?featured=true&limit=8 - ::1
 [2026-07-20 19:23:26] error: TypeError: fetch failed - GET /api/v1/products?flash_sale=true&limit=4 - ::1
 [2026-07-21 18:14:29] error: TypeError: fetch failed - GET /api/v1/products/B07JB2Y4SR/reviews?page=1&limit=5 - ::1
+[2026-07-21 19:00:29] error: Invalid email or password. - POST /api/v1/auth/login - ::1
