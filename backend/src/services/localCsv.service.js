@@ -103,7 +103,7 @@ class LocalCsvService {
             if (imgMatch) {
                 primaryImg = imgMatch[1].replace(/,$/, '').replace(/\/W\/WEBP_[^\/]+\/images/g, '');
             } else {
-                primaryImg = '/assets/images/placeholder.webp';
+                primaryImg = '';
             }
 
             return {

@@ -21,7 +21,8 @@ export async function fetchCategories() {
 
 // ── Render Product Card ──────────────────────────────────────
 export function renderProductCard(product) {
-  const img = product.primary_image || 'assets/images/placeholder.webp';
+  const basePath = window.location.pathname.includes('/pages/') ? '../' : './';
+  const img = product.primary_image || (basePath + 'assets/images/placeholder.webp');
   const discount = calcDiscount(product.price, product.compare_price);
   const inStock = (product.available_quantity || product.stock_quantity || 0) > 0;
   const isNew = product.is_new_arrival;
@@ -37,7 +38,7 @@ export function renderProductCard(product) {
           alt="${escapeHTML(product.name)}"
           class="product-card-img"
           loading="lazy"
-          onerror="this.onerror=null; this.src='./assets/images/placeholder.webp';"
+          onerror="this.onerror=null; this.src=(window.location.pathname.includes('/pages/') ? '../' : './') + 'assets/images/placeholder.webp';"
         >
         ${!inStock ? '<div class="product-card-badges"><span class="card-badge card-badge-out">Out of Stock</span></div>' :
       (isNew || isSale || isBestSeller) ? `
@@ -61,7 +62,7 @@ export function renderProductCard(product) {
         </div>
       </div>
 
-      <div class="product-card-body" role="button" tabindex="0" onclick="window.location.href='/pages/product-detail.html?slug=${product.slug}'" onkeydown="if(event.key==='Enter')window.location.href='/pages/product-detail.html?slug=${product.slug}'">
+      <div class="product-card-body" role="button" tabindex="0" onclick="window.location.href=(window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'product-detail.html?slug=${product.slug}'" onkeydown="if(event.key==='Enter')window.location.href=(window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'product-detail.html?slug=${product.slug}'">
         ${product.brand_name ? `<div class="product-card-brand">${escapeHTML(product.brand_name)}</div>` : ''}
         <h3 class="product-card-name">${escapeHTML(product.name)}</h3>
         <div class="product-card-rating" aria-label="${product.avg_rating} out of 5 stars (${product.review_count} reviews)">
