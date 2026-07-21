@@ -131,7 +131,7 @@ function initNavSearch() {
 
       dropdown.querySelectorAll('.search-suggestion').forEach(item => {
         item.addEventListener('click', () => {
-          window.location.href = `/pages/product-detail.html?slug=${item.dataset.slug}`;
+          window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `product-detail.html?slug=${item.dataset.slug}`;
         });
       });
     } catch { }
@@ -142,7 +142,7 @@ function initNavSearch() {
 
   const doSearch = () => {
     const q = input.value.trim();
-    if (q) window.location.href = `/pages/search.html?q=${encodeURIComponent(q)}`;
+    if (q) window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `search.html?q=${encodeURIComponent(q)}`;
   };
 
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });

@@ -356,14 +356,14 @@ function initCheckoutButton() {
 
   btn.addEventListener('click', () => {
     if (!Auth.isLoggedIn()) {
-      window.location.href = '/pages/login.html?redirect=/pages/checkout.html';
+      window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'login.html?redirect=/pages/checkout.html';
       return;
     }
     if (!cartData?.cart_items?.length) {
       showToast('Your cart is empty', 'warning');
       return;
     }
-    window.location.href = '/pages/checkout.html';
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'checkout.html';
   });
 }
 

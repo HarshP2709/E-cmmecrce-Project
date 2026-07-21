@@ -39,7 +39,7 @@ async function loadCart() {
     cartData = await Cart.getCart();
     if (!cartData?.cart_items?.length) {
       showToast('Your cart is empty. Redirecting…', 'warning');
-      setTimeout(() => { window.location.href = '/pages/cart.html'; }, 1500);
+      setTimeout(() => { window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'cart.html'; }, 1500);
       return;
     }
     renderCheckoutItems();
@@ -480,7 +480,7 @@ function initPlaceOrderButton() {
       const orderId = data.data?.id || data.order_id;
       showToast('Order placed successfully! 🎉', 'success', 'Order Confirmed');
       setTimeout(() => {
-        window.location.href = `/pages/order-success.html?id=${orderId}`;
+        window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `order-success.html?id=${orderId}`;
       }, 600);
     } catch (err) {
       showToast(err.message || 'Failed to place order. Please try again.', 'error');

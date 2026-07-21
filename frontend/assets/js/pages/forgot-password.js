@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Redirect already-logged-in users
   if (Auth.isLoggedIn()) {
-    window.location.href = '/pages/profile.html';
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'profile.html';
     return;
   }
 

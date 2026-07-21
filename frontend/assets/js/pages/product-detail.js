@@ -375,7 +375,7 @@ async function handleAddToCart() {
 // ── Buy Now ───────────────────────────────────────────────────
 async function handleBuyNow() {
   if (!Auth.isLoggedIn()) {
-    window.location.href = `/pages/login.html?redirect=/pages/checkout.html`;
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `login.html?redirect=/pages/checkout.html`;
     return;
   }
 
@@ -383,7 +383,7 @@ async function handleBuyNow() {
   if (btn) btn.classList.add('loading');
   try {
     await Cart.addItem(product.id, quantity, selectedVariantId);
-    window.location.href = '/pages/checkout.html';
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'checkout.html';
   } catch (err) {
     showToast(err.message || 'Failed to proceed', 'error');
     if (btn) btn.classList.remove('loading');
@@ -561,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
   writeBtn?.addEventListener('click', () => {
     if (!Auth.isLoggedIn()) {
       showToast('Please sign in to write a review', 'info');
-      setTimeout(() => { window.location.href = `/pages/login.html?redirect=${encodeURIComponent(window.location.href)}`; }, 800);
+      setTimeout(() => { window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `login.html?redirect=${encodeURIComponent(window.location.href)}`; }, 800);
       return;
     }
     if (reviewForm) reviewForm.style.display = 'block';

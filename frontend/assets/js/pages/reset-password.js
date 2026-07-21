@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Redirect already-logged-in users
   if (Auth.isLoggedIn()) {
-    window.location.href = '/pages/profile.html';
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'profile.html';
     return;
   }
 
@@ -191,6 +191,6 @@ function showSuccessPanel() {
 
   // Auto-redirect to login after 3 seconds
   setTimeout(() => {
-    window.location.href = '/pages/login.html?message=password_reset';
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'login.html?message=password_reset';
   }, 3000);
 }

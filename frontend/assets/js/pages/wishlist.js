@@ -109,8 +109,8 @@ function renderWishlistCard(item) {
 
       <div class="product-card-body"
         role="button" tabindex="0"
-        onclick="window.location.href='/pages/product-detail.html?slug=${escapeHTML(product.slug)}'"
-        onkeydown="if(event.key==='Enter')window.location.href='/pages/product-detail.html?slug=${escapeHTML(product.slug)}'"
+        onclick="window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'product-detail.html?slug=${escapeHTML(product.slug)}'"
+        onkeydown="if(event.key==='Enter')window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'product-detail.html?slug=${escapeHTML(product.slug)}'"
       >
         ${product.brand_name ? `<div class="product-card-brand">${escapeHTML(product.brand_name)}</div>` : ''}
         <h3 class="product-card-name">${escapeHTML(product.name)}</h3>

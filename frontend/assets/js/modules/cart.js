@@ -132,7 +132,7 @@ export function renderCartItem(item) {
       <img src="${img}" alt="${product.name}" class="cart-item-img" loading="lazy" onerror="this.src='assets/images/placeholder.webp'">
       <div class="cart-item-body">
         <div class="cart-item-brand">${product.brand_name || ''}</div>
-        <a href="/pages/product-detail.html?slug=${product.slug}" class="cart-item-name" style="color:inherit;text-decoration:none">${product.name}</a>
+        <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}product-detail.html?slug=${product.slug}" class="cart-item-name" style="color:inherit;text-decoration:none">${product.name}</a>
         ${item.variant_id ? `<div class="cart-item-variant">Variant selected</div>` : ''}
         <div class="cart-item-footer">
           <div class="qty-selector">

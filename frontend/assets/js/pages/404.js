@@ -26,7 +26,7 @@ function initSearchForm() {
     e.preventDefault();
     const q = input?.value.trim();
     if (q) {
-      window.location.href = `/pages/search.html?q=${encodeURIComponent(q)}`;
+      window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `search.html?q=${encodeURIComponent(q)}`;
     }
   });
 }

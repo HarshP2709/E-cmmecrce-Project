@@ -129,7 +129,7 @@ export function renderFlashCard(product) {
           ${discount > 0 ? `<span class="card-badge card-badge-sale">${discount}% Off</span>` : ''}
         </div>
       </div>
-      <div class="product-card-body" onclick="window.location.href='/pages/product-detail.html?slug=${product.slug}'" style="cursor:pointer">
+      <div class="product-card-body" onclick="window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'product-detail.html?slug=${product.slug}'" style="cursor:pointer">
         <div class="product-card-name">${escapeHTML(product.name)}</div>
         <div class="product-card-price-row">
           <span class="product-card-price">${formatPrice(product.price)}</span>

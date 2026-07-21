@@ -90,11 +90,11 @@ export function updateNavbarAuth() {
           <div class="nav-dropdown-email">${user.email}</div>
         </div>
         <div class="nav-dropdown-body">
-          <a href="/pages/profile.html" class="dropdown-item"><span class="icon">👤</span> My Profile</a>
-          <a href="/pages/orders.html" class="dropdown-item"><span class="icon">📦</span> My Orders</a>
-          <a href="/pages/wishlist.html" class="dropdown-item"><span class="icon">🤍</span> Wishlist</a>
-          <a href="/pages/profile.html#addresses" class="dropdown-item"><span class="icon">📍</span> Addresses</a>
-          ${user.role === 'admin' ? '<a href="/pages/admin/dashboard.html" class="dropdown-item"><span class="icon">⚙️</span> Admin Panel</a>' : ''}
+          <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}profile.html" class="dropdown-item"><span class="icon">👤</span> My Profile</a>
+          <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}orders.html" class="dropdown-item"><span class="icon">📦</span> My Orders</a>
+          <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}wishlist.html" class="dropdown-item"><span class="icon">🤍</span> Wishlist</a>
+          <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}profile.html#addresses" class="dropdown-item"><span class="icon">📍</span> Addresses</a>
+          ${user.role === 'admin' ? '<a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}admin/dashboard.html" class="dropdown-item"><span class="icon">⚙️</span> Admin Panel</a>' : ''}
         </div>
         <div class="nav-dropdown-footer">
           <button class="dropdown-item danger w-full" id="logout-btn"><span class="icon">🚪</span> Sign Out</button>
@@ -116,11 +116,11 @@ export function updateNavbarAuth() {
           <div class="nav-dropdown-email">Sign in to your account</div>
         </div>
         <div class="nav-dropdown-body">
-          <a href="/pages/login.html" class="dropdown-item"><span class="icon">🔐</span> Sign In</a>
-          <a href="/pages/register.html" class="dropdown-item"><span class="icon">📝</span> Create Account</a>
+          <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}login.html" class="dropdown-item"><span class="icon">🔐</span> Sign In</a>
+          <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}register.html" class="dropdown-item"><span class="icon">📝</span> Create Account</a>
         </div>
         <div class="nav-dropdown-footer">
-          <a href="/pages/orders.html" class="dropdown-item"><span class="icon">📦</span> Track Order</a>
+          <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}orders.html" class="dropdown-item"><span class="icon">📦</span> Track Order</a>
         </div>
       `;
     }
@@ -153,7 +153,7 @@ export function initUserMenu() {
 export function requireAuth(redirectUrl) {
   if (!Auth.isLoggedIn()) {
     const returnPath = redirectUrl || window.location.pathname + window.location.search;
-    window.location.href = `/pages/login.html?redirect=${encodeURIComponent(returnPath)}`;
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `login.html?redirect=${encodeURIComponent(returnPath)}`;
     return false;
   }
   return true;

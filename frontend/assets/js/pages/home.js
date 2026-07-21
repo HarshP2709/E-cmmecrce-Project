@@ -237,7 +237,7 @@ function initProductActions() {
     // Quick view
     const quickViewBtn = e.target.closest('[data-action="quick-view"]');
     if (quickViewBtn?.dataset.slug) {
-      window.location.href = `/pages/product-detail.html?slug=${quickViewBtn.dataset.slug}`;
+      window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + `product-detail.html?slug=${quickViewBtn.dataset.slug}`;
     }
   });
 }
