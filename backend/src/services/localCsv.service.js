@@ -101,7 +101,7 @@ class LocalCsvService {
             let primaryImg = '';
             const imgMatch = rawImage.match(/(https?:\/\/[^\s|]+)/);
             if (imgMatch) {
-                primaryImg = imgMatch[1].replace(/,$/, ''); // remove trailing comma if present
+                primaryImg = imgMatch[1].replace(/,$/, '').replace(/\/W\/WEBP_[^\/]+\/images/g, '');
             } else {
                 primaryImg = '/assets/images/placeholder.webp';
             }
