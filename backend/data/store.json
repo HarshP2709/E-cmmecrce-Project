@@ -19,6 +19,16 @@
       "role": "customer",
       "is_active": true,
       "created_at": "2026-07-21T13:43:38.329Z"
+    },
+    {
+      "id": "local_1784723875508_dggq6pekt",
+      "email": "harshfk05@gmail.com",
+      "password": "12345Ab@",
+      "full_name": "Harsh Ashwinbhai Prajapati",
+      "phone": "+919714672210",
+      "role": "customer",
+      "is_active": true,
+      "created_at": "2026-07-22T12:37:55.508Z"
     }
   ],
   "carts": [
@@ -29,6 +39,51 @@
     {
       "user_id": "guest",
       "items": []
+    },
+    {
+      "user_id": "local_1784723875508_dggq6pekt",
+      "items": [
+        {
+          "product_id": "B07JW9H4J1",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B098NS6PVG",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B08HDJ86NZ",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B08CF3B7N1",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B08Y1TFSP6",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B08DPLCM6T",
+          "quantity": 1,
+          "variant_id": null
+        },
+        {
+          "product_id": "B09F6S8BT6",
+          "quantity": 1,
+          "variant_id": null
+        }
+      ]
     }
   ],
   "wishlists": [
@@ -38,9 +93,90 @@
         "B098NS6PVG",
         "B096MSW6CT"
       ]
+    },
+    {
+      "user_id": "local_1784723875508_dggq6pekt",
+      "items": [
+        "B00NH11PEY"
+      ]
     }
   ],
   "orders": [
+    {
+      "id": "mock_order_1784724889824",
+      "order_number": "SV150155",
+      "user_id": "local_1784723875508_dggq6pekt",
+      "status": "confirmed",
+      "total_amount": 15918,
+      "items": [
+        {
+          "product_id": "B09F6S8BT6",
+          "quantity": 1,
+          "price": 13490
+        }
+      ],
+      "shipping_address": {
+        "full_name": "Harsh Ashwinbhai Prajapati",
+        "phone": "9714672210",
+        "address_line1": "10, Vihal nagar society behind vaishali cinema",
+        "address_line2": "Near water tank Nadiad -387002",
+        "city": "Nadiad",
+        "state": "Gujarat",
+        "postal_code": "387002",
+        "type": "home",
+        "is_default": true,
+        "id": "1784724877788",
+        "user_id": "local_1784723875508_dggq6pekt"
+      },
+      "payment_method": "cod",
+      "created_at": "2026-07-22T12:54:49.824Z",
+      "estimated_delivery": "2026-07-27T12:54:49.824Z"
+    },
+    {
+      "id": "mock_order_1784724204355",
+      "order_number": "SV142593",
+      "user_id": "local_1784723875508_dggq6pekt",
+      "status": "confirmed",
+      "total_amount": 33689,
+      "items": [
+        {
+          "product_id": "B00NH11PEY",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B096MSW6CT",
+          "quantity": 1,
+          "price": 199
+        },
+        {
+          "product_id": "B08CF3D7QR",
+          "quantity": 1,
+          "price": 154
+        },
+        {
+          "product_id": "B0B6F7LX4C",
+          "quantity": 2,
+          "price": 13999
+        }
+      ],
+      "shipping_address": {
+        "full_name": "Harsh Ashwinbhai Prajapati",
+        "phone": "9714672210",
+        "address_line1": "10, Vihal nagar society behind vaishali cinema",
+        "address_line2": "Near water tank Nadiad -387002",
+        "city": "Nadiad",
+        "state": "Gujarat",
+        "postal_code": "387002",
+        "type": "home",
+        "is_default": true,
+        "id": "1784723920915",
+        "user_id": "local_1784723875508_dggq6pekt"
+      },
+      "payment_method": "card",
+      "created_at": "2026-07-22T12:43:24.355Z",
+      "estimated_delivery": "2026-07-27T12:43:24.355Z"
+    },
     {
       "id": "mock_order_1784703114978",
       "order_number": "SV228561",

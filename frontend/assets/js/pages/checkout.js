@@ -3,10 +3,11 @@
  * Multi-step checkout: Shipping → Payment → Review → Place Order
  */
 
-import { initPage, apiFetch, showToast, formatPrice, hidePageLoader } from '../modules/utils.js';
+import { initPage, apiFetch, showToast, formatPrice, hidePageLoader, getParams } from '../modules/utils.js';
 import { initNavbar } from '../modules/navbar.js';
 import { requireAuth, Auth } from '../modules/auth.js';
 import { Cart } from '../modules/cart.js';
+import { fetchProductBySlug } from '../modules/products.js';
 
 // ── State ─────────────────────────────────────────────────────
 let currentStep = 1;
@@ -35,6 +36,42 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // ── Load Cart ─────────────────────────────────────────────────
 async function loadCart() {
+  const params = getParams();
+  if (params.buy_now) {
+    try {
+      const data = await fetchProductBySlug(params.buy_now);
+      const product = data.data || data.product || data;
+      const qty = parseInt(params.qty) || 1;
+
+      let price = product.price;
+      if (params.variant) {
+        const variant = (product.product_variants || product.variants || []).find(v => v.id === params.variant);
+        if (variant && variant.price_modifier) price += variant.price_modifier;
+      }
+
+      cartData = {
+        is_buy_now: true,
+        cart_items: [
+          {
+            product_id: product.id,
+            variant_id: params.variant || null,
+            quantity: qty,
+            price: price, // explicitly setting price to calculate totals correctly
+            products: product
+          }
+        ],
+        coupon_discount: 0
+      };
+
+      renderCheckoutItems();
+      computeTotals();
+      renderSummaryTotals();
+      return;
+    } catch (e) {
+      showToast('Failed to load product for checkout', 'error');
+    }
+  }
+
   try {
     cartData = await Cart.getCart();
     if (!cartData?.cart_items?.length) {
@@ -462,6 +499,7 @@ function initPlaceOrderButton() {
       payment_method: paymentMethod,
       items: cartData?.cart_items?.map(i => ({ product_id: i.product_id, variant_id: i.variant_id, quantity: i.quantity })) || [],
       coupon_id: cartData?.coupon_id || null,
+      is_buy_now: cartData?.is_buy_now === true,
       // Include card/upi details for non-COD methods (backend tokenises)
       ...(paymentMethod === 'card' && {
         card_last4: (document.getElementById('card-number')?.value || '').replace(/\s/g, '').slice(-4),

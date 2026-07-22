@@ -64,9 +64,25 @@ function renderOrderDetails(order) {
     paymentEl.textContent = labels[method?.toLowerCase()] || `💳 ${method}`;
   }
 
+  // Total & Breakdown Calculation
+  const itemsList = order.order_items || [];
+  const subtotal = itemsList.reduce((sum, item) => sum + ((item.price || item.unit_price || item.products?.price || 0) * item.quantity), 0);
+  const shippingAmt = subtotal >= 499 ? 0 : 49;
+  const totalAmt = order.total_amount || (subtotal + shippingAmt);
+  const taxAmt = totalAmt - subtotal - shippingAmt > 0 ? totalAmt - subtotal - shippingAmt : Math.round(subtotal * 0.18);
+
+  const subtotalEl = document.getElementById('detail-subtotal');
+  if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
+
+  const taxEl = document.getElementById('detail-tax');
+  if (taxEl) taxEl.textContent = formatPrice(taxAmt);
+
+  const shipEl = document.getElementById('detail-shipping');
+  if (shipEl) shipEl.innerHTML = shippingAmt === 0 ? '<span style="color:var(--color-success)">FREE</span>' : formatPrice(shippingAmt);
+
   // Total
   const totalEl = document.getElementById('detail-total');
-  if (totalEl) totalEl.textContent = formatPrice(order.total_amount || 0);
+  if (totalEl) totalEl.textContent = formatPrice(totalAmt);
 
   // Estimated delivery (3–7 business days from order date)
   const deliveryEl = document.getElementById('detail-delivery');
@@ -223,6 +239,7 @@ function initInvoiceDownload(order) {
 
     const shipping = subtotal >= 499 ? 0 : 49;
     const total = order.total_amount || (subtotal + shipping);
+    const tax = total - subtotal - shipping > 0 ? total - subtotal - shipping : Math.round(subtotal * 0.18);
 
     const invoiceHTML = `
 <!DOCTYPE html>
@@ -430,6 +447,10 @@ function initInvoiceDownload(order) {
       <tr>
         <td class="label">Subtotal</td>
         <td class="value">${formatPrice(subtotal)}</td>
+      </tr>
+      <tr>
+        <td class="label">Tax (18% GST)</td>
+        <td class="value">${formatPrice(tax)}</td>
       </tr>
       <tr>
         <td class="label">Shipping</td>

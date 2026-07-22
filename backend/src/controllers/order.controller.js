@@ -82,7 +82,9 @@ const createOrder = asyncHandler(async (req, res) => {
   };
 
   const { data } = localData.createOrder(newOrder);
-  localData.updateCartItems(req.user.id, []);
+  if (!req.body.is_buy_now) {
+    localData.updateCartItems(req.user.id, []);
+  }
 
   res.status(201).json({ success: true, message: 'Order placed', data: data });
 });

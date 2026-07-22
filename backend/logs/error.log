@@ -442,3 +442,9 @@
 [2026-07-22 11:40:39] error: TypeError: fetch failed - GET /api/v1/products/B00NH11PEY/reviews?page=1&limit=5 - ::1
 [2026-07-22 11:47:39] error: TypeError: fetch failed - GET /api/v1/products/B00NH11PEY/reviews?page=1&limit=5 - ::1
 [2026-07-22 12:21:33] error: TypeError: fetch failed - GET /api/v1/products/B0B6F7LX4C/reviews?page=1&limit=5 - ::1
+[2026-07-22 18:00:16] error: Authentication failed. - GET /api/v1/cart - ::1
+[2026-07-22 18:00:16] error: Authentication failed. - GET /api/v1/wishlist - ::1
+[2026-07-22 18:01:10] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-22 18:01:39] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-22 18:03:04] error: Invalid email or password. - POST /api/v1/auth/login - ::1
+[2026-07-22 18:08:30] error: TypeError: fetch failed - GET /api/v1/products/B0B6F7LX4C/reviews?page=1&limit=5 - ::1

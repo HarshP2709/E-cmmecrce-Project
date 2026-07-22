@@ -382,8 +382,9 @@ async function handleBuyNow() {
   const btn = document.getElementById('buy-now-btn');
   if (btn) btn.classList.add('loading');
   try {
-    await Cart.addItem(product.id, quantity, selectedVariantId);
-    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'checkout.html';
+    const relativePath = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'checkout.html';
+    const qs = `?buy_now=${product.slug}&qty=${quantity}${selectedVariantId ? '&variant=' + selectedVariantId : ''}`;
+    window.location.href = relativePath + qs;
   } catch (err) {
     showToast(err.message || 'Failed to proceed', 'error');
     if (btn) btn.classList.remove('loading');
