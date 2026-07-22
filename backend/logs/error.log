@@ -453,3 +453,4 @@
 [2026-07-22 18:24:27] error: TypeError: fetch failed - GET /api/v1/products/B09F6S8BT6/reviews?page=1&limit=5 - ::1
 [2026-07-22 18:49:10] error: TypeError: fetch failed - GET /api/v1/products/B09F6S8BT6/reviews?page=1&limit=5 - ::1
 [2026-07-22 18:49:14] error: TypeError: fetch failed - GET /api/v1/products/B085194JFL/reviews?page=1&limit=5 - ::1
+[2026-07-22 19:14:09] error: Email already registered. Please sign in instead. - POST /api/v1/auth/register - ::1

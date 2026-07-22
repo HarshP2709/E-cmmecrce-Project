@@ -9,7 +9,8 @@ class LocalCsvService {
     }
 
     init() {
-        const csvPath = path.join(__dirname, '../../../../amazon_mongodb_ready.csv');
+        // Point to the repo root dataset
+        const csvPath = path.join(__dirname, '../../../amazon_mongodb_ready.csv');
         let csvData = '';
         try {
             csvData = fs.readFileSync(csvPath, 'utf8');
