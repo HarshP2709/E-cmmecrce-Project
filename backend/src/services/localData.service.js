@@ -143,5 +143,37 @@ module.exports = {
         store.orders[idx] = { ...store.orders[idx], ...updates };
         saveStore();
         return { data: store.orders[idx] };
+    },
+    getAddresses: (userId) => {
+        return { data: store.addresses?.filter(a => a.user_id === userId) || [] };
+    },
+    createAddress: (data) => {
+        if (!store.addresses) store.addresses = [];
+        if (data.is_default) {
+            store.addresses.filter(a => a.user_id === data.user_id).forEach(a => a.is_default = false);
+        }
+        store.addresses.push(data);
+        saveStore();
+        return { data };
+    },
+    updateAddress: (id, updates) => {
+        const idx = (store.addresses || []).findIndex(a => a.id === id);
+        if (idx !== -1) {
+            if (updates.is_default) {
+                store.addresses.filter(a => a.user_id === store.addresses[idx].user_id).forEach(a => a.is_default = false);
+            }
+            store.addresses[idx] = { ...store.addresses[idx], ...updates };
+            saveStore();
+            return { data: store.addresses[idx] };
+        }
+        return { error: { message: 'Address not found' } };
+    },
+    deleteAddress: (id) => {
+        if (!store.addresses) return { error: { message: 'Address not found' } };
+        const originalLength = store.addresses.length;
+        store.addresses = store.addresses.filter(a => a.id !== id);
+        if (store.addresses.length === originalLength) return { error: { message: 'Address not found' } };
+        saveStore();
+        return { success: true };
     }
 };

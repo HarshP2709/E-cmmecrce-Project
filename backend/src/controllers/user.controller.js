@@ -22,23 +22,29 @@ const updateAvatar = asyncHandler(async (req, res) => {
 
 // GET /api/v1/users/addresses
 const getAddresses = asyncHandler(async (req, res) => {
-  res.json({ success: true, data: [] });
+  const { data } = localData.getAddresses(req.user.id);
+  res.json({ success: true, data });
 });
 
 // POST /api/v1/users/addresses
 const createAddress = asyncHandler(async (req, res) => {
   const addressData = { ...req.body, id: Date.now().toString(), user_id: req.user.id };
-  res.status(201).json({ success: true, message: 'Address mocked locally', data: addressData });
+  const { data } = localData.createAddress(addressData);
+  res.status(201).json({ success: true, message: 'Address created', data });
 });
 
 // PUT /api/v1/users/addresses/:id
 const updateAddress = asyncHandler(async (req, res) => {
-  res.json({ success: true, message: 'Address mocked updated', data: { id: req.params.id, ...req.body } });
+  const { data, error } = localData.updateAddress(req.params.id, req.body);
+  if (error) throw new AppError(error.message, 404);
+  res.json({ success: true, message: 'Address updated', data });
 });
 
 // DELETE /api/v1/users/addresses/:id
 const deleteAddress = asyncHandler(async (req, res) => {
-  res.json({ success: true, message: 'Address mocked deleted' });
+  const { error } = localData.deleteAddress(req.params.id);
+  if (error) throw new AppError(error.message, 404);
+  res.json({ success: true, message: 'Address deleted' });
 });
 
 // GET /api/v1/users/notifications

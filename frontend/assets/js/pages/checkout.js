@@ -14,6 +14,7 @@ let currentStep = 1;
 let cartData = null;
 let addresses = [];
 let selectedAddr = null;    // selected address object
+let editingAddressId = null;// tracker for editing state
 let paymentMethod = 'cod';  // 'cod' | 'card' | 'upi'
 let summaryTotals = {};     // { subtotal, shipping, tax, couponDiscount, total }
 
@@ -138,6 +139,7 @@ function renderSavedAddresses() {
               ${addr.type || 'home'}
             </span>
             ${addr.is_default ? '<span style="font-size:0.65rem;background:rgba(108,99,255,0.1);color:var(--color-primary);padding:3px 8px;border-radius:4px;font-weight:600">Default</span>' : ''}
+            <button class="btn btn-sm btn-ghost open-edit-addr-btn" data-id="${addr.id}" style="margin-left:auto;font-size:0.75rem;padding:var(--space-1) var(--space-3);color:var(--color-primary)">✎ Edit</button>
           </div>
         </div>
       `).join('')}
@@ -152,6 +154,40 @@ function renderSavedAddresses() {
     card.addEventListener('click', () => selectAddress(card.dataset.addrId));
     card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') selectAddress(card.dataset.addrId); });
   });
+
+  // Bind Edit buttons
+  container.querySelectorAll('.open-edit-addr-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openEditAddressForm(btn.dataset.id);
+    });
+  });
+}
+
+function openEditAddressForm(addrId) {
+  const addr = addresses.find(a => a.id === addrId);
+  if (!addr) return;
+  editingAddressId = addrId;
+
+  document.getElementById('addr-full-name').value = addr.full_name || '';
+  document.getElementById('addr-phone').value = addr.phone || '';
+  document.getElementById('addr-line1').value = addr.address_line1 || '';
+  document.getElementById('addr-line2').value = addr.address_line2 || '';
+  document.getElementById('addr-city').value = addr.city || '';
+  document.getElementById('addr-state').value = addr.state || '';
+  document.getElementById('addr-pincode').value = addr.postal_code || '';
+  document.getElementById('addr-type').value = addr.type || 'home';
+  const defaultInput = document.getElementById('addr-default-input');
+  if (defaultInput) {
+    defaultInput.checked = !!addr.is_default;
+    const defCheck = document.getElementById('addr-default-check');
+    if (defCheck) defCheck.classList.toggle('checked', defaultInput.checked);
+  }
+
+  const btn = document.getElementById('toggle-new-address-btn');
+  if (btn) btn.textContent = '✕ Cancel Edit';
+
+  toggleNewAddressForm(true);
 }
 
 function selectAddress(id) {
@@ -348,10 +384,18 @@ function initNewAddressForm() {
 
   toggleBtn?.addEventListener('click', () => {
     const isOpen = document.getElementById('new-address-form').classList.contains('open');
+    if (isOpen) {
+      editingAddressId = null;
+      form?.reset();
+    }
     toggleNewAddressForm(!isOpen);
   });
 
-  cancelBtn?.addEventListener('click', () => toggleNewAddressForm(false));
+  cancelBtn?.addEventListener('click', () => {
+    editingAddressId = null;
+    form?.reset();
+    toggleNewAddressForm(false);
+  });
 
   defaultInput?.addEventListener('change', () => {
     if (defaultCheck) defaultCheck.classList.toggle('checked', defaultInput.checked);
@@ -392,19 +436,35 @@ function initNewAddressForm() {
     }
 
     try {
-      const data = await apiFetch('/users/addresses', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
-      const newAddr = data.data;
-      addresses.push(newAddr);
-      selectedAddr = newAddr;
-      showToast('Address saved successfully ✅', 'success');
+      if (editingAddressId) {
+        const data = await apiFetch(`/users/addresses/${editingAddressId}`, {
+          method: 'PUT',
+          body: JSON.stringify(payload)
+        });
+        const updatedAddr = data.data;
+        const idx = addresses.findIndex(a => a.id === editingAddressId);
+        if (idx !== -1) addresses[idx] = updatedAddr;
+        if (selectedAddr?.id === editingAddressId) selectedAddr = updatedAddr;
+        showToast('Address updated successfully ✅', 'success');
+      } else {
+        const data = await apiFetch('/users/addresses', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        const newAddr = data.data;
+        addresses.push(newAddr);
+        selectedAddr = newAddr;
+        showToast('Address saved successfully ✅', 'success');
+      }
+
+      editingAddressId = null;
       toggleNewAddressForm(false);
       form.reset();
       renderSavedAddresses();
-      // Re-select the newly added address
-      setTimeout(() => selectAddress(newAddr.id), 50);
+
+      if (selectedAddr) {
+        setTimeout(() => selectAddress(selectedAddr.id), 50);
+      }
     } catch (err) {
       showToast(err.message || 'Failed to save address', 'error');
     } finally {
