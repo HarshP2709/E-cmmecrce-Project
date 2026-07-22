@@ -107,7 +107,7 @@ export class Cart {
           method: 'POST',
           body: JSON.stringify({ product_id: item.product_id, quantity: item.quantity }),
         });
-      } catch {}
+      } catch { }
     }
     storage.remove(this.STORAGE_KEY);
   }
@@ -120,19 +120,24 @@ export async function initCartBadge() {
 
 // ── Render Cart Page ─────────────────────────────────────────
 export function renderCartItem(item) {
-  const product = item.products || item;
-  const img = product.product_images?.[0]?.url || product.primary_image || 'assets/images/placeholder.webp';
+  const product = item.products || {};
+  const inPages = window.location.pathname.includes('/pages/');
+  const prefix = inPages ? '../' : '';
+  const imgFallback = `${prefix}assets/images/placeholder.webp`;
+  const img = product.product_images?.[0]?.url || product.primary_image || imgFallback;
   const price = item.price || product.price || 0;
   const total = price * item.quantity;
-  const originalPrice = product.compare_price;
+  const originalPrice = product.compare_price || price;
   const discount = originalPrice > price ? Math.round((originalPrice - price) / originalPrice * 100) : 0;
+  const name = product.name || item.name || item.product_id || 'Product';
+  const detailLink = `${inPages ? '' : 'pages/'}product-detail.html?slug=${product.slug || ''}`;
 
   return `
-    <div class="cart-item" data-item-id="${item.id}" data-product-id="${product.id}">
-      <img src="${img}" alt="${product.name}" class="cart-item-img" loading="lazy" onerror="this.src='assets/images/placeholder.webp'">
+    <div class="cart-item" data-item-id="${item.id}" data-product-id="${product.id || item.product_id}">
+      <img src="${img}" alt="${escapeHTML(name)}" class="cart-item-img" loading="lazy" onerror="this.src='${imgFallback}'">
       <div class="cart-item-body">
-        <div class="cart-item-brand">${product.brand_name || ''}</div>
-        <a href="${window.location.pathname.includes('/pages/') ? '' : 'pages/'}product-detail.html?slug=${product.slug}" class="cart-item-name" style="color:inherit;text-decoration:none">${product.name}</a>
+        <div class="cart-item-brand">${escapeHTML(product.brand_name || '')}</div>
+        <a href="${detailLink}" class="cart-item-name" style="color:inherit;text-decoration:none">${escapeHTML(name)}</a>
         ${item.variant_id ? `<div class="cart-item-variant">Variant selected</div>` : ''}
         <div class="cart-item-footer">
           <div class="qty-selector">
@@ -149,4 +154,14 @@ export function renderCartItem(item) {
       </div>
     </div>
   `;
+}
+// Helper to escape HTML safely inside this function since escapeHTML isn't imported here
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }

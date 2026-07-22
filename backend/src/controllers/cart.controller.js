@@ -5,6 +5,7 @@ const { asyncHandler, AppError } = require('../middleware/error.middleware');
 // Formats mock inner join for cart items natively mimicking Supabase structures
 const populateCartItems = (items) => {
   return items.map(item => ({
+    id: item.product_id,
     ...item,
     products: localCsv.getProductById(item.product_id) || null
   }));

@@ -236,10 +236,10 @@ function validateStep1() {
 // ── Step 2 Validation ─────────────────────────────────────────
 function validateStep2() {
   if (paymentMethod === 'card') {
-    const name = document.getElementById('card-holder-name')?.value.trim();
-    const number = document.getElementById('card-number')?.value.replace(/\s/g, '');
-    const expiry = document.getElementById('card-expiry')?.value.trim();
-    const cvv = document.getElementById('card-cvv')?.value.trim();
+    const name = (document.getElementById('card-holder-name')?.value || '').trim();
+    const number = (document.getElementById('card-number')?.value || '').replace(/\s/g, '');
+    const expiry = (document.getElementById('card-expiry')?.value || '').trim();
+    const cvv = (document.getElementById('card-cvv')?.value || '').trim();
 
     if (!name) { showToast('Enter cardholder name', 'warning'); return false; }
     if (number.length < 16) { showToast('Enter a valid 16-digit card number', 'warning'); return false; }
@@ -247,7 +247,7 @@ function validateStep2() {
     if (!cvv || cvv.length < 3) { showToast('Enter a valid CVV', 'warning'); return false; }
   }
   if (paymentMethod === 'upi') {
-    const upiId = document.getElementById('upi-id')?.value.trim();
+    const upiId = (document.getElementById('upi-id')?.value || '').trim();
     if (!upiId || !upiId.includes('@')) {
       showToast('Enter a valid UPI ID (e.g. name@upi)', 'warning');
       return false;
@@ -464,11 +464,11 @@ function initPlaceOrderButton() {
       coupon_id: cartData?.coupon_id || null,
       // Include card/upi details for non-COD methods (backend tokenises)
       ...(paymentMethod === 'card' && {
-        card_last4: document.getElementById('card-number')?.value.replace(/\s/g, '').slice(-4),
-        card_name: document.getElementById('card-holder-name')?.value.trim(),
+        card_last4: (document.getElementById('card-number')?.value || '').replace(/\s/g, '').slice(-4),
+        card_name: (document.getElementById('card-holder-name')?.value || '').trim(),
       }),
       ...(paymentMethod === 'upi' && {
-        upi_id: document.getElementById('upi-id')?.value.trim(),
+        upi_id: (document.getElementById('upi-id')?.value || '').trim(),
       }),
     };
 

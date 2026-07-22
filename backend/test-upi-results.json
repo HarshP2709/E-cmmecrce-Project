@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "cartCleared": true,
+  "paymentMethodPersisted": true,
+  "order": {
+    "success": true,
+    "data": {
+      "id": "mock_order_1784700522420",
+      "order_number": "SV381525",
+      "user_id": "local_1784641418329_4fg5cdft7",
+      "status": "confirmed",
+      "total_amount": 356,
+      "items": [
+        {
+          "product_id": "B00N1U9AJS",
+          "quantity": 2,
+          "price": 130
+        }
+      ],
+      "shipping_address": {
+        "full_name": "Harsh Prajapati",
+        "phone": "9714672225",
+        "address_line1": "10, Vihal nagar society",
+        "city": "Nadiad",
+        "state": "Gujarat",
+        "postal_code": "387002",
+        "type": "home"
+      },
+      "payment_method": "upi",
+      "created_at": "2026-07-22T06:08:42.420Z",
+      "estimated_delivery": "2026-07-27T06:08:42.420Z",
+      "order_items": [
+        {
+          "product_id": "B00N1U9AJS",
+          "quantity": 2,
+          "price": 130,
+          "products": {
+            "id": "B00N1U9AJS",
+            "slug": "3m-scotch-double-sided-heavy-duty-tape-1m-holds-4-",
+            "name": "3M Scotch Double Sided Heavy Duty Tape(1m holds 4.5Kgs) for indoor hanging applications (Photo frames, Mirrors, Key Holders, Car Interiors, Extension Boards, Wall decoration, etc)(L: 3m, W: 24mm)",
+            "brand_name": "3M",
+            "price": 130,
+            "compare_price": 165,
+            "primary_image": "https://m.media-amazon.com/images/I/41BeawIQB5L._SX300_SY300_QL70_FMwebp_.jpg",
+            "available_quantity": 100,
+            "stock_quantity": 100,
+            "is_new_arrival": false,
+            "is_best_seller": false,
+            "is_flash_sale": false,
+            "is_featured": false,
+            "avg_rating": 3.9,
+            "review_count": 14,
+            "category_slug": "home-kitchen",
+            "category_name": "Home & Kitchen",
+            "is_active": true,
+            "description": "Sticks to most surfaces includingwalls, ceramic tiles and wood-surfacesthat are clean, dry and smooth#.|A no-mess alternative to glue forlight-duty attaching andmounting tasks.|Ideal for permanent mounting tasks.",
+            "specifications": ""
+          }
+        }
+      ]
+    }
+  },
+  "logs": [
+    "1. Logging in user \"harsh@123gmail.com\"...",
+    "Login successful! User ID: local_1784641418329_4fg5cdft7",
+    "\n2. Fetching current cart...",
+    "Cart Items before order: []",
+    "Cart is empty. Adding item...",
+    "Add to cart response: {\"success\":true,\"cart\":{\"user_id\":\"local_1784641418329_4fg5cdft7\",\"items\":[{\"product_id\":\"B00N1U9AJS\",\"quantity\":2}]}}",
+    "Cart Items to purchase: [{\"id\":\"B00N1U9AJS\",\"product_id\":\"B00N1U9AJS\",\"quantity\":2,\"products\":{\"id\":\"B00N1U9AJS\",\"slug\":\"3m-scotch-double-sided-heavy-duty-tape-1m-holds-4-\",\"name\":\"3M Scotch Double Sided Heavy Duty Tape(1m holds 4.5Kgs) for indoor hanging applications (Photo frames, Mirrors, Key Holders, Car Interiors, Extension Boards, Wall decoration, etc)(L: 3m, W: 24mm)\",\"brand_name\":\"3M\",\"price\":130,\"compare_price\":165,\"primary_image\":\"https://m.media-amazon.com/images/I/41BeawIQB5L._SX300_SY300_QL70_FMwebp_.jpg\",\"available_quantity\":100,\"stock_quantity\":100,\"is_new_arrival\":false,\"is_best_seller\":false,\"is_flash_sale\":false,\"is_featured\":false,\"avg_rating\":3.9,\"review_count\":14,\"category_slug\":\"home-kitchen\",\"category_name\":\"Home & Kitchen\",\"is_active\":true,\"description\":\"Sticks to most surfaces includingwalls, ceramic tiles and wood-surfacesthat are clean, dry and smooth#.|A no-mess alternative to glue forlight-duty attaching andmounting tasks.|Ideal for permanent mounting tasks.\",\"specifications\":\"\"}}]",
+    "\n3. Placing UPI Order...",
+    "Order creation status: 201 Body: {\"success\":true,\"message\":\"Order placed\",\"data\":{\"id\":\"mock_order_1784700522420\",\"order_number\":\"SV381525\",\"user_id\":\"local_1784641418329_4fg5cdft7\",\"status\":\"confirmed\",\"total_amount\":356,\"items\":[{\"product_id\":\"B00N1U9AJS\",\"quantity\":2,\"price\":130}],\"shipping_address\":{\"full_name\":\"Harsh Prajapati\",\"phone\":\"9714672225\",\"address_line1\":\"10, Vihal nagar society\",\"city\":\"Nadiad\",\"state\":\"Gujarat\",\"postal_code\":\"387002\",\"type\":\"home\"},\"payment_method\":\"upi\",\"created_at\":\"2026-07-22T06:08:42.420Z\",\"estimated_delivery\":\"2026-07-27T06:08:42.420Z\"}}",
+    "Order created successfully with ID: mock_order_1784700522420",
+    "\n4. Verifying cart is cleared after order...",
+    "Cart items count after order: 0",
+    "\n5. Retrying fetch of the created order by ID...",
+    "Order response from GET: {\"success\":true,\"data\":{\"id\":\"mock_order_1784700522420\",\"order_number\":\"SV381525\",\"user_id\":\"local_1784641418329_4fg5cdft7\",\"status\":\"confirmed\",\"total_amount\":356,\"items\":[{\"product_id\":\"B00N1U9AJS\",\"quantity\":2,\"price\":130}],\"shipping_address\":{\"full_name\":\"Harsh Prajapati\",\"phone\":\"9714672225\",\"address_line1\":\"10, Vihal nagar society\",\"city\":\"Nadiad\",\"state\":\"Gujarat\",\"postal_code\":\"387002\",\"type\":\"home\"},\"payment_method\":\"upi\",\"created_at\":\"2026-07-22T06:08:42.420Z\",\"estimated_delivery\":\"2026-07-27T06:08:42.420Z\",\"order_items\":[{\"product_id\":\"B00N1U9AJS\",\"quantity\":2,\"price\":130,\"products\":{\"id\":\"B00N1U9AJS\",\"slug\":\"3m-scotch-double-sided-heavy-duty-tape-1m-holds-4-\",\"name\":\"3M Scotch Double Sided Heavy Duty Tape(1m holds 4.5Kgs) for indoor hanging applications (Photo frames, Mirrors, Key Holders, Car Interiors, Extension Boards, Wall decoration, etc)(L: 3m, W: 24mm)\",\"brand_name\":\"3M\",\"price\":130,\"compare_price\":165,\"primary_image\":\"https://m.media-amazon.com/images/I/41BeawIQB5L._SX300_SY300_QL70_FMwebp_.jpg\",\"available_quantity\":100,\"stock_quantity\":100,\"is_new_arrival\":false,\"is_best_seller\":false,\"is_flash_sale\":false,\"is_featured\":false,\"avg_rating\":3.9,\"review_count\":14,\"category_slug\":\"home-kitchen\",\"category_name\":\"Home & Kitchen\",\"is_active\":true,\"description\":\"Sticks to most surfaces includingwalls, ceramic tiles and wood-surfacesthat are clean, dry and smooth#.|A no-mess alternative to glue forlight-duty attaching andmounting tasks.|Ideal for permanent mounting tasks.\",\"specifications\":\"\"}}]}}"
+  ]
+}
