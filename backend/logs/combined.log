@@ -13853,3 +13853,4 @@
 [2026-07-22 19:14:09] info: ::1 - - [22/Jul/2026:13:44:09 +0000] "POST /api/v1/auth/register HTTP/1.1" 409 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
 [2026-07-22 19:27:07] info: ::1 - - [22/Jul/2026:13:57:07 +0000] "GET /does-not-exist.js HTTP/1.1" 200 12614 "-" "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-GB) WindowsPowerShell/5.1.26100.8875"
 [2026-07-22 19:27:21] info: ::1 - - [22/Jul/2026:13:57:21 +0000] "GET /assets/js/modules/utils.js HTTP/1.1" 200 12859 "-" "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-GB) WindowsPowerShell/5.1.26100.8875"
+[2026-07-22 20:19:36] info: 🚀 ShopVerse API running on port 3000 in development mode
