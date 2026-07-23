@@ -36,11 +36,19 @@ app.use(helmet({
 
 const allowedOrigins = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-  : ['http://localhost:3000'];
+  : ['http://localhost:3000', 'https://shopverse27.onrender.com'];
+
+let allowedOriginsStr = process.env.ALLOWED_ORIGINS;
+if (allowedOriginsStr) {
+  try {
+    const parsed = allowedOriginsStr.split(',').map(u => u.trim());
+    allowedOrigins.push(...parsed);
+  } catch (e) { }
+}
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*') || origin.endsWith('.onrender.com')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
